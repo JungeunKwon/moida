@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-@PropertySource(value = {"classpath:${db.config}"})
+@PropertySource(value = {"classpath:${db.config}", "classpath:${aws.config}"})
 public class MoidaApplication {
 
 	public static void main(String[] args) {
