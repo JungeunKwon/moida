@@ -1,5 +1,7 @@
 package com.ssafy.moida.web;
 
+import java.io.IOException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,7 +28,7 @@ public class AccountController {
 	
 	@ApiOperation(value = "회원가입", httpMethod = "POST", notes = "회원가입하는 부분")
 	@PostMapping(value = "/signup")
-	public ResponseEntity<Long> register(@RequestBody RegisterRequestDto requestDto){
+	public ResponseEntity<Long> register(@RequestBody RegisterRequestDto requestDto) throws IllegalArgumentException, IOException{
 		return new ResponseEntity<Long>(accountService.register(requestDto), HttpStatus.OK);
 	}
 }
