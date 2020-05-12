@@ -24,7 +24,7 @@ public class AccountController {
 
 	private final AccountService accountService;
 	
-	@ApiOperation(value = "È¸¿ø°¡ÀÔ", httpMethod = "POST", notes = "È¸¿ø°¡ÀÔÇÏ´Â ºÎºÐÀÔ´Ï´Ù.")
+	@ApiOperation(value = "È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", httpMethod = "POST", notes = "È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Îºï¿½ï¿½Ô´Ï´ï¿½.")
 	@PostMapping(value = "/signup")
 	public ResponseEntity<Long> register(@RequestBody RegisterRequestDto requestDto){
 		return new ResponseEntity<Long>(accountService.Register(requestDto), HttpStatus.OK);
