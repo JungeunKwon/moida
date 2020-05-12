@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class AccountController {
 	
 	private final AccountService accountService;
-	
+
 	@ApiOperation(value = "회원가입", httpMethod = "POST", notes = "회원가입하는 부분입니다.")
 	@PostMapping(value = "/signup", consumes = "multipart/form-data")
 	public ResponseEntity<Long> register(@Valid @RequestParam("uploadFile") @Nullable MultipartFile uploadFile,
