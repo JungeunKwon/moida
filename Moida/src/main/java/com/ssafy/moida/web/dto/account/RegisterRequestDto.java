@@ -1,5 +1,7 @@
 package com.ssafy.moida.web.dto.account;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ssafy.moida.domain.account.Account;
 
 import lombok.Builder;
@@ -18,6 +20,7 @@ public class RegisterRequestDto {
 	private int gender;
 	private String phone;
 	private String profileImg;
+	private MultipartFile uploadFile;
 	
 	public Account toEntity() {
 		return Account.builder()
@@ -33,7 +36,7 @@ public class RegisterRequestDto {
 
 	@Builder
 	public RegisterRequestDto(String email, String password, String username, String nickname, int gender, String phone,
-			String profileImg) {
+			String profileImg,MultipartFile uploadFile) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -42,5 +45,6 @@ public class RegisterRequestDto {
 		this.gender = gender;
 		this.phone = phone;
 		this.profileImg = profileImg;
+		this.uploadFile = uploadFile;
 	}
 }
