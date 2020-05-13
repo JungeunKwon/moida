@@ -35,7 +35,4 @@ public class AccountGroup {
 		this.account = account;
 		this.group = group;
 	}
-	
-	
-	
 }
