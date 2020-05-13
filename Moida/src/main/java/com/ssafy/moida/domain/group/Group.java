@@ -20,11 +20,5 @@ public class Group {
 	private Long id;
 	
 	@Column(nullable = true, length = 30)
-	private String name;
-	
-	
-	
-	
-	
-
+	private String name;	
 }

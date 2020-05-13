@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.ssafy.moida.domain.account.Account;
 
@@ -53,7 +54,4 @@ public class Goalplanner {
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
-	
-	
-	
 }

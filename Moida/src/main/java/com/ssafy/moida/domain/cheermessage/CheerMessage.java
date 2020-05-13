@@ -48,7 +48,4 @@ public class CheerMessage {
 		this.message = message;
 		this.account = account;
 	}
-	
-	
-	
 }
