@@ -28,7 +28,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-web-services')
 	compile('org.springframework.boot:spring-boot-starter-security')
-	//compile('org.springframework.cloud:spring-cloud-starter-aws')
+	compile('org.springframework.cloud:spring-cloud-starter-aws')
 	compile('pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.0')
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	compile("org.mariadb.jdbc:mariadb-java-client")

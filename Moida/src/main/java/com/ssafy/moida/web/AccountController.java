@@ -48,9 +48,8 @@ public class AccountController {
 			@RequestParam("password") String password,
 			@RequestParam("username") String username,
 			@RequestParam("nickname") String nickname,
-			@RequestParam("sex") int gender,
-			@RequestParam("phone") String phone,
-			@RequestParam("profileImg") String profileImg
+			@RequestParam("gender") int gender,
+			@RequestParam("phone") String phone
 			) throws IllegalArgumentException, IOException{
 		RegisterRequestDto requestDto = RegisterRequestDto.builder()
 										.email(email)
@@ -59,7 +58,7 @@ public class AccountController {
 										.nickname(nickname)
 										.gender(gender)
 										.phone(phone)
-										.profileImg(profileImg)
+										.uploadFile(uploadFile)
 										.build();
 		return new ResponseEntity<Long>(accountService.register(requestDto), HttpStatus.OK);
 	}

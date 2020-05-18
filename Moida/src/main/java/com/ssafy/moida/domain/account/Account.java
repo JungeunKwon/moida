@@ -12,12 +12,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.moida.domain.common.BaseEntity;
+import com.ssafy.moida.domain.group.AccountGroup;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -39,6 +42,7 @@ implements UserDetails {
 	@Column(nullable = false, length = 100)
 	private String username;
 	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //쓰기 시에만 deserialize
 	@Column(nullable = false, length = 100)
 	private String password;
 	
@@ -57,6 +61,9 @@ implements UserDetails {
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "account")
+	private List<AccountGroup> groupList = new ArrayList<>();
+	
 	public void updateAccountInfo(String password, String phone,  String nickname, String profileImg) {
 		this.password = password;
 		this.phone = phone;
@@ -64,26 +71,31 @@ implements UserDetails {
 		this.profileImg = profileImg;
 	}
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 	}
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public boolean isEnabled() {
 		return true;
