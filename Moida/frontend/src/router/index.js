@@ -1,11 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+// import About from "../views/About.vue";
+import SharedDiary from "../views/SharedDiary.vue";
 
 Vue.use(VueRouter);
 
-const routes = [
-	{
+const routes = [{
 		path: "/",
 		name: "Home",
 		component: Home,
@@ -14,8 +15,14 @@ const routes = [
 		path: "/about",
 		name: "About",
 		component: () =>
-			import(/* webpackChunkName: "about" */ "../views/About.vue"),
+			import( /* webpackChunkName: "about" */ "../views/About.vue"),
 	},
+	{
+		path: "/shared",
+		name: "SharedDiary",
+		component: SharedDiary
+	}
+
 ];
 
 const router = new VueRouter({
