@@ -6,28 +6,29 @@ import SharedDiary from "../views/SharedDiary.vue";
 
 Vue.use(VueRouter);
 
-const About = () => import('../views/About.vue');
 const routes = [{
 		path: "/",
 		name: "Home",
-		component: Home
+		component: Home,
 	},
 	{
 		path: "/about",
 		name: "About",
-		component: About,
+		component: () =>
+			import( /* webpackChunkName: "about" */ "../views/About.vue"),
 	},
 	{
 		path: "/shared",
 		name: "SharedDiary",
 		component: SharedDiary
 	}
+
 ];
 
 const router = new VueRouter({
 	mode: "history",
 	base: process.env.BASE_URL,
-	routes
+	routes,
 });
 
 export default router;

@@ -18,17 +18,17 @@ public class SwaggerConfig {
 	@Bean
     public Docket swaggerApi() {
         return new Docket(DocumentationType.SWAGGER_2).apiInfo(swaggerInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("com.ssfay.moida.web"))
+                .apis(RequestHandlerSelectors.basePackage("com.ssafy.moida.web"))
                 .paths(PathSelectors.any())
                 .build()
-                .useDefaultResponseMessages(false); // ±âº»À¸·Î ¼¼ÆÃµÇ´Â 200,401,403,404 ¸Ş½ÃÁö¸¦ Ç¥½Ã ÇÏÁö ¾ÊÀ½
+                .useDefaultResponseMessages(false);
     }
 
 
 
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder().title("Spring API Documentation")
-                .description("¾Û °³¹ß½Ã »ç¿ëµÇ´Â ¼­¹ö API¿¡ ´ëÇÑ ¿¬µ¿ ¹®¼­ÀÔ´Ï´Ù")
+                .description("Moidaì˜ API Swagger")
                 .license("ssafy").licenseUrl("http://edu.ssafy.com").version("1").build();
     }
 }
