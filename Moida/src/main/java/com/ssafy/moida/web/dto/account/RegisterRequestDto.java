@@ -1,5 +1,7 @@
 package com.ssafy.moida.web.dto.account;
 
+import java.util.Collections;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.moida.domain.account.Account;
@@ -31,6 +33,7 @@ public class RegisterRequestDto {
 				.gender(gender)
 				.phone(phone)
 				.profileImg(profileImg)
+				.roles(Collections.singletonList("ROLE_USER"))
 				.build();
 	}
 

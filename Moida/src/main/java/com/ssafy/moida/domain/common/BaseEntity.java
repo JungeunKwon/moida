@@ -1,5 +1,6 @@
 package com.ssafy.moida.domain.common;
 
+
 import java.time.LocalDateTime;
 
 import javax.persistence.EntityListeners;
