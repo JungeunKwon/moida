@@ -4,7 +4,7 @@
 		<div class="paper p1"></div>
 		<div class="paper p2"></div>
 		<div class="paper p3"><slot /></div>
-		<router-link to="/" class="tag t1">감쓰</router-link>
+		<router-link to="/trash" class="tag t1">감쓰</router-link>
 		<router-link to="/about" class="tag t2">일기</router-link>
 		<router-link to="/" class="tag t3">공다</router-link>
 		<router-link to="/" class="tag t4">my</router-link>
