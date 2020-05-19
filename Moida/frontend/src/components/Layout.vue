@@ -29,14 +29,6 @@ export default {
 }
 
 @font-face {
-	font-family: "Katuri";
-	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_13@1.0/Katuri.woff")
-		format("woff");
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
 	font-family: "Recipekorea";
 	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/Recipekorea.woff")
 		format("woff");
@@ -73,6 +65,10 @@ export default {
 	font-weight: bold;
 	text-align: center;
 	margin-left: 17px;
+}
+
+.tag:hover {
+	filter: brightness(80%);
 }
 
 .t1 {
