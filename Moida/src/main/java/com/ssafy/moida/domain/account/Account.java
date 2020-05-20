@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.moida.domain.common.BaseEntity;
+import com.ssafy.moida.domain.etrash.Etrash;
 import com.ssafy.moida.domain.group.AccountGroup;
 
 import lombok.Builder;
@@ -63,6 +64,9 @@ implements UserDetails {
 	
 	@OneToMany(mappedBy = "account")
 	private List<AccountGroup> groupList = new ArrayList<>();
+	
+	
+
 	
 	public void updateAccountInfo(String password, String phone,  String nickname, String profileImg) {
 		this.password = password;
