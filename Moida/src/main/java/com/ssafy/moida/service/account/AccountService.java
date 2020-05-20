@@ -11,9 +11,9 @@ import com.ssafy.moida.web.dto.account.SignInRequestDto;
 
 public interface AccountService {
 	public Long register(RegisterRequestDto requestDto) throws IllegalArgumentException, IOException;
-	public Account findByEmail(SignInRequestDto requestDto);
-	public Account findById(String id);
-	public String signIn(SignInRequestDto requestDto);
+	public Account findByEmail(SignInRequestDto requestDto) throws BaseException;
+	public Account findById(String id) throws NumberFormatException, BaseException;
+	public String signIn(SignInRequestDto requestDto) throws BaseException;
 	public AccountResponseDto findByAccount() throws NumberFormatException, BaseException;
 	public void updateAccount(AccountUpdateRequestDto requestDTO) throws IOException, BaseException;
 	public void deleteAccount() throws NumberFormatException, BaseException;
