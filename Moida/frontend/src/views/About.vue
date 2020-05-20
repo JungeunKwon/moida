@@ -1,5 +1,23 @@
 <template>
-	<div class="about">
-		<h1>This is an about page</h1>
+	<div>
+		<button v-on:click="setTest">click</button>
+		{{ u }}
+		{{ e }}
 	</div>
 </template>
+
+<script>
+import { mapGetters, mapState } from "vuex";
+export default {
+	methods: {
+		setTest() {
+			this.$store.dispatch("user/setTest", "test");
+		},
+	},
+	computed: {
+		...mapGetters({ u: "username", e: "phone" }),
+	},
+};
+</script>
+
+<style></style>
