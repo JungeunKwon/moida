@@ -1,9 +1,9 @@
 <template>
-	<div id="app">
+	<v-app id="app">
 		<Layout>
 			<router-view />
 		</Layout>
-	</div>
+	</v-app>
 </template>
 <script>
 import Layout from "@/components/Layout.vue";
