@@ -1,14 +1,15 @@
 <template>
 	<v-btn
 		v-show="fab"
-		v-scroll="onScroll"
+		v-scroll:#test="onScroll"
 		style="opacity: 0.9"
 		fab
 		dark
 		fixed
 		bottom
 		right
-		color="#fa8072"
+		small
+		color="#c7ceea"
 		@click="toTop"
 	>
 		<v-icon>mdi-chevron-up</v-icon>
@@ -17,10 +18,13 @@
 
 <script>
 export default {
+	name: "GoTop",
 	data: () => ({
 		fab: false,
 	}),
-
+	mounted() {
+		console.log("GoTop mounted()");
+	},
 	methods: {
 		onScroll(e) {
 			if (typeof window === "undefined") return;
@@ -28,7 +32,8 @@ export default {
 			this.fab = top > 20;
 		},
 		toTop() {
-			this.$vuetify.goTo(0);
+			console.log("toTop()");
+			document.getElementById("test").scrollTop = 0;
 		},
 	},
 };

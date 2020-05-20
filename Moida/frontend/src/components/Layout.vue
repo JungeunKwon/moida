@@ -3,37 +3,26 @@
 		<div id="cover"></div>
 		<div class="paper p1"></div>
 		<div class="paper p2"></div>
-		<div class="paper p3"><slot /></div>
-		<router-link to="/trash" class="tag t1">감쓰</router-link>
-		<router-link to="/about" class="tag t2">일기</router-link>
-		<router-link to="/shared" class="tag t3">공다</router-link>
-		<router-link to="/" class="tag t4">my</router-link>
-		<router-link to="/" class="tag t5">login</router-link>
+		<div class="paper p3" id="test">
+			<slot />
+		</div>
+		<router-link to="/trash" class="myTag t1">감쓰</router-link>
+		<router-link to="/trash" class="myTag t2">일기</router-link>
+		<router-link to="/shared" class="myTag t3">공다</router-link>
+		<router-link to="/trash" class="myTag t4">my</router-link>
+		<router-link to="/trash" class="myTag t5">login</router-link>
 	</div>
 </template>
 
 <script>
 export default {
 	name: "Layout",
+	components: {},
+	mounted() {},
+	methods: {},
 };
 </script>
 <style>
-@font-face {
-	font-family: "KyoboHand";
-	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff")
-		format("woff");
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: "Recipekorea";
-	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/Recipekorea.woff")
-		format("woff");
-	font-weight: normal;
-	font-style: normal;
-}
-
 #cover {
 	z-index: 1;
 	position: fixed;
@@ -48,7 +37,7 @@ export default {
 	box-shadow: 1px 1px 5px gray;
 }
 
-.tag {
+.myTag {
 	z-index: 3;
 	position: fixed;
 	right: 30px;
@@ -56,7 +45,7 @@ export default {
 	height: 45px;
 	box-shadow: 1px 1px 5px gray;
 	text-decoration: none;
-	color: rgb(52, 54, 54);
+	color: rgb(52, 54, 54) !important;
 	font-family: "KyoboHand", sans-serif;
 	line-height: 45px;
 	font-size: 17px;
@@ -65,7 +54,7 @@ export default {
 	margin-left: 17px;
 }
 
-.tag:hover {
+.myTag:hover {
 	filter: brightness(80%);
 }
 
@@ -119,5 +108,7 @@ export default {
 	z-index: 4;
 	height: calc(100% - 50px);
 	width: calc(100% - 100px);
+	padding: 10px 0 10px 0;
+	overflow: auto;
 }
 </style>
