@@ -1,3 +1,5 @@
+import { login } from "@/api/user";
+
 const state = {
 	token: "",
 	email: "",
