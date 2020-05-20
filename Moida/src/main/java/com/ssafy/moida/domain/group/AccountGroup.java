@@ -12,8 +12,10 @@ import com.ssafy.moida.domain.account.Account;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 public class AccountGroup {
@@ -26,13 +28,13 @@ public class AccountGroup {
 	private Account account;
 	
 	@ManyToOne
-	@JoinColumn(name="group_id")
-	private Group group;
+	@JoinColumn(name="groupTB_id")
+	private GroupTB groupTB;
 
 	@Builder
-	public AccountGroup(Long id, Account account, Group group) {
+	public AccountGroup(Long id, Account account, GroupTB groupTB) {
 		this.id = id;
 		this.account = account;
-		this.group = group;
+		this.groupTB  = groupTB;
 	}
 }
