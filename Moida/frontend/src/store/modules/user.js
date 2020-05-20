@@ -35,6 +35,11 @@ const mutations = {
 };
 
 const actions = {
+	//test
+	setTest({ commit }, text) {
+		commit("SET_USERNAME", text);
+		commit("SET_PHONE", text);
+	},
 	// user login
 	login({ commit }, userInfo) {
 		const { email, password } = userInfo;
