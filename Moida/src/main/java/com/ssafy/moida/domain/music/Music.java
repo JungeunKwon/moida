@@ -32,7 +32,7 @@ public class Music {
 	@Column(nullable = false, length = 10)
 	private Long likecount;
 	
-	@Column(nullable = false, length = 10)
+	@Column(nullable = false,unique = true, length = 10)
 	private String videoid;
 	
 	

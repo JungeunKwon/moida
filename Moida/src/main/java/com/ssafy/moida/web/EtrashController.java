@@ -69,7 +69,7 @@ public class EtrashController {
 	@ApiOperation(value = "모든감쓰", httpMethod = "GET", notes = "감정쓰레기 모든 피드를 가져온다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/etrash")
-	public Page<EtrashResponseDto> findAll(final Pageable pageable
+	public Page<EtrashResponseDto> findAll(Pageable pageable
 			) throws IllegalArgumentException, IOException{
 		EtrashAllRequestDTO requestDto = new EtrashAllRequestDTO();
 		requestDto.setPageable(pageable);
@@ -81,10 +81,12 @@ public class EtrashController {
 	@ApiOperation(value = "감쓰 무드로 검색", httpMethod = "GET", notes = "무드가 같은 감정쓰레기 피드를 가져온다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/etrash/{mood}")
-	public ResponseEntity<List<EtrashResponseDto>> findByMood(@PathVariable String mood
+	public Page<EtrashResponseDto> findByMood(@PathVariable String mood, Pageable pageable
 			) throws IllegalArgumentException, IOException{
-		
-		return new ResponseEntity<List<EtrashResponseDto>>(etrashService.findByMood(mood), HttpStatus.OK);
+		EtrashAllRequestDTO requestDto = new EtrashAllRequestDTO();
+		requestDto.setPageable(pageable);
+		requestDto.setMood(mood);
+		return etrashService.findByMood(requestDto);
 	}
 	
 	

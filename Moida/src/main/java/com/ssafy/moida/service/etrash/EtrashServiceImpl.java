@@ -25,11 +25,11 @@ public class EtrashServiceImpl implements EtrashService{
 	private final EtrashRepository etrashRepository;
 
 	@Transactional(readOnly = true)
-	public List<EtrashResponseDto> findByMood(String mood) {
+	public Page<EtrashResponseDto> findByMood(EtrashAllRequestDTO requestDto) {
 		
-		return etrashRepository.findByMoodLike(mood).stream()
-				.map(EtrashResponseDto::new)
-				.collect(Collectors.toList());
+		return etrashRepository.findByMood(requestDto.getMood(),requestDto.getPageable())
+				.map(EtrashResponseDto::new);
+			
 	}
 
 	@Transactional(readOnly = true)
@@ -54,7 +54,7 @@ public class EtrashServiceImpl implements EtrashService{
 	}
 
 	@Override
-	public List<Music> musicrecommend(String mood) {
+	public Page<Music> musicrecommend(String mood) {
 		// TODO Auto-generated method stub
 		return null;
 	}
