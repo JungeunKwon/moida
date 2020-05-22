@@ -7,7 +7,7 @@
 		<router-link to="/trash" class="tag t1">감쓰</router-link>
 		<router-link to="/about" class="tag t2">일기</router-link>
 		<router-link to="/" class="tag t3">공다</router-link>
-		<router-link to="/" class="tag t4">my</router-link>
+		<router-link to="/myPage" class="tag t4">my</router-link>
 		<router-link to="/" class="tag t5">로그인</router-link>
 	</div>
 </template>

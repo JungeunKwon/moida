@@ -28,6 +28,11 @@ const routes = [
 		name: "Trash",
 		component: Trash,
 	},
+	{
+		path: "/myPage",
+		name: "MyPage",
+		component: () => import("../views/myPage/index.vue"),
+	},
 ];
 
 const router = new VueRouter({
