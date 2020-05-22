@@ -8,13 +8,7 @@
 		</div>
 		<div class="trashother">
 			<div id="player" class="video">
-				<iframe
-					width="100%"
-					height="50"
-					:src="this.videourl"
-					frameborder="0"
-					allowfullscreen
-				></iframe>
+				<iframe width="100%" height="50" :src="this.videourl" frameborder="0" allowfullscreen></iframe>
 				<div class="videodisc">{{ trash.musictitle }}</div>
 			</div>
 
@@ -23,18 +17,14 @@
 				<div class="trashbottombottom">
 					<div class="bottomleft">
 						<div class="timewrap">
-							<v-chip class="time" color="error">
-								{{ lefttime }}
-							</v-chip>
+							<v-chip class="time" color="red accent-1">{{ lefttime }}</v-chip>
 
 							<div class="timecontent">시간 뒤 펑~!</div>
 						</div>
 					</div>
 					<div class="bottomright">
 						<v-btn icon @click="likeup">
-							<v-icon style="height:100%" color="pink lighten-4"
-								>mdi-heart</v-icon
-							>
+							<v-icon style="height:100%" color="pink lighten-4">mdi-heart</v-icon>
 							{{ trash.likes }}
 						</v-btn>
 					</div>
@@ -60,12 +50,13 @@ export default {
 			heightclass: false,
 		};
 	},
+	created() {
+		this.videourl = "https://www.youtube.com/embed/" + this.trash.videoid;
+	},
 	mounted() {
 		let today = new Date();
 		let getday = new Date(this.trash.date);
 		this.lefttime = Math.abs(today.getHours() - getday.getHours());
-
-		this.videourl = "https://www.youtube.com/embed/" + this.trash.videoid;
 	},
 	methods: {
 		likeup() {
