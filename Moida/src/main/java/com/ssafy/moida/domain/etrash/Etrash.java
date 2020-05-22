@@ -47,9 +47,9 @@ public class Etrash extends BaseEntity{
 		this.mood = mood;
 	}
 	
-	public void updateMusic(Music music) {
+	public Long updateMusic(Music music) {
 		this.music = music;
-		
+		return this.music.getId();
 	}
 	
 	@Builder

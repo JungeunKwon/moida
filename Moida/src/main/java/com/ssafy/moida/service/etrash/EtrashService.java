@@ -14,6 +14,7 @@ import com.ssafy.moida.web.dto.etrash.EtrashSaveRequestDto;
 public interface EtrashService {
 	
 	Long saveEtrash(EtrashSaveRequestDto dto);
+	Long updateEtrashMusic(Etrash etrash, Music music);
 	String sentimentanalysis(String description);
 	Page<Music> musicrecommend(String mood);
 	Page<EtrashResponseDto> findByMood(EtrashAllRequestDTO requestDto);

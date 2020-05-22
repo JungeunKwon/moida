@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.moida.domain.etrash.Etrash;
 import com.ssafy.moida.domain.etrash.EtrashRepository;
 import com.ssafy.moida.domain.music.Music;
+import com.ssafy.moida.domain.music.MusicRepository;
 import com.ssafy.moida.web.dto.etrash.EtrashAllRequestDTO;
 import com.ssafy.moida.web.dto.etrash.EtrashResponseDto;
 import com.ssafy.moida.web.dto.etrash.EtrashSaveRequestDto;
@@ -23,7 +24,9 @@ import lombok.RequiredArgsConstructor;
 public class EtrashServiceImpl implements EtrashService{
 	
 	private final EtrashRepository etrashRepository;
-
+	private final MusicRepository musicRepository;
+	
+	
 	@Transactional(readOnly = true)
 	public Page<EtrashResponseDto> findByMood(EtrashAllRequestDTO requestDto) {
 		
@@ -45,9 +48,14 @@ public class EtrashServiceImpl implements EtrashService{
 		return etrashRepository.save(dto.toEntity()).getId();
 	}
 
+	@Transactional
+	public Long updateEtrashMusic(Etrash etrash, Music music) {
+
+		return etrashRepository.findById(etrash.getId()).get().updateMusic(musicRepository.findById(music.getId()).get());
+	}
 
 
-	@Override
+	@Transactional
 	public String sentimentanalysis(String description) {
 		// TODO Auto-generated method stub
 		return null;
@@ -58,5 +66,7 @@ public class EtrashServiceImpl implements EtrashService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 }
