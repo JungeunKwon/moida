@@ -1,12 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+// import About from "../views/About.vue";
 import SharedDiary from "../views/SharedDiary/index.vue";
 import Trash from "../views/Trash.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
-
 	{
 		path: "/trash",
 		name: "Trash",
@@ -18,8 +19,12 @@ const routes = [
 		name: "SharedDiary",
 		component: SharedDiary,
 	},
-
-
+	{
+		path: "/trash",
+		name: "Trash",
+		component: () =>
+			import(/* webpackChunkName: "trash" */ "../views/Trash.vue"),
+	},
 ];
 
 const router = new VueRouter({
