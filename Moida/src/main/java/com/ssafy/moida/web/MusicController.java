@@ -15,13 +15,20 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.moida.domain.etrash.Etrash;
+import com.ssafy.moida.domain.music.MusicRepository;
 import com.ssafy.moida.service.etrash.EtrashService;
+import com.ssafy.moida.service.music.MusicService;
 import com.ssafy.moida.web.dto.etrash.EtrashSaveRequestDto;
+import com.ssafy.moida.web.dto.music.MusicFindByMoodRequestDTO;
+import com.ssafy.moida.web.dto.music.MusicFindByMoodResponseDTO;
+import com.ssafy.moida.web.dto.music.MusicSaveRequestDTO;
+import com.ssafy.moida.web.dto.music.MusicSelcetMusicRequest;
 import com.ssafy.moida.web.dto.etrash.EtrashAllRequestDTO;
 import com.ssafy.moida.web.dto.etrash.EtrashDescriptionDTO;
 import com.ssafy.moida.web.dto.etrash.EtrashResponseDto;
@@ -32,62 +39,65 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
-@Api(tags = {"2. etrash"})
+@Api(tags = {"3. music"})
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
-public class EtrashController {
+public class MusicController {
 	
-	private final EtrashService etrashService;
+	private final MusicService musicService;
+	private final MusicRepository musicRepository;
 	
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
-	@ApiOperation(value = "감쓰생성", httpMethod = "POST", notes = "감정쓰레기피드 작성하는 부분입니다.")
+	@ApiOperation(value = "음악생성", httpMethod = "POST", notes = "음악 추가하는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@PostMapping(value = "/etrash")
-	public ResponseEntity<Long> createEtrash(@RequestBody EtrashSaveRequestDto requestDto
+	@PostMapping(value = "/music")
+	public ResponseEntity<Long> saveMusic(@RequestBody MusicSaveRequestDTO requestDto
 			) throws IllegalArgumentException, IOException{
 		
-		return new ResponseEntity<Long>(etrashService.saveEtrash(requestDto), HttpStatus.OK);
-	}
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
-	})
-	@ApiOperation(value = "감정분석", httpMethod = "POST", notes = "글내용 으로 감정을 분석한다.")
-	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@PostMapping(value = "/etrash/sentimentanalysis")
-	public ResponseEntity<String> sentimentanalysis(@RequestBody EtrashDescriptionDTO requestDto
-			) throws IllegalArgumentException, IOException{
-		
-		return new ResponseEntity<String>(etrashService.sentimentanalysis(requestDto.getDescription()), HttpStatus.OK);
-	}
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
-	})
-	@ApiOperation(value = "모든감쓰", httpMethod = "GET", notes = "감정쓰레기 모든 피드를 가져온다.")
-	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@GetMapping(value = "/etrash")
-	public Page<EtrashResponseDto> findAll(Pageable pageable
-			) throws IllegalArgumentException, IOException{
-		EtrashAllRequestDTO requestDto = new EtrashAllRequestDTO();
-		requestDto.setPageable(pageable);
-		return etrashService.findAll(requestDto);
-	}
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
-	})
-	@ApiOperation(value = "감쓰 무드로 검색", httpMethod = "GET", notes = "무드가 같은 감정쓰레기 피드를 가져온다.")
-	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@GetMapping(value = "/etrash/{mood}")
-	public Page<EtrashResponseDto> findByMood(@PathVariable String mood, Pageable pageable
-			) throws IllegalArgumentException, IOException{
-		EtrashAllRequestDTO requestDto = new EtrashAllRequestDTO();
-		requestDto.setPageable(pageable);
-		requestDto.setMood(mood);
-		return etrashService.findByMood(requestDto);
+		return new ResponseEntity<Long>(musicService.saveMusic(requestDto), HttpStatus.OK);
 	}
 	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "음악검색", httpMethod = "GET", notes = "무드로 음악 검색.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@GetMapping(value = "/music/findByMood/{mood}")
+	public Page<MusicFindByMoodResponseDTO> findByMood(@PathVariable String mood,Pageable pageable
+			) throws IllegalArgumentException, IOException{
+		MusicFindByMoodRequestDTO requestDto = new MusicFindByMoodRequestDTO(mood, pageable);
+
+		return musicService.findByMood(requestDto);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "음악선택", httpMethod = "POST", notes = "음악 선택.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@PostMapping(value = "/music/select")
+	public ResponseEntity<Long> selectMusic(@RequestBody MusicSelcetMusicRequest requestDto
+			) throws IllegalArgumentException, IOException{
+		
+		System.out.println(requestDto.getEtrashid()+"     "+requestDto.getMusicid());
+		return new ResponseEntity<Long>(musicService.selectMusic(requestDto), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "전체음악", httpMethod = "GET", notes = "음악 전체 목록.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@GetMapping(value = "/music")
+	public Page<MusicFindByMoodResponseDTO> searchByAll(Pageable pageable
+			) throws IllegalArgumentException, IOException{
+		
+
+		return musicRepository.findAll(pageable).map(MusicFindByMoodResponseDTO::new);
+	}
 	
 }

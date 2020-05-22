@@ -1,7 +1,5 @@
 package com.ssafy.moida.web.dto.music;
 
-
-
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.music.Music;
 
@@ -13,17 +11,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MusicSaveRequestDTO {
-
+public class MusicFindByVideoResponse {
+	
+	private Long id;
+	private String mood;
 	private String musicname;
 	private Long likecount;
 	private String videoid;
 	private Account account;
-	private String mood;
+	
+	
 	
 	@Builder
-	public MusicSaveRequestDTO(String musicname, Long likecount, String videoid, Account account,String mood) {
-		super();
+	public MusicFindByVideoResponse(Long id, String mood, String musicname, Long likecount, String videoid, Account account) {
+		this.id = id;
 		this.musicname = musicname;
 		this.likecount = likecount;
 		this.videoid = videoid;
@@ -31,17 +32,20 @@ public class MusicSaveRequestDTO {
 		this.mood = mood;
 	}
 	
-	public Music toEntity() {
-		return Music.builder()
-				.musicname(musicname)
-				.likecount(likecount)
-				.videoid(videoid)
-				.account(account)
-				.mood(mood)
-				.build();
-	}
+	
+	
+//	public MusicFindByVideoResponse(Music entity) {
+//		this.id = entity.getId();
+//		this.musicname = entity.getMusicname();
+//		this.likecount = entity.getLikecount();
+//		this.videoid = entity.getVideoid();
+//		this.account = entity.getAccount();
+//		this.mood = entity.getMood();
+//	}
 	
 	
 	
-
+	
+	
+	
 }

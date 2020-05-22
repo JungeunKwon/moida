@@ -14,13 +14,15 @@ import lombok.Setter;
 public class EtrashAllRequestDTO {
 
 	private Pageable pageable;
+	private String mood;
 	
 
 	
 	@Builder
-	public EtrashAllRequestDTO(Pageable pageable ) {
+	public EtrashAllRequestDTO(Pageable pageable, String mood ) {
 
 		this.pageable = pageable;
+		this.mood = mood;
 	}
 	
 	

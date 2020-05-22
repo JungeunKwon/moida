@@ -2,8 +2,6 @@ package com.ssafy.moida.web.dto.etrash;
 
 
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.etrash.Etrash;
 import com.ssafy.moida.domain.music.Music;
