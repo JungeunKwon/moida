@@ -1,76 +1,128 @@
 <template>
 	<div class="trashcontainer">
-		<!-- <masonry
-			:cols="{
-				default: 1,
-				1500: 1,
-				1024: 3,
-				1000: 3,
-				900: 3,
-				800: 2,
-				700: 2,
-				600: 1,
-				400: 1,
-			}"
-			:gutter="{ default: '15px', 700: '15px' }"
-			style="text-align:left"
-		>
-			<TrashCom
-				:trash="intrash"
-				v-for="(intrash, index) in trash"
-				:key="intrash.id"
-				:index="index"
-			/>
-		</masonry>-->
-		<div class="masonry">
-			<div v-for="(intrash, index) in trash" :key="intrash.id" class="card">
-				<TrashCom class="card-content" :trash="intrash" :index="index" />
+		<div class="trashtop">
+			<div class="todack" dark @click="trashdialog = true">
+				토닥토닥
 			</div>
-		</div>
-		<div class="todack">
-			<v-btn class="ma-2" dark @click="trashdialog = true">Open Dialog 2</v-btn>
-			<v-dialog v-model="trashdialog" max-width="70%">
+			<v-dialog
+				v-model="trashdialog"
+				max-width="50%"
+				style="padding:20px"
+			>
 				<v-card>
 					<v-card-text>
-						<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
-							<v-chip>
-								<v-avatar left>
-									<v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-								</v-avatar>화남
-							</v-chip>
+						<v-chip-group
+							v-model="selection"
+							active-class="deep-purple accent-4 white--text"
+							column
+						>
+							<div style="margin: 0 auto; width:70%">
+								<v-chip>
+									<v-avatar left>
+										<v-img
+											src="https://cdn.vuetifyjs.com/images/john.png"
+										></v-img> </v-avatar
+									>화남
+								</v-chip>
 
-							<v-chip>
-								<v-avatar left>
-									<v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-								</v-avatar>슬픔
-							</v-chip>
+								<v-chip>
+									<v-avatar left>
+										<v-img
+											src="https://cdn.vuetifyjs.com/images/john.png"
+										></v-img> </v-avatar
+									>슬픔
+								</v-chip>
 
-							<v-chip>
-								<v-avatar left>
-									<v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-								</v-avatar>짜증
-							</v-chip>
+								<v-chip>
+									<v-avatar left>
+										<v-img
+											src="https://cdn.vuetifyjs.com/images/john.png"
+										></v-img> </v-avatar
+									>짜증
+								</v-chip>
 
-							<v-chip>
-								<v-avatar left>
-									<v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-								</v-avatar>우울
-							</v-chip>
+								<v-chip>
+									<v-avatar left>
+										<v-img
+											src="https://cdn.vuetifyjs.com/images/john.png"
+										></v-img> </v-avatar
+									>우울
+								</v-chip>
 
-							<v-chip>
-								<v-avatar left>
-									<v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-								</v-avatar>행복
-							</v-chip>
-							<v-chip>
-								<v-avatar left>
-									<v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-								</v-avatar>기쁨
-							</v-chip>
+								<v-chip>
+									<v-avatar left>
+										<v-img
+											src="https://cdn.vuetifyjs.com/images/john.png"
+										></v-img> </v-avatar
+									>행복
+								</v-chip>
+								<v-chip>
+									<v-avatar left>
+										<v-img
+											src="https://cdn.vuetifyjs.com/images/john.png"
+										></v-img> </v-avatar
+									>기쁨
+								</v-chip>
+							</div>
 						</v-chip-group>
+						<div style="margin: 0 auto; width:70%">
+							<p class="font-weight-bold">
+								해당 감정에 자주 듣는 노래 url을
+								입력해주세요.(유투브)
+							</p>
+							<div style="margin: 0 auto; width:60%">
+								<v-text-field
+									v-model="url"
+									@keyup.enter="insert"
+									label="url"
+									ref="url"
+									required
+									:rules="[youtube_parser]"
+									style="display: inline-block; width: 80%;"
+								/>
+
+								<v-btn
+									text
+									style="display: inline-block; width: 20%;"
+									@click="insert"
+									>입력</v-btn
+								>
+							</div>
+						</div>
 					</v-card-text>
 				</v-card>
 			</v-dialog>
+		</div>
+		<div class="masonry" v-lazy-container="{ selector: 'card' }">
+			<div
+				v-for="(intrash, index) in trash"
+				:key="intrash.id"
+				class="card"
+			>
+				<TrashCom
+					@load="rendered"
+					class="card-content"
+					:trash="intrash"
+					:index="index"
+				/>
+			</div>
+		</div>
+		<v-divider></v-divider>
+
+		<div class="bottomtrash">
+			<div style="width:80%; margin: 0 auto">
+				<v-text-field
+					v-model="url"
+					@keyup.enter="trash"
+					ref="url"
+					required
+					style="display: inline-block; width: 80%; "
+				/>
+
+				<v-btn text style="display: inline-block; ;" @click="trash">
+					<v-icon x-large>mdi-heart-box</v-icon></v-btn
+				>
+			</div>
 		</div>
 	</div>
 </template>
@@ -78,6 +130,7 @@
 <script>
 // @ is an alias to /src
 import TrashCom from "@/components/TrashComponent.vue";
+import axios from "axios";
 
 export default {
 	name: "Trash",
@@ -88,7 +141,9 @@ export default {
 		return {
 			trashdialog: false,
 			selection: 0,
-
+			imageCounter: 0,
+			imagesCount: 0,
+			url: "",
 			trash: [
 				{
 					id: 0,
@@ -256,18 +311,76 @@ export default {
 		};
 	},
 	created() {
+		// let masonryEvents = ["load", "resize"];
+		// let vm = this;
+		// masonryEvents.forEach(function(event) {
+		// 	window.addEventListener(event, vm.resizeAllMasonryItems);
+		// });
+	},
+	mounted() {
 		let masonryEvents = ["load", "resize"];
 		let vm = this;
 		masonryEvents.forEach(function(event) {
 			window.addEventListener(event, vm.resizeAllMasonryItems);
 		});
+		vm.resizeAllMasonryItems();
 	},
 	watch: {
 		imagesCount: function() {
-			this.resizeAllMasonryItems();
+			if (this.imagesCount == this.imageCounter) {
+				this.resizeAllMasonryItems();
+			}
 		},
 	},
+
 	methods: {
+		youtube_parser2(url) {
+			var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+
+			var match = url.match(regExp);
+
+			return match && match[7].length == 11 ? match[7] : false;
+		},
+		youtube_parser() {
+			var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+
+			var match = this.url.match(regExp);
+			if (match && match[7].length == 11) {
+				return true;
+			} else {
+				return "youtube 주소가 아닙니다.";
+			}
+		},
+		calculateImageCount() {
+			this.imagesCount = this.trash.length;
+		},
+		rendered() {
+			this.imagesCount++;
+		},
+		insert() {
+			var videoid = this.youtube_parser2(this.url);
+			alert(videoid);
+		},
+		trash() {
+			axios
+				.post("http://192.168.77.80:8080/v1/signup", formData)
+				.then(response => {
+					console.log(
+						"response : ",
+						JSON.stringify(response, null, 2),
+					);
+					if (response.status == 200) {
+						alert("회원 가입 성공");
+						this.$router.push("/");
+					} else {
+						alert("회원 가입 실패");
+						resetForm();
+					}
+				})
+				.catch(error => {
+					console.log("failed", error);
+				});
+		},
 		resizeMasonryItem(item) {
 			/* Get the grid object, its row-gap, and the size of its implicit rows */
 			let grid = document.getElementsByClassName("masonry")[0],
@@ -323,22 +436,40 @@ export default {
 	grid-gap: 15px;
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 	grid-auto-rows: 0;
+	height: 90%;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+.bottomtrash {
+	height: 10%;
+	margin: 0 auto;
+	background-color: #fce4ec;
 }
 .todack {
-	position: fixed;
-	float: right;
+	background-color: #b2dfdb;
+
+	border-radius: 5px;
+	color: white;
+	border: 1px solid rgba(192, 192, 192, 0.363);
 }
 @media screen and (max-width: 400px) {
 	.masonry {
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 	}
 }
-
+.trashtop {
+	position: fixed;
+	top: 15px;
+	left: 15px;
+	width: 120px;
+	height: 50px;
+	cursor: pointer;
+}
 .trashcontainer {
 	height: 100%;
 	margin: 0 auto;
-	overflow-y: auto;
-	overflow-x: hidden;
+
 	margin-bottom: 30px;
+	padding: 20px;
 }
 </style>

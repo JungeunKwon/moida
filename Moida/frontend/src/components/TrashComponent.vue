@@ -8,7 +8,16 @@
 		</div>
 		<div class="trashother">
 			<div id="player" class="video">
-				<iframe width="100%" height="50" :src="this.videourl" frameborder="0" allowfullscreen></iframe>
+				<div style="width:100%; height:50">
+					<iframe
+						width="100%"
+						height="50"
+						:src="this.videourl"
+						frameborder="0"
+						allowfullscreen
+						loading="lazy"
+					></iframe>
+				</div>
 				<div class="videodisc">{{ trash.musictitle }}</div>
 			</div>
 
@@ -17,14 +26,18 @@
 				<div class="trashbottombottom">
 					<div class="bottomleft">
 						<div class="timewrap">
-							<v-chip class="time" color="red accent-1">{{ lefttime }}</v-chip>
+							<v-chip class="time" color="red accent-1">{{
+								lefttime
+							}}</v-chip>
 
 							<div class="timecontent">시간 뒤 펑~!</div>
 						</div>
 					</div>
 					<div class="bottomright">
 						<v-btn icon @click="likeup">
-							<v-icon style="height:100%" color="pink lighten-4">mdi-heart</v-icon>
+							<v-icon style="height:100%" color="pink lighten-4"
+								>mdi-heart</v-icon
+							>
 							{{ trash.likes }}
 						</v-btn>
 					</div>
@@ -51,7 +64,8 @@ export default {
 		};
 	},
 	created() {
-		this.videourl = "https://www.youtube.com/embed/" + this.trash.videoid;
+		this.videourl =
+			"https://www.youtube-nocookie.com/embed/" + this.trash.videoid;
 	},
 	mounted() {
 		let today = new Date();
@@ -62,13 +76,6 @@ export default {
 		likeup() {
 			this.trash.likes = this.trash.likes + 1;
 		},
-		youtube_parser(url) {
-			var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-
-			var match = url.match(regExp);
-
-			return match && match[7].length == 11 ? match[7] : false;
-		},
 	},
 };
 </script>
@@ -78,7 +85,7 @@ export default {
 	display: inline-block;
 	max-width: 300px;
 	margin: 5px;
-	border-radius: 5px;
+	border-radius: 10px;
 	max-height: 400px;
 	border-radius: 5px;
 
