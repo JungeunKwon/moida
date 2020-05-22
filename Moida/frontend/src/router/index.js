@@ -8,7 +8,7 @@ Vue.use(VueRouter);
 const routes = [
 
 	{
-		path: "/trash",
+		path: "/",
 		name: "Trash",
 		component: Trash,
 	},

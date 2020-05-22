@@ -9,7 +9,7 @@
 		bottom
 		right
 		small
-		color="#c7ceea"
+		color="#fadf99"
 		@click="toTop"
 	>
 		<v-icon>mdi-chevron-up</v-icon>

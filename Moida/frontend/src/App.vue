@@ -1,6 +1,7 @@
 <template>
 	<v-app id="app">
-		<Layout id="app-view">
+		<First v-if="isFirst" />
+		<Layout v-else id="app-view">
 			<v-fade-transition mode="out-in">
 				<router-view :key="$route.fullPath" />
 			</v-fade-transition>
@@ -12,11 +13,17 @@
 <script>
 import Layout from "@/components/Layout";
 import GoTop from "@/components/GoTop";
-
+import First from "@/components/First";
 export default {
 	components: {
 		Layout,
 		GoTop,
+		First,
+	},
+	data() {
+		return {
+			isFirst: false,
+		};
 	},
 	mounted() {},
 };
@@ -39,6 +46,7 @@ export default {
 	font-style: normal;
 }
 #app {
+	/* background-image: url("./assets/images/background.png"); */
 	height: 100%;
 	overflow: hidden;
 	font-family: "Noto Sans KR", sans-serif;
