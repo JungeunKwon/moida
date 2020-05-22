@@ -1,19 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
 // import About from "../views/About.vue";
 import SharedDiary from "../views/SharedDiary/index.vue";
-import Trash from "../views/Trash.vue";
+//import Trash from "../views/Trash/index.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
-	{
-		path: "/trash",
-		name: "Trash",
-		component: Trash,
-	},
-
 	{
 		path: "/shared",
 		name: "SharedDiary",
@@ -23,7 +16,7 @@ const routes = [
 		path: "/trash",
 		name: "Trash",
 		component: () =>
-			import(/* webpackChunkName: "trash" */ "../views/Trash.vue"),
+			import(/* webpackChunkName: "trash" */ "../views/Trash/index.vue"),
 	},
 ];
 
