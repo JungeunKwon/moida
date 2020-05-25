@@ -1,26 +1,28 @@
 <template>
 	<div class="mp-main-container">
-		<el-row type="flex" class="mp-first-row" justify="space-between">
+		<el-row type="flex" class="mp-first-row">
 			<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-				<div class="mp-content mp-myInfo">User Info</div>
+				<user-card />
 			</el-col>
-			<el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
-				<div class="mp-content mp-joinedDiary">
-					내가 참여한 다이어리들
-				</div>
+			<el-col :xs="12" :sm="12" :md="12" :lg="{span: 6, offset: 5}" :xl="{span: 6, offset: 5}">
+				<div class="mp-content mp-joinedDiary">내가 참여한 다이어리들</div>
 			</el-col>
 		</el-row>
 		<el-row type="flex" class="mp-second-row" justify="start">
-			<el-col :xs="24" :sm="24" :md="24" :lg="23" :xl="23"
-				><div class="mp-content mp-Calendar">달력컴포넌트</div></el-col
-			>
+			<el-col :xs="24" :sm="24" :md="24" :lg="23" :xl="23">
+				<div class="mp-content mp-Calendar">달력컴포넌트</div>
+			</el-col>
 		</el-row>
 	</div>
 </template>
 
 <script>
+import userCard from "./components/userCard";
 export default {
 	name: "myPage",
+	components: {
+		userCard,
+	},
 	data() {
 		return {};
 	},
