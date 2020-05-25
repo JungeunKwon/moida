@@ -10,8 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.springframework.stereotype.Controller;
 
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.common.BaseEntity;
@@ -30,16 +33,23 @@ public class GroupTB extends BaseEntity {
 	private Long id;
 	
 	@Column(nullable = true, length = 30)
-	private String name;
-	
-	@Column(nullable = true, length=300)
-	private String password;
+	private String subject;
 	
 	@Column
 	private int limitUser;
 	
-	@Column
+	@Column(nullable = true)
 	private LocalDateTime deleteTime;
+	
+	@Column(nullable = true)
+	private boolean isPrivate;
+	
+	@Column(nullable = true)
+	private String imgUrl;
+	
+	@Column(nullable = true)
+	@Lob
+	private String description;
 	
 	@ManyToOne
 	@JoinColumn(name="account_id")
@@ -48,17 +58,21 @@ public class GroupTB extends BaseEntity {
 	@OneToMany(mappedBy = "groupTB")
 	private List<AccountGroup> account = new ArrayList<>();
 
-	public void updateDeleteDate() {
-		this.deleteTime = LocalDateTime.now();
+	public void updateDeleteDate(LocalDateTime deleteTime) {
+		this.deleteTime = deleteTime;
 	}
-	
+
 	@Builder
-	public GroupTB(Long id, String name, String password, int limitUser, Account host, List<AccountGroup> account) {
+	public GroupTB(Long id, String subject, int limitUser, LocalDateTime deleteTime, boolean isPrivate, String imgUrl,
+			Account host, List<AccountGroup> account, String description) {
 		this.id = id;
-		this.name = name;
-		this.password = password;
+		this.subject = subject;
 		this.limitUser = limitUser;
+		this.deleteTime = deleteTime;
+		this.isPrivate = isPrivate;
+		this.imgUrl = imgUrl;
 		this.host = host;
 		this.account = account;
+		this.description = description;
 	}
 }

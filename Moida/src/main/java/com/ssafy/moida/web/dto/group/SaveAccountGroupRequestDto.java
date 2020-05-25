@@ -15,12 +15,12 @@ public class SaveAccountGroupRequestDto {
 	private Account account;
 	private Long groupId;
 	private GroupTB groupTB;
-	private String password;
 	
 	public AccountGroup toEntity() {
 		return AccountGroup.builder()
 				.account(account)
 				.groupTB(groupTB)
+				.groupId(groupId)
 				.build();
 	}
 }

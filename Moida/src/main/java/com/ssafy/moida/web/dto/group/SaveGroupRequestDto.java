@@ -1,5 +1,7 @@
 package com.ssafy.moida.web.dto.group;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.group.GroupTB;
 
@@ -12,23 +14,33 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class SaveGroupRequestDto {
-	private String name;
-	private String password;
+	private String subject;
 	private Account host;
+	private int limitUser;
+	private boolean isPrivate;
+	private String imgUrl;
+	private String description;
+	private MultipartFile uploadFile;
 	
 	public GroupTB toEntity() {
 		return GroupTB.builder()
-				.name(name)
-				.password(password)
+				.subject(subject)
 				.host(host)
+				.limitUser(limitUser)
+				.isPrivate(isPrivate)
+				.description(description)
 				.build();
 	}
 
 	@Builder
-	public SaveGroupRequestDto(String name, String password, Account host) {
-		super();
-		this.name = name;
-		this.password = password;
+	public SaveGroupRequestDto(String subject, Account host, int limitUser, boolean isPrivate, MultipartFile uploadFile,
+			String imgUrl, String description) {
+		this.subject = subject;
 		this.host = host;
+		this.limitUser = limitUser;
+		this.isPrivate = isPrivate;
+		this.uploadFile = uploadFile;
+		this.imgUrl = imgUrl;
+		this.description = description;
 	}
 }

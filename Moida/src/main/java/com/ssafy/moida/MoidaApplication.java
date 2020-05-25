@@ -6,11 +6,13 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.filter.OrderedHttpPutFormContentFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.filter.HttpPutFormContentFilter;
 
 @EnableJpaAuditing
 @SpringBootApplication
@@ -30,5 +32,15 @@ public class MoidaApplication {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
+	
+	@Bean
+	public HttpPutFormContentFilter httpPutFormFilter() {
+		return new HttpPutFormContentFilter();
+	}
+	
+	@Bean
+	public OrderedHttpPutFormContentFilter httpputFormContentFilter() {
+		return new OrderedHttpPutFormContentFilter();
 	}
 }
