@@ -1,4 +1,4 @@
-package com.ssafy.moida.domain.group;
+package com.ssafy.moida.domain.follow;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,37 +9,32 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.ssafy.moida.domain.account.Account;
+import com.ssafy.moida.domain.common.BaseEntity;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
+@Getter
 @NoArgsConstructor
-public class AccountGroup {
+public class Follow extends BaseEntity {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="account_id")
-	private Account account;
+	@JoinColumn(name="follower_id")
+	private Account follower;
 	
-	@ManyToOne
-	@JoinColumn(name="groupTB_id")
-	private GroupTB groupTB;
+	@Column(name = "following_id")
+	private Long followingId;
 
-	@Column
-	private Long groupId;
-	
 	@Builder
-	public AccountGroup(Long id, Account account, GroupTB groupTB, Long groupId) {
+	public Follow(Long id, Account follower, Long followingId) {
 		this.id = id;
-		this.account = account;
-		this.groupTB  = groupTB;
-		this.groupId = groupId;
-	}	
+		this.follower = follower;
+		this.followingId = followingId;
+	}
 }

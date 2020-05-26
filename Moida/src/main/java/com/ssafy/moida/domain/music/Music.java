@@ -1,4 +1,4 @@
-package com.ssafy.moida.domain.group;
+package com.ssafy.moida.domain.music;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,33 +13,45 @@ import com.ssafy.moida.domain.account.Account;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
-public class AccountGroup {
+public class Music {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(nullable = false, length = 10)
+	private String mood;
+	
+	@Column(nullable = false, length = 255)
+	private String musicname;
+	
+	@Column(nullable = false, length = 10)
+	private Long likecount;
+	
+	@Column(nullable = false,unique = true, length = 10)
+	private String videoid;
+	
+	
+	
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
-	
-	@ManyToOne
-	@JoinColumn(name="groupTB_id")
-	private GroupTB groupTB;
 
-	@Column
-	private Long groupId;
-	
 	@Builder
-	public AccountGroup(Long id, Account account, GroupTB groupTB, Long groupId) {
+	public Music(Long id, String mood, String musicname, Long likecount, String videoid, Account account) {
 		this.id = id;
+		this.mood = mood;
+		this.musicname = musicname;
+		this.likecount = likecount;
+		this.videoid = videoid;
 		this.account = account;
-		this.groupTB  = groupTB;
-		this.groupId = groupId;
-	}	
+	}
+	
+	
+	
+	
 }
