@@ -65,7 +65,7 @@ public class AccountController {
 	
 	@ApiOperation(value = "로그인", httpMethod = "POST", notes = "로그인 하는 부분")
 	@PostMapping(value = "/signin")
-	public ResponseEntity<String> signIn(@RequestBody SignInRequestDto requestDto){
+	public ResponseEntity<String> signIn(@RequestBody SignInRequestDto requestDto) throws BaseException{
 		return new ResponseEntity<String>(accountService.signIn(requestDto), HttpStatus.OK);
 	}
 	
