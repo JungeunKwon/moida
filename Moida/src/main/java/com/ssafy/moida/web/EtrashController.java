@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.moida.domain.etrash.Etrash;
+import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.etrash.EtrashService;
 import com.ssafy.moida.web.dto.etrash.EtrashSaveRequestDto;
 import com.ssafy.moida.web.dto.etrash.EtrashAllRequestDTO;
@@ -48,7 +49,7 @@ public class EtrashController {
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@PostMapping(value = "/etrash")
 	public ResponseEntity<Long> createEtrash(@RequestBody EtrashSaveRequestDto requestDto
-			) throws IllegalArgumentException, IOException{
+			) throws IllegalArgumentException, IOException, BaseException{
 	
 		return new ResponseEntity<Long>(etrashService.saveEtrash(requestDto), HttpStatus.OK);
 	}
