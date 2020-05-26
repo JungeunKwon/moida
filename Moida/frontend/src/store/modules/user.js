@@ -5,9 +5,10 @@ const state = {
 	email: "",
 	username: "",
 	gender: "",
-	nickname: "",
+	nickname: "Nickname",
 	phone: "",
-	profile_img: "",
+	profile_img:
+		"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
 };
 
 const mutations = {
@@ -35,6 +36,11 @@ const mutations = {
 };
 
 const actions = {
+	//test
+	setTest({ commit }, text) {
+		commit("SET_USERNAME", text);
+		commit("SET_PHONE", text);
+	},
 	// user login
 	login({ commit }, userInfo) {
 		const { email, password } = userInfo;
