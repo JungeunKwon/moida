@@ -1,7 +1,8 @@
 import { login } from "@/api/user";
 
 const state = {
-	token: "",
+	token:
+		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTU5MDQ4NDMyMiwiZXhwIjoxNTkyNjQ0MzIyfQ.ypqzzPDvmmWQ7X_fErMWsKhyYYKJdCVivgQ-8GYxVIM",
 	email: "",
 	username: "",
 	gender: "",

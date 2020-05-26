@@ -9,7 +9,7 @@ const service = axios.create({
 service.interceptors.request.use(
 	config => {
 		if (store.getters.token) {
-			config.headers["X-AUTH-TOKEN"] = getToken();
+			config.headers["X-AUTH-TOKEN"] = store.getters.token;
 			config.headers["Access-Control-Allow-Origin"] = "*";
 		}
 		return config;
