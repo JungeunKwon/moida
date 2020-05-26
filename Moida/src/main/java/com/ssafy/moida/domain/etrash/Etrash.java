@@ -27,14 +27,14 @@ public class Etrash extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, length = 255)
+	@Column(nullable = false)
 	private String description;
 	
 	@Column(nullable = false, length = 10)
 	private String mood;
 	
 	@Column(nullable = false, length = 10)
-	private int like;
+	private int likes;
 	
 	@ManyToOne
 	@JoinColumn(name="account_id")
@@ -51,7 +51,7 @@ public class Etrash extends BaseEntity{
 	}
 	
 	public void updateEtrashLike() {
-		this.like++;
+		this.likes++;
 	}
 	
 	public Long updateMusic(Music music) {
@@ -60,14 +60,15 @@ public class Etrash extends BaseEntity{
 	}
 	
 	@Builder
-	public Etrash(Long id, String description, String mood,int like, Account account,Music music) {
+	public Etrash(Long id, String description, String mood, int likes, Account account, Music music) {
 		this.id = id;
 		this.description = description;
 		this.mood = mood;
-		this.like = like;
+		this.likes = likes;
 		this.account = account;
 		this.music = music;
 	}
+	
 	
 	
 	

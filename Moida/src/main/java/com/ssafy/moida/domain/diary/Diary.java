@@ -27,16 +27,16 @@ public class Diary {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, length = 250)
+	@Column(nullable = false)
 	private String description;
 	
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false)
 	private String deletedate;
 	
-	@Column(nullable = false, length = 10)
+	@Column(nullable = false)
 	private String mood;
 	
-	@Column(nullable = false, length = 250)
+	@Column(nullable = false)
 	private String imgurl;
 	
 	@ManyToOne
