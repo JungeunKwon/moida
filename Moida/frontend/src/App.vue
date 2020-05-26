@@ -1,6 +1,8 @@
 <template>
 	<v-app id="app">
-		<First v-if="isFirst" />
+		<First v-if="isFirst" id="app-view">
+			<router-view :key="$route.fullPath" />
+		</First>
 		<Layout v-else id="app-view">
 			<v-fade-transition mode="out-in">
 				<router-view :key="$route.fullPath" />
@@ -22,10 +24,9 @@ export default {
 	},
 	data() {
 		return {
-			isFirst: false,
+			isFirst: true,
 		};
 	},
-	mounted() {},
 };
 </script>
 <style>
@@ -47,6 +48,8 @@ export default {
 }
 #app {
 	/* background-image: url("./assets/images/background.png"); */
+	background-repeat: no-repeat;
+	background-size: cover;
 	height: 100%;
 	overflow: hidden;
 	font-family: "Noto Sans KR", sans-serif;

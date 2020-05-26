@@ -4,85 +4,43 @@
 </style>
 
 <template>
-	<div class="container">
+	<div class="container" @click="opened = false">
 		<div class="main">
 			<ul id="bk-list" class="bk-list clearfix">
 				<li>
-					<div class="bk-book book-1 bk-bookdefault">
+					<div
+						@click.stop="opened = true"
+						:class="{
+							'bk-book': true,
+							'book-1': true,
+							'bk-viewinside': opened,
+							'bk-bookdefault': !opened,
+						}"
+					>
 						<div class="bk-front">
 							<div class="bk-cover-back"></div>
 							<div class="bk-cover">
 								<h2>
-									<span>Anthony Burghiss</span>
-									<span>A Catwork Orange</span>
+									<span>모 이 다</span>
+									<span>- 모두를 이어주는 다이어리 -</span>
 								</h2>
 							</div>
 						</div>
 						<div class="bk-page">
 							<div class="bk-content bk-content-current">
-								<p>
-									Red snapper Kafue pike fangtooth humums
-									slipmouth, salmon cutlassfish; swallower
-									European perch mola mola sunfish, threadfin
-									bream. Billfish hog sucker trout-perch lenok
-									orbicular velvetfish. Delta smelt striped
-									bass, medusafish dragon goby starry flounder
-									cuchia round whitefish northern anchovy
-									spadefish merluccid hake cat shark Black
-									pickerel. Pacific cod.
-								</p>
-							</div>
-							<div class="bk-content">
-								<p>
-									Whale catfish leatherjacket deep sea
-									anglerfish grenadier sawfish pompano
-									dolphinfish carp large-eye bream, squeaker
-									amago. Sandroller; rough scad, tiger
-									shovelnose catfish snubnose parasitic eel?
-									Black bass soldierfish duckbill--Rattail
-									Atlantic saury Blind shark California
-									halibut; false trevally warty angler!
-								</p>
-							</div>
-							<div class="bk-content">
-								<p>
-									Trahira giant wels cutlassfish snapper koi
-									blackchin mummichog mustard eel rock bass
-									whiff murray cod. Bigmouth buffalo ling cod
-									giant wels, sauger pink salmon. Clingfish
-									luderick treefish flatfish Cherubfish
-									oldwife Indian mul gizzard shad hagfish
-									zebra danio. Butterfly ray lizardfish
-									ponyfish muskellunge Long-finned sand diver
-									mullet swordfish limia ghost carp filefish.
-								</p>
+								<slot />
 							</div>
 						</div>
-
+						<div class="bk-back"></div>
 						<div class="bk-right"></div>
 						<div class="bk-left">
 							<h2>
-								<span>Anthony Burghiss</span>
-								<span>A Catwork Orange</span>
+								<span>HOLYMOLY</span>
+								<!-- <span>모두를 이어주는 다이어리</span> -->
 							</h2>
 						</div>
 						<div class="bk-top"></div>
 						<div class="bk-bottom"></div>
-					</div>
-					<div class="bk-info">
-						<button class="bk-bookback">Flip</button>
-						<button class="bk-bookview">View inside</button>
-						<h3>
-							<span>Anthony Burghiss</span>
-							<span>A Catwork Orange</span>
-						</h3>
-						<p>
-							Social prophecy? Black comedy? Study of freewill? A
-							Clockwork Orange is all of these. It is also a
-							dazzling experiment in language, as Burghiss creates
-							a new language - 'meow', the cat slang of a
-							not-too-distant future.
-						</p>
 					</div>
 				</li>
 			</ul>
@@ -91,8 +49,32 @@
 </template>
 
 <script>
-// import test from "../utils/3DBookShowcase/js/modernizr.custom";
-export default {};
+export default {
+	data() {
+		return {
+			others: {},
+			opened: false,
+		};
+	},
+	mounted() {},
+	methods: {
+		openDiary() {
+			this.opened = true;
+		},
+	},
+};
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+#signUp_title {
+	font-family: "KyoboHand";
+	position: fixed;
+	right: -90px;
+	text-align: center;
+	font-size: 20px;
+	background-color: #cde4db;
+	color: white;
+	padding: 10px 20px 10px 20px;
+	box-shadow: 1px 1px 3px rgba(102, 102, 102, 0.534);
+}
+</style>

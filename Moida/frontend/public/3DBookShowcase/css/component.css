@@ -1,38 +1,22 @@
-@font-face {
-	font-family: 'Binggrae-Bold';
-	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Binggrae-Bold.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'MapoFlowerIsland';
-	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
 .bk-list {
 	list-style: none;
 	position: relative;
-	text-align: center;
 }
 
 .bk-list li {
 	position: relative;
-	display: inline-block;
-	width: 550px;
+	width: 300px;
+	float: left;
 	z-index: 1;
-	margin: 50px 50px 40px -50px;
+	margin: 0px 50px 40px 0;
 	-webkit-perspective: 1800px;
 	perspective: 1800px;
 }
 
 .bk-list li .bk-book {
 	position: absolute;
-	/* width: 100%; */
-	/* height: 400px; */
-	height: 650px;
+	width: 100%;
+	height: 400px;
 	-webkit-transform-style: preserve-3d;
 	transform-style: preserve-3d;
 	-webkit-transition: -webkit-transform .5s;
@@ -77,11 +61,8 @@
 	-webkit-transform: translate3d(0, 0, 19px);
 	transform: translate3d(0, 0, 19px);
 	display: none;
-	/* width: 295px;
-	height: 390px; */
-	width: 535px;
-	height: 625px;
-
+	width: 295px;
+	height: 390px;
 	top: 5px;
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
@@ -91,10 +72,9 @@
 .bk-list li .bk-front,
 .bk-list li .bk-back,
 .bk-list li .bk-front>div {
-	/* width: 300px;
-	height: 400px; */
-	width: 550px;
-	height: 650px;
+	width: 300px;
+	height: 400px;
+
 }
 
 .bk-list li .bk-left {
@@ -104,7 +84,7 @@
 
 .bk-list li .bk-top,
 .bk-list li .bk-bottom {
-	width: 550px;
+	width: 295px;
 	height: 40px;
 	top: -15px;
 	-webkit-backface-visibility: hidden;
@@ -125,7 +105,7 @@
 }
 
 .bk-list li .bk-right {
-	height: 650px;
+	height: 390px;
 	top: 5px;
 	-webkit-transform: rotate3d(0, 1, 0, 90deg) translate3d(0, 0, 295px);
 	-moz-transform: rotate3d(0, 1, 0, 90deg) translate3d(0, 0, 295px);
@@ -135,8 +115,7 @@
 }
 
 .bk-list li .bk-left {
-	/* height: 400px; */
-	height: 650px;
+	height: 400px;
 	-webkit-transform: rotate3d(0, 1, 0, -90deg);
 	transform: rotate3d(0, 1, 0, -90deg);
 }
@@ -210,8 +189,7 @@
 }
 
 .bk-left h2 {
-	/* width: 400px; */
-	width: 650px;
+	width: 400px;
 	height: 40px;
 	-webkit-transform-origin: 0 0;
 	-moz-transform-origin: 0 0;
@@ -226,6 +204,7 @@
 	left: 20px;
 	bottom: 20px;
 	right: 20px;
+	padding: 30px;
 	overflow: hidden;
 	background: #fff;
 	opacity: 0;
@@ -243,6 +222,7 @@
 }
 
 .bk-content p {
+	padding: 0 0 10px;
 	-webkit-font-smoothing: antialiased;
 	color: #000;
 	font-size: 13px;
@@ -281,11 +261,11 @@
 .book-1 .bk-back,
 .book-1 .bk-left,
 .book-1 .bk-front:after {
-	background-color: rgb(250, 223, 153);
+	background-color: #ff924a;
 }
 
 .book-1 .bk-cover {
-	/* background-image: url(../images/1.png); */
+	background-image: url(../images/1.png);
 	background-repeat: no-repeat;
 	background-position: 10px 40px;
 	box-shadow: 1px 1px 1px rgba(39, 26, 26, 0.795);
@@ -304,20 +284,10 @@
 
 .book-1 .bk-cover h2 span:first-child,
 .book-1 .bk-left h2 span:first-child {
-	font-family: "Binggrae-Bold", serif;
 	text-transform: uppercase;
 	font-weight: 400;
-	font-size: 20px;
-}
-
-/* 중앙 책 제목 */
-.book-1 .bk-cover h2 span:first-child {
-	font-size: 40px;
-}
-
-/* 왼쪽 책 제목 */
-.book-1 .bk-left h2 span:first-child {
-	font-size: 15px;
+	font-size: 13px;
+	padding-right: 20px;
 }
 
 .book-1 .bk-cover h2 span:first-child {
@@ -326,21 +296,13 @@
 
 .book-1 .bk-cover h2 span:last-child,
 .book-1 .bk-left h2 span:last-child {
-	font-family: "MapoFlowerIsland", serif;
-}
-
-/* 중앙 책 제목 상세 */
-.book-1 .bk-cover h2 span:last-child {
-	font-size: 25px;
-}
-
-/* 왼쪽 책 제목 상세 */
-.book-1 .bk-left h2 span:last-child {
-	font-size: 20px;
+	font-family: "D2Coding";
+	/* font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif; */
 }
 
 .book-1 .bk-content p {
-	font-family: "Noto Sans KR", serif;
+	font-family: "D2Coding";
+	/* font-family: Georgia, Times, "Times New Roman", serif; */
 }
 
 .book-1 .bk-left h2 {
@@ -353,6 +315,7 @@
 
 .book-1 .bk-back p {
 	color: #fff;
+	font-size: 13px;
 	padding: 40px;
 	text-align: center;
 	font-weight: 700;
@@ -372,55 +335,4 @@
 .no-csstransforms3d .bk-info button,
 .no-js .bk-info button {
 	display: none;
-}
-
-@media screen and (max-width: 500px) {
-	.bk-list li .bk-page {
-		width: 290px;
-		height: 380px;
-	}
-
-	.bk-list li .bk-front,
-	.bk-list li .bk-back,
-	.bk-list li .bk-front>div {
-		width: 300px;
-		height: 400px;
-	}
-
-	.bk-list li .bk-left {
-		height: 400px;
-	}
-
-	.bk-left h2 {
-		width: 400px;
-	}
-
-	.bk-list li .bk-book {
-		width: 0;
-		height: 400px;
-	}
-
-	/* 중앙 책 제목 */
-	.book-1 .bk-cover h2 span:first-child {
-		font-size: 30px;
-	}
-
-	/* 왼쪽 책 제목 */
-	.book-1 .bk-left h2 span:first-child {
-		font-size: 20px;
-	}
-
-	.book-1 .bk-cover h2 span:first-child {
-		display: block;
-	}
-
-	/* 중앙 책 제목 상세 */
-	.book-1 .bk-cover h2 span:last-child {
-		font-size: 15px;
-	}
-
-	/* 왼쪽 책 제목 상세 */
-	.book-1 .bk-left h2 span:last-child {
-		font-size: 10px;
-	}
 }

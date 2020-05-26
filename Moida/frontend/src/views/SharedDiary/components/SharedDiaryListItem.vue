@@ -1,11 +1,6 @@
 <template>
 	<div style="padding: 10px; display: inline-block;">
-		<v-card
-			@click="openDiaryDetail()"
-			id="sharedDiaryItem"
-			class="mx-auto"
-			max-width="300"
-		>
+		<v-card @click="openDiaryDetail()" id="sharedDiaryItem" class="mx-auto" max-width="300">
 			<v-img :src="item.imgUrl" height="200px" />
 			<div id="diaryInfo">
 				<div id="subjectDiv">
@@ -19,10 +14,7 @@
 				<div style="clear: both;" />
 				<div id="desc">{{ item.description }}</div>
 			</div>
-
-			<v-dialog v-model="dialog" width="500">
-				<SharedDiaryDetail :detail="detail" />
-			</v-dialog>
+			<SharedDiaryDetail v-if="dialog" :detail="detail" :dialog="dialog" />
 		</v-card>
 	</div>
 </template>
@@ -30,7 +22,7 @@
 <script>
 import SharedDiaryDetail from "./SharedDiaryDetail";
 export default {
-	name: "SharedDiaryItem",
+	name: "SharedDiaryListItem",
 	components: { SharedDiaryDetail },
 	data() {
 		return {
@@ -44,7 +36,7 @@ export default {
 				isPrivate: true,
 				imgUrl: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg",
 				description:
-					"오는 부끄러운 경, 벌써 위에도 봅니다. 써 별 아직 쉬이 딴은 별 이름을 지나고 북간도에 있습니다. 이름을 아스라히 마리아 까닭이요, 이국 거외다. 사람들의 하나에 계절이 헤일 묻힌 멀리 있습니다. 풀이 위에도 강아지, 딴은 잠, 써 어머니, 겨울이 나는 봅니다. 말 북간도에 지나고 내일 가득 그러나 이름과 별 거외다. 나는 멀듯이, 써 쓸쓸함과 릴케 풀이 나는 보고, 봅니다. 노새, 내린 하나에 불러 이런 하나에 버리었습니다. 경, 가슴속에 라이너 버리었습니다. 그리고 계절이 이런 별 이웃 같이 부끄러운 잠, 청춘이 까닭입니다. 그리고 하나에 책상을 버리었습니다",
+					"오는 부끄러운 경, 벌써 위에도 봅니다. 써 별 아직 쉬이 딴은 별 이름을 지나고 북간도에 있습니다. 이름을 아스라히 마리아 까닭이요, 이국 거외다. 사람들의 하나에 계절이 헤일 묻힌 멀리 있습니다.",
 				limit: 5,
 				count: 3,
 			},

@@ -1,18 +1,14 @@
 <template>
 	<div id="SharedDiary">
-		<SharedDiaryItem
-			v-for="(item, idx) in diaries"
-			:key="idx"
-			:item="item"
-		/>
+		<SharedDiaryListItem v-for="(item, idx) in diaries" :key="idx" :item="item" />
 	</div>
 </template>
 <script>
-import SharedDiaryItem from "./components/SharedDiaryItem";
+import SharedDiaryListItem from "./components/SharedDiaryListItem";
 export default {
 	name: "SharedDiary",
 	components: {
-		SharedDiaryItem,
+		SharedDiaryListItem,
 	},
 	data() {
 		return {
@@ -208,6 +204,8 @@ export default {
 	/* height: 100%;
 	overflow-y: auto;
 	overflow-x: hidden; */
+	width: 100%;
+	height: 100%;
 	margin: 1px;
 }
 </style>
