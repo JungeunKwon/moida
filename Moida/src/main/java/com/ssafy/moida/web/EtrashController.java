@@ -53,6 +53,7 @@ public class EtrashController {
 	
 		return new ResponseEntity<Long>(etrashService.saveEtrash(requestDto), HttpStatus.OK);
 	}
+	
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
@@ -64,6 +65,7 @@ public class EtrashController {
 		
 		return new ResponseEntity<String>(etrashService.sentimentanalysis(requestDto.getDescription()), HttpStatus.OK);
 	}
+	
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})

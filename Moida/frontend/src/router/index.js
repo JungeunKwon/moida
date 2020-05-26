@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
 // import About from "../views/About.vue";
 import SharedDiary from "../views/SharedDiary/index.vue";
 import Trash from "../views/Trash.vue";
@@ -24,6 +23,11 @@ const routes = [
 		name: "Trash",
 		component: () =>
 			import(/* webpackChunkName: "trash" */ "../views/Trash.vue"),
+	},
+	{
+		path: "/myPage",
+		name: "MyPage",
+		component: () => import("../views/myPage/index.vue"),
 	},
 ];
 

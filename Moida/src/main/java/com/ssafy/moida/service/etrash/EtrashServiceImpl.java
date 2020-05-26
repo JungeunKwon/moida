@@ -39,8 +39,7 @@ public class EtrashServiceImpl implements EtrashService{
 	}
 
 	@Transactional(readOnly = true)
-	public Page<EtrashResponseDto> findAll(EtrashAllRequestDTO requestDto) {
-		
+	public Page<EtrashResponseDto> findAll(EtrashAllRequestDTO requestDto) {		
 		return etrashRepository.findAll(requestDto.getPageable())
 				.map(EtrashResponseDto::new);
 	}
