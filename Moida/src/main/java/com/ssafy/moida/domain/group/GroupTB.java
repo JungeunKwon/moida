@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.common.BaseEntity;
+import com.ssafy.moida.web.dto.group.GroupUpdateRequestDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -60,6 +61,14 @@ public class GroupTB extends BaseEntity {
 
 	public void updateDeleteDate(LocalDateTime deleteTime) {
 		this.deleteTime = deleteTime;
+	}
+	
+	public void updateGroup(String subject, int limitUser, boolean isPrivate, String description, String imgUrl) {
+		subject = this.subject;
+		limitUser = this.limitUser;
+		isPrivate = this.isPrivate;
+		description = this.description;
+		imgUrl = this.imgUrl;
 	}
 
 	@Builder

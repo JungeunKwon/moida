@@ -6,6 +6,7 @@ import java.util.List;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.web.dto.group.AccountGroupResponseDto;
 import com.ssafy.moida.web.dto.group.GroupResponseDto;
+import com.ssafy.moida.web.dto.group.GroupUpdateRequestDto;
 import com.ssafy.moida.web.dto.group.SaveAccountGroupRequestDto;
 import com.ssafy.moida.web.dto.group.SaveGroupRequestDto;
 
@@ -17,4 +18,5 @@ public interface GroupService {
 	List<GroupResponseDto> findAllGroup();
 	List<GroupResponseDto> findAllGroupExcludeDeleted();
 	List<AccountGroupResponseDto> findByGroupTBId(Long groupId) throws BaseException;
+	void updateGroup(GroupUpdateRequestDto requestDto) throws BaseException, IllegalArgumentException, IOException;
 }

@@ -29,6 +29,7 @@ public class SaveGroupRequestDto {
 				.limitUser(limitUser)
 				.isPrivate(isPrivate)
 				.description(description)
+				.imgUrl(imgUrl)
 				.build();
 	}
 

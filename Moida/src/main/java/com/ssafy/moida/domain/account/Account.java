@@ -114,13 +114,4 @@ implements UserDetails {
 		this.nickname = nickname;
 		this.roles = roles;
 	}
-
-	@Override
-	public String toString() {
-		return "Account [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password
-				+ ", gender=" + gender + ", profileImg=" + profileImg + ", phone=" + phone + ", nickname=" + nickname
-				+ ", roles=" + roles + ", groupList=" + groupList + "]";
-	}
-	
-	
 }

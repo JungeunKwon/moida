@@ -102,8 +102,17 @@ public class GroupServiceImpl implements GroupService {
 	}
 	
 	@Transactional
-	public void updateGroup(GroupUpdateRequestDto requestDto) {
-		
+	public void updateGroup(GroupUpdateRequestDto requestDto) throws BaseException, IllegalArgumentException, IOException {
+		GroupTB group = groupTBRepository.findById(requestDto.getGroupId()).orElseThrow(() -> new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		String imgUrl;
+		if(requestDto.getUploadFile()==null) {
+			imgUrl = DEFAULT_URL;
+		}
+		else {
+			deleteS3.deleteFile(deleteS3.getFilePath(group.getImgUrl()));
+			imgUrl = uploadS3.uploadFile(requestDto.getUploadFile(), "group/" + group.getHost().getEmail());
+		}
+		group.updateGroup(requestDto.getSubject(), requestDto.getLimitUser(), requestDto.isPrivate(), requestDto.getDescription(), imgUrl);
 	}
 
 	public Account getAccount() throws NumberFormatException, BaseException {

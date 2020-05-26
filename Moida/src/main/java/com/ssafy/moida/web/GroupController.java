@@ -128,15 +128,17 @@ public class GroupController {
 			@RequestParam("subject") String subject,
 			@RequestParam("limitUser") int limitUser,
 			@RequestParam("isPrivate") boolean isPrivate,
-			@RequestParam("description") String description){
-		GroupUpdateRequestDto reqeustDto = GroupUpdateRequestDto.builder()
+			@RequestParam("description") String description,
+			@RequestParam("groupId") Long groupId) throws IllegalArgumentException, BaseException, IOException{
+		GroupUpdateRequestDto requestDto = GroupUpdateRequestDto.builder()
 											.subject(subject)
 											.limitUser(limitUser)
 											.isPrivate(isPrivate)
 											.description(description)
 											.uploadFile(uploadFile)
+											.groupId(groupId)
 											.build();
-		
+		groupService.updateGroup(requestDto);
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
 }
