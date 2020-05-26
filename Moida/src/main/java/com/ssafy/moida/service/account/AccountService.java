@@ -19,5 +19,5 @@ public interface AccountService {
 	public void deleteAccount() throws NumberFormatException, BaseException;
 	public Boolean checkEmail(String email);
 	public Boolean checkNickname(String nickname);
-	
+	public Account getAccount() throws NumberFormatException, BaseException;
 }

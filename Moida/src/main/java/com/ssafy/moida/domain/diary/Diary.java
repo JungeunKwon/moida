@@ -1,4 +1,4 @@
-package com.ssafy.moida.domain.etrash;
+package com.ssafy.moida.domain.diary;
 
 
 
@@ -11,8 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.ssafy.moida.domain.account.Account;
-import com.ssafy.moida.domain.common.BaseEntity;
-import com.ssafy.moida.domain.music.Music;
+
+import com.ssafy.moida.domain.group.GroupTB;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -21,54 +21,54 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Etrash extends BaseEntity{
+public class Diary {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, length = 255)
+	@Column(nullable = false, length = 250)
 	private String description;
+	
+	@Column(nullable = false, length = 30)
+	private String deletedate;
 	
 	@Column(nullable = false, length = 10)
 	private String mood;
 	
-	@Column(nullable = false, length = 10)
-	private int like;
+	@Column(nullable = false, length = 250)
+	private String imgurl;
 	
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
 	
 	@ManyToOne
-	@JoinColumn(name="music_id")
-	private Music music;
-	
-	
-	public void updateEtrashInfo(String description,String mood) {
-		this.description = description;
-		this.mood = mood;
-	}
-	
-	public void updateEtrashLike() {
-		this.like++;
-	}
-	
-	public Long updateMusic(Music music) {
-		this.music = music;
-		return this.music.getId();
-	}
+	@JoinColumn(name="groupTB_id")
+	private GroupTB groupTB;
 	
 	@Builder
-	public Etrash(Long id, String description, String mood,int like, Account account,Music music) {
+	public Diary(Long id, String description, String deletedate, String mood, String imgurl,
+			Account account, GroupTB groupTB) {
+		super();
 		this.id = id;
 		this.description = description;
+		this.deletedate = deletedate;
 		this.mood = mood;
-		this.like = like;
+		this.imgurl = imgurl;
 		this.account = account;
-		this.music = music;
+		this.groupTB = groupTB;
 	}
 	
+	public void updateDiaryinfo(String description, String mood, String imgurl) {
+		this.description = description;
+		this.mood = mood;
+		this.imgurl = imgurl;
+	}
+	
+	public void deleteDiary(String deletedate) {
+		this.deletedate = deletedate;
+	}
 	
 	
 	

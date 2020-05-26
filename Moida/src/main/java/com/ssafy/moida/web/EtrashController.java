@@ -49,7 +49,7 @@ public class EtrashController {
 	@PostMapping(value = "/etrash")
 	public ResponseEntity<Long> createEtrash(@RequestBody EtrashSaveRequestDto requestDto
 			) throws IllegalArgumentException, IOException{
-		
+	
 		return new ResponseEntity<Long>(etrashService.saveEtrash(requestDto), HttpStatus.OK);
 	}
 	@ApiImplicitParams({

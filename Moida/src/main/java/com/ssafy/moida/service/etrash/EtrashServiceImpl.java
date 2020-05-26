@@ -12,6 +12,8 @@ import com.ssafy.moida.domain.etrash.Etrash;
 import com.ssafy.moida.domain.etrash.EtrashRepository;
 import com.ssafy.moida.domain.music.Music;
 import com.ssafy.moida.domain.music.MusicRepository;
+import com.ssafy.moida.exception.BaseException;
+import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.web.dto.etrash.EtrashAllRequestDTO;
 import com.ssafy.moida.web.dto.etrash.EtrashResponseDto;
 import com.ssafy.moida.web.dto.etrash.EtrashSaveRequestDto;
@@ -25,6 +27,7 @@ public class EtrashServiceImpl implements EtrashService{
 	
 	private final EtrashRepository etrashRepository;
 	private final MusicRepository musicRepository;
+	private final AccountService accountservice;
 	
 	
 	@Transactional(readOnly = true)
@@ -44,7 +47,8 @@ public class EtrashServiceImpl implements EtrashService{
 
 
 	@Transactional
-	public Long saveEtrash(EtrashSaveRequestDto dto) {
+	public Long saveEtrash(EtrashSaveRequestDto dto) throws NumberFormatException, BaseException {
+		dto.setAccount(accountservice.getAccount());
 		return etrashRepository.save(dto.toEntity()).getId();
 	}
 
