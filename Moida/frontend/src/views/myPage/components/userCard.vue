@@ -6,11 +6,13 @@
 		</el-col>
 		<el-col :span="18" class="us-content">
 			<el-row style="height: 30%">
-				<el-col class="us-nickname">{{$store.getters.nickname}}</el-col>
+				<el-col class="us-nickname">{{
+					$store.getters.nickname
+				}}</el-col>
 			</el-row>
 			<el-row style="height: 70%">
-				<el-col :span="12">팔로워:</el-col>
-				<el-col :span="12">팔로잉:</el-col>
+				<el-col :span="12" class="us-follow">팔로워:</el-col>
+				<el-col :span="12" class="us-follow">팔로잉:</el-col>
 			</el-row>
 		</el-col>
 	</el-card>
@@ -19,7 +21,7 @@
 <script>
 export default {
 	data() {
-		return;
+		return {};
 	},
 };
 </script>
@@ -51,5 +53,9 @@ export default {
 	font-size: 2.5rem;
 	font-weight: 900;
 	text-align: left;
+}
+.us-follow {
+	font-size: 1.5rem;
+	font-weight: 600;
 }
 </style>
