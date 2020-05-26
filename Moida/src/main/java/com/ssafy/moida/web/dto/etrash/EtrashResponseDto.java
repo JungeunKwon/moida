@@ -2,8 +2,6 @@ package com.ssafy.moida.web.dto.etrash;
 
 
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.etrash.Etrash;
 import com.ssafy.moida.domain.music.Music;
@@ -21,6 +19,7 @@ public class EtrashResponseDto {
 	private Long id;
 	private String description;
 	private String mood;
+	private int likes;
 	private Account account;
 	private Music music;
 	
@@ -29,6 +28,7 @@ public class EtrashResponseDto {
 		this.id = entity.getId();
 		this.description = entity.getDescription();
 		this.mood = entity.getMood();
+		this.likes = entity.getLikes();
 		this.account = entity.getAccount();
 		this.music = entity.getMusic();
 	}

@@ -5,7 +5,8 @@ import lombok.Getter;
 
 @Getter
 public enum EnumAccountException implements EnumExceptionBase {
-	USER_NOT_FOUND("012", "유저를 찾을 수 없습니다.");
+	USER_NOT_FOUND("011", "유저를 찾을 수 없습니다."),
+	PASS_NOT_CORRECT("012", "비밀번호를 틀렸습니다.");
 	
 	private String code;
 	private String desc;

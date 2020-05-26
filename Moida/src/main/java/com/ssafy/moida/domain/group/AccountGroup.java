@@ -1,5 +1,6 @@
 package com.ssafy.moida.domain.group;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,10 +32,14 @@ public class AccountGroup {
 	@JoinColumn(name="groupTB_id")
 	private GroupTB groupTB;
 
+	@Column
+	private Long groupId;
+	
 	@Builder
-	public AccountGroup(Long id, Account account, GroupTB groupTB) {
+	public AccountGroup(Long id, Account account, GroupTB groupTB, Long groupId) {
 		this.id = id;
 		this.account = account;
 		this.groupTB  = groupTB;
-	}
+		this.groupId = groupId;
+	}	
 }
