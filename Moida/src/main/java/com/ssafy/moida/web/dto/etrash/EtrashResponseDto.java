@@ -19,7 +19,7 @@ public class EtrashResponseDto {
 	private Long id;
 	private String description;
 	private String mood;
-	private int likes;
+	private int likecount;
 	private Account account;
 	private Music music;
 	
@@ -28,7 +28,7 @@ public class EtrashResponseDto {
 		this.id = entity.getId();
 		this.description = entity.getDescription();
 		this.mood = entity.getMood();
-		this.likes = entity.getLikes();
+		this.likecount = entity.getLikecount();
 		this.account = entity.getAccount();
 		this.music = entity.getMusic();
 	}

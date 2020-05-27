@@ -22,6 +22,7 @@ public class DiarySaveRequest {
 	private String imgurl;
 	private Account account;
 	private GroupTB groupTB;
+	private Long groupid;
 	
 	public Diary toEntity() {
 		return Diary.builder()

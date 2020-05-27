@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import com.ssafy.moida.domain.account.Account;
@@ -23,20 +24,21 @@ public class Music {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, length = 10)
+	@Column(nullable = false)
 	private String mood;
 	
 	@Column(nullable = false)
 	private String musicname;
 	
-	@Column(nullable = false, length = 10)
+	@Column(nullable = false)
 	private Long likecount;
 	
-	@Column(nullable = false,unique = true, length = 1000)
+	@Lob
+	@Column(nullable = false,unique = true)
 	private String videoid;
 	
 	@Column(nullable = true)
-	private String sumnail;
+	private String thumbnail;
 	
 	
 	@ManyToOne
@@ -44,14 +46,14 @@ public class Music {
 	private Account account;
 
 	@Builder
-	public Music(Long id, String mood, String musicname, Long likecount, String videoid, Account account,String sumnail) {
+	public Music(Long id, String mood, String musicname, Long likecount, String videoid, Account account,String thumbnail) {
 		this.id = id;
 		this.mood = mood;
 		this.musicname = musicname;
 		this.likecount = likecount;
 		this.videoid = videoid;
 		this.account = account;
-		this.sumnail = sumnail;
+		this.thumbnail = thumbnail;
 	}
 	
 	

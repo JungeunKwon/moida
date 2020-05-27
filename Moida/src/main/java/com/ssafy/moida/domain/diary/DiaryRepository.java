@@ -1,6 +1,5 @@
 package com.ssafy.moida.domain.diary;
 
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +16,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>{
 	Page<Diary> findByMoodAndDeletedateIsNull(String mood,Pageable pageable);
 	Page<Diary> findByGroupTBAndDeletedateIsNull(GroupTB groupTB,Pageable pageable);
 	
-	@Query("select * from diary where substring(createDate,1,4) = ?1 AND substring(createDate,6,2) = ?2 AND deletedate = NULL")
-	Page<Diary> findByMood(String year,String month,Pageable pageable);
+	@Query("select * from diary where group_id = ?1 AND substring(createDate,1,4) = ?2 AND substring(createDate,6,2) = ?3 AND deletedate = NULL AND substring(createDate,6,2) = ?4")
+	Page<Diary> findByMood(Long groupid, String year,String month,String day,Pageable pageable);
 	
 }

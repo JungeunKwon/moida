@@ -74,9 +74,7 @@ public class EtrashController {
 	@GetMapping(value = "/etrash")
 	public Page<EtrashResponseDto> findAll(Pageable pageable
 			) throws IllegalArgumentException, IOException{
-		EtrashAllRequestDTO requestDto = new EtrashAllRequestDTO();
-		requestDto.setPageable(pageable);
-		return etrashService.findAll(requestDto);
+		return etrashService.findAll(new EtrashAllRequestDTO(pageable, null));
 	}
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
@@ -86,10 +84,8 @@ public class EtrashController {
 	@GetMapping(value = "/etrash/{mood}")
 	public Page<EtrashResponseDto> findByMood(@PathVariable String mood, Pageable pageable
 			) throws IllegalArgumentException, IOException{
-		EtrashAllRequestDTO requestDto = new EtrashAllRequestDTO();
-		requestDto.setPageable(pageable);
-		requestDto.setMood(mood);
-		return etrashService.findByMood(requestDto);
+	
+		return etrashService.findByMood(new EtrashAllRequestDTO(pageable,mood));
 	}
 	
 	

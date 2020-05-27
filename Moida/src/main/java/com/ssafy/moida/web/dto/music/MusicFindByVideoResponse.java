@@ -19,18 +19,18 @@ public class MusicFindByVideoResponse {
 	private Long likecount;
 	private String videoid;
 	private Account account;
-	private String sumnail;
+	private String thumbnail;
 	
 	
 	@Builder
-	public MusicFindByVideoResponse(Long id, String mood, String musicname, Long likecount, String videoid, Account account,String sumnail) {
+	public MusicFindByVideoResponse(Long id, String mood, String musicname, Long likecount, String videoid, Account account,String thumbnail) {
 		this.id = id;
 		this.musicname = musicname;
 		this.likecount = likecount;
 		this.videoid = videoid;
 		this.account = account;
 		this.mood = mood;
-		this.sumnail = sumnail;
+		this.thumbnail = thumbnail;
 	}
 	
 
