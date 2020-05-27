@@ -3,12 +3,23 @@ import VueRouter from "vue-router";
 // import About from "../views/About.vue";
 import SharedDiary from "../views/SharedDiary/index.vue";
 import Trash from "../views/Trash.vue";
+import Login from "../components/Login.vue";
+import SignUp from "../components/SignUp.vue";
 
 Vue.use(VueRouter);
 
-const routes = [
+const routes = [{
+		path: "/login",
+		name: "Login",
+		component: Login,
+	},
 	{
-		path: "/trash",
+		path: "/signUp",
+		name: "SignUp",
+		component: SignUp
+	},
+	{
+		path: "/",
 		name: "Trash",
 		component: Trash,
 	},

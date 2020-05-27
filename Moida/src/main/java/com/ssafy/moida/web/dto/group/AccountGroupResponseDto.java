@@ -2,7 +2,10 @@ package com.ssafy.moida.web.dto.group;
 
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.group.AccountGroup;
+import com.ssafy.moida.domain.group.GroupTB;
+import com.ssafy.moida.web.dto.group.AccountGroupGroupResponseDto.AccountGroupGroupResponseDtoBuilder;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +18,12 @@ public class AccountGroupResponseDto {
 	public AccountGroupResponseDto(AccountGroup entity) {
 		this.id = entity.getId();
 		this.account = entity.getAccount();
+	}
+	
+	@Builder
+	public AccountGroupResponseDto(Long id, Account account) {
+		super();
+		this.id = id;
+		this.account = account;
 	}
 }

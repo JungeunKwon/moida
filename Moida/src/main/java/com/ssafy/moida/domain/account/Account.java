@@ -65,9 +65,6 @@ implements UserDetails {
 	@OneToMany(mappedBy = "account")
 	private List<AccountGroup> groupList = new ArrayList<>();
 	
-	
-
-	
 	public void updateAccountInfo(String password, String phone,  String nickname, String profileImg) {
 		this.password = password;
 		this.phone = phone;
