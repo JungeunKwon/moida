@@ -1,7 +1,5 @@
 package com.ssafy.moida.service.etrash;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

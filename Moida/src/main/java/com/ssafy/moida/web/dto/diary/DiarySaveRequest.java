@@ -18,16 +18,15 @@ import lombok.Setter;
 public class DiarySaveRequest {
 	
 	private String description;
-	private String deletedate;
 	private String mood;
 	private String imgurl;
 	private Account account;
 	private GroupTB groupTB;
+	private Long groupid;
 	
 	public Diary toEntity() {
 		return Diary.builder()
 				.description(description)
-				.deletedate(deletedate)
 				.mood(mood)
 				.imgurl(imgurl)
 				.account(account)
@@ -36,11 +35,10 @@ public class DiarySaveRequest {
 	}
 	
 	@Builder
-	public DiarySaveRequest(String description, String deletedate, String mood, String imgurl, Account account,
+	public DiarySaveRequest(String description, String mood, String imgurl, Account account,
 			GroupTB groupTB) {
 		super();
 		this.description = description;
-		this.deletedate = deletedate;
 		this.mood = mood;
 		this.imgurl = imgurl;
 		this.account = account;

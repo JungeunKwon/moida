@@ -7,6 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.moida.domain.etrash.EtrashRepository;
 import com.ssafy.moida.domain.music.Music;
 import com.ssafy.moida.domain.music.MusicRepository;
+import com.ssafy.moida.exception.BaseException;
+import com.ssafy.moida.exception.EnumAccountException;
+import com.ssafy.moida.exception.EnumMusicException;
+import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.service.etrash.EtrashService;
 import com.ssafy.moida.web.dto.music.MusicFindByMoodRequestDTO;
 import com.ssafy.moida.web.dto.music.MusicFindByMoodResponseDTO;
@@ -24,9 +28,14 @@ public class MusicServiceImpl implements MusicService{
 	private final MusicRepository musicRepository;
 	private final EtrashService etrashService;
 	private final EtrashRepository etrashRepository;
+	private final AccountService accountservice;
 	
 	@Transactional
-	public Long saveMusic(MusicSaveRequestDTO requestDTO) {
+	public Long saveMusic(MusicSaveRequestDTO requestDTO) throws NumberFormatException, BaseException {
+		requestDTO.setAccount(accountservice.getAccount());
+		if(musicRepository.countByVideoid(requestDTO.getVideoid()) != 0) {
+			throw new BaseException(EnumMusicException.MUSIC_DUPLICATE);
+		}
 		return musicRepository.save(requestDTO.toEntity()).getId();
 	}
 

@@ -1,5 +1,7 @@
 package com.ssafy.moida.web.dto.diary;
 
+import org.springframework.data.domain.Pageable;
+
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.group.GroupTB;
 
@@ -13,11 +15,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DiaryFindByGroupRequest {
 	GroupTB group;
+	Pageable pageable;
 	
 	@Builder
-	public DiaryFindByGroupRequest(GroupTB group) {
+	public DiaryFindByGroupRequest(GroupTB group,Pageable pageable) {
 		super();
 		this.group = group;
+		this.pageable = pageable;
 	}
 	
 	
