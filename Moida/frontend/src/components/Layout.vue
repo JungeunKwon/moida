@@ -28,7 +28,6 @@ export default {
 	position: fixed;
 	left: 0;
 	bottom: 0;
-	/* background-color: #bed7d1; */
 	background-color: rgb(250, 223, 153);
 	margin: 0 auto;
 	height: calc(100% - 30px);

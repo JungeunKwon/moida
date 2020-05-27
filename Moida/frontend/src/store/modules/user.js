@@ -1,4 +1,6 @@
-import { login } from "@/api/user";
+import {
+	login
+} from "@/api/user";
 
 const state = {
 	token: "",
@@ -42,19 +44,23 @@ const actions = {
 		commit("SET_PHONE", text);
 	},
 	// user login
-	login({ commit }, userInfo) {
-		const { email, password } = userInfo;
+	login({
+		commit
+	}, userInfo) {
+		userInfo;
+		console.log("store ::: login ::: ");
+		console.log(userInfo);
 		return new Promise((resolve, reject) => {
 			login({
-				email: username.trim(),
-				password: password,
-			})
+					email: userInfo.email.trim(),
+					password: userInfo.password,
+				})
 				.then(response => {
 					commit("SET_TOKEN", response.data);
 					resolve(response);
 				})
 				.catch(error => {
-					reject(error);
+					reject(error.response);
 				});
 		});
 	},
