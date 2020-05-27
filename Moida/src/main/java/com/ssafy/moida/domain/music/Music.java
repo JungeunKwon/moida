@@ -35,6 +35,8 @@ public class Music {
 	@Column(nullable = false,unique = true)
 	private String videoid;
 	
+	@Column(nullable = true)
+	private String sumnail;
 	
 	
 	@ManyToOne
@@ -42,13 +44,14 @@ public class Music {
 	private Account account;
 
 	@Builder
-	public Music(Long id, String mood, String musicname, Long likecount, String videoid, Account account) {
+	public Music(Long id, String mood, String musicname, Long likecount, String videoid, Account account,String sumnail) {
 		this.id = id;
 		this.mood = mood;
 		this.musicname = musicname;
 		this.likecount = likecount;
 		this.videoid = videoid;
 		this.account = account;
+		this.sumnail = sumnail;
 	}
 	
 	

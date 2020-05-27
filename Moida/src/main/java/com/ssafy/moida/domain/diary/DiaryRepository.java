@@ -8,10 +8,11 @@ import com.ssafy.moida.domain.account.Account;
 
 public interface DiaryRepository {
 	
-	Page<Diary> findByDescription(String description,Pageable pageable);
-	Page<Diary> findByAccount(Account account,Pageable pageable);
-	Page<Diary> findByMood(String mood,Pageable pageable);
+	Page<Diary> findByDescriptionAndByDeletedateIsNull(String description,Pageable pageable);
+	Page<Diary> findByAccountAndByDeletedateIsNull(Account account,Pageable pageable);
+	Page<Diary> findByMoodAndByDeletedateIsNull(String mood,Pageable pageable);
 	
-	@Query("select m from diary where substring(m.createDate,1,4) = ?1 AND substring(m.createDate,6,2) = ?2")
+	@Query("select * from diary where substring(createDate,1,4) = ?1 AND substring(createDate,6,2) = ?2 AND deletedate = NULL")
 	Page<Diary> findByMonth(String year,String month,Pageable pageable);
+	
 }

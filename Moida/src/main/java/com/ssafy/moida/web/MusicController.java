@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.moida.domain.etrash.Etrash;
 import com.ssafy.moida.domain.music.MusicRepository;
+import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.etrash.EtrashService;
 import com.ssafy.moida.service.music.MusicService;
 import com.ssafy.moida.web.dto.etrash.EtrashSaveRequestDto;
@@ -56,8 +57,9 @@ public class MusicController {
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@PostMapping(value = "/music")
 	public ResponseEntity<Long> saveMusic(@RequestBody MusicSaveRequestDTO requestDto
-			) throws IllegalArgumentException, IOException{
+			) throws IllegalArgumentException, IOException, BaseException{
 		
+		System.out.println("컨트롤러"+requestDto.getMusicname());
 		return new ResponseEntity<Long>(musicService.saveMusic(requestDto), HttpStatus.OK);
 	}
 	
