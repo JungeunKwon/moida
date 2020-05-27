@@ -13,6 +13,7 @@
 		"element-ui": "^2.13.2",
 		"js-cookie": "^2.2.1",
 		"material-design-icons-iconfont": "^5.0.1",
+		"moment": "^2.26.0",
 		"node-sass": "^4.13.0",
 		"vue": "^2.6.11",
 		"vue-lazyload": "^1.3.3",

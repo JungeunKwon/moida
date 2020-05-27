@@ -6,5 +6,8 @@ const getters = {
 	nickname: state => state.user.nickname,
 	phone: state => state.user.phone,
 	profile_img: state => state.user.profile_img,
+	//calendar
+	currentMonth: state => state.calendar.currentMonth,
+	firstDay: state => state.calendar.firstDay,
 };
 export default getters;
