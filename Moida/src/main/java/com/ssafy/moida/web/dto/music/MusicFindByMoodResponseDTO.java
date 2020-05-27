@@ -18,7 +18,7 @@ public class MusicFindByMoodResponseDTO {
 	private String videoid;
 	private Account account;
 	private String mood;
-	private String sumnail;
+	private String thumbnail;
 	
 	@Builder
 	public MusicFindByMoodResponseDTO(Music music) {
@@ -28,7 +28,7 @@ public class MusicFindByMoodResponseDTO {
 		this.videoid = music.getVideoid();
 		this.account = music.getAccount();
 		this.mood = music.getMood();
-		this.sumnail = music.getSumnail();
+		this.thumbnail = music.getThumbnail();
 	}
 	
 	
