@@ -5,10 +5,12 @@ import com.ssafy.moida.domain.music.Music;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class MusicFindByMoodResponseDTO {
 	private Long id;
 	private String musicname;

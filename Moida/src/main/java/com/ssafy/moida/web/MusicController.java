@@ -40,7 +40,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
-@Api(tags = {"3. music"})
+@Api(tags = {"5. music"})
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1")
@@ -59,7 +59,6 @@ public class MusicController {
 	public ResponseEntity<Long> saveMusic(@RequestBody MusicSaveRequestDTO requestDto
 			) throws IllegalArgumentException, IOException, BaseException{
 		
-		System.out.println("컨트롤러"+requestDto.getMusicname());
 		return new ResponseEntity<Long>(musicService.saveMusic(requestDto), HttpStatus.OK);
 	}
 	
@@ -84,8 +83,7 @@ public class MusicController {
 	@PostMapping(value = "/music/select")
 	public ResponseEntity<Long> selectMusic(@RequestBody MusicSelcetMusicRequest requestDto
 			) throws IllegalArgumentException, IOException{
-		
-		System.out.println(requestDto.getEtrashid()+"     "+requestDto.getMusicid());
+
 		return new ResponseEntity<Long>(musicService.selectMusic(requestDto), HttpStatus.OK);
 	}
 	
