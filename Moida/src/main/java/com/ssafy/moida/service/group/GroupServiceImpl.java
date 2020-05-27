@@ -91,7 +91,7 @@ public class GroupServiceImpl implements GroupService {
 	
 	@Transactional(readOnly = true)
 	public List<GroupResponseDto> findAllGroupExcludeDeleted(){
-		return groupTBRepository.findAllGroupExcludeDeleted().stream()
+		return groupTBRepository.findByDeleteTimeIsNull().stream()
 				.map(GroupResponseDto :: new)
 				.collect(Collectors.toList());
 	}

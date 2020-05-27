@@ -9,14 +9,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AccountGroupGroupResponseDto {
-	private GroupTB group;
+	private Long groupId;
 	
 	public AccountGroupGroupResponseDto(AccountGroup entity) {
-		this.group = entity.getGroupTB();
+		this.groupId = entity.getGroupId();
 	}
 
 	@Builder
-	public AccountGroupGroupResponseDto(GroupTB group) {
-		this.group = group;
+	public AccountGroupGroupResponseDto(Long groupId) {
+		this.groupId = groupId;
 	}
 }

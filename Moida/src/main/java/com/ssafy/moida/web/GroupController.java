@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
-@Api(tags = {"3. Group"})
+@Api(tags = {"3. group"})
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1")
