@@ -20,15 +20,17 @@ public class MusicSaveRequestDTO {
 	private String videoid;
 	private Account account;
 	private String mood;
+    private String sumnail;
 	
 	@Builder
-	public MusicSaveRequestDTO(String musicname, Long likecount, String videoid, Account account,String mood) {
+	public MusicSaveRequestDTO(String musicname, Long likecount, String videoid, Account account,String mood,String sumnail) {
 		super();
 		this.musicname = musicname;
 		this.likecount = likecount;
 		this.videoid = videoid;
 		this.account = account;
 		this.mood = mood;
+		this.sumnail = sumnail;
 	}
 	
 	public Music toEntity() {
@@ -38,6 +40,7 @@ public class MusicSaveRequestDTO {
 				.videoid(videoid)
 				.account(account)
 				.mood(mood)
+				.sumnail(sumnail)
 				.build();
 	}
 	
