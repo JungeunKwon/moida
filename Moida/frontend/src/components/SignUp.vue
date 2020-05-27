@@ -1,7 +1,6 @@
 <template>
 	<div id="signUp">
-		<div v-if="here" id="signUp_title">회원가입</div>
-		<v-form id="form" ref="form" v-model="valid">
+		<v-form id="form" ref="form" v-model="valid" onsubmit="return false;">
 			<img-inputer
 				ref="profile"
 				v-model="file"
@@ -17,7 +16,7 @@
 			<div class="signUp_input">
 				<v-text-field
 					ref="email"
-					v-model="email"
+					v-model="loginForm.email"
 					:rules="[rules.required, rules.email, duplicatedemail]"
 					:error-messages="errorMessages"
 					label="이메일"
@@ -27,14 +26,12 @@
 					color="#fadf99"
 					style="float: left; width: calc(100% - 100px);"
 				/>
-				<button @click="emailcheck" class="signUp_btn dupli">
-					중복체크
-				</button>
+				<button @click="emailcheck" class="signUp_btn dupli">중복체크</button>
 			</div>
 			<div class="signUp_input">
 				<v-text-field
 					ref="nickname"
-					v-model="nickname"
+					v-model="loginForm.nickname"
 					:rules="[rules.required, duplicatednickname]"
 					label="닉네임"
 					required
@@ -43,15 +40,13 @@
 					@change="changenick"
 					style="float: left; width: calc(100% - 100px);"
 				/>
-				<button @click="nicknamecheck" class="signUp_btn dupli">
-					중복체크
-				</button>
+				<button @click="nicknamecheck" class="signUp_btn dupli">중복체크</button>
 			</div>
 			<div class="signUp_input">
 				<v-text-field
-					ref="name"
-					v-model="name"
-					:rules="[() => !!name || 'This field is required']"
+					ref="username"
+					v-model="loginForm.username"
+					:rules="[() => !!loginForm.username || 'This field is required']"
 					label="이름"
 					required
 					color="#fadf99"
@@ -60,49 +55,61 @@
 			</div>
 			<div class="signUp_input">
 				<v-text-field
-					ref="firstpassword"
-					v-model="firstpassword"
-					:append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
-					:rules="[rules.required, rules.min]"
-					:type="show3 ? 'text' : 'password'"
-					name="input-10-2"
-					label="비밀번호"
+					ref="phone"
+					v-model="loginForm.phone"
+					:rules="[rules.required, rules.phone]"
+					label="전화번호"
+					required
 					color="#fadf99"
-					hint="At least 8 characters"
-					class="input-group--focused"
-					@click:append="show3 = !show3"
 					outlined
 				/>
 			</div>
 			<div class="signUp_input">
 				<v-text-field
-					ref="secondpassword"
-					v-model="secondpassword"
-					:append-icon="show4 ? 'mdi-eye' : 'mdi-eye-off'"
+					ref="password"
+					v-model="loginForm.password"
+					:append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+					:rules="[rules.required, rules.min]"
+					:type="show1 ? 'text' : 'password'"
+					name="input-10-2"
+					label="비밀번호"
+					color="#fadf99"
+					hint="At least 8 characters"
+					class="input-group--focused"
+					@click:append="show1 = !show1"
+					outlined
+				/>
+			</div>
+
+			<div class="signUp_input">
+				<v-text-field
+					ref="re_password"
+					v-model="loginForm.re_password"
+					:append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
 					:rules="[
 						() =>
-							firstpassword === secondpassword ||
+							loginForm.password === loginForm.re_password ||
 							'The password you entered dont match',
 					]"
-					:type="show4 ? 'text' : 'password'"
+					:type="show2 ? 'text' : 'password'"
 					name="input-10-2"
 					label="비밀번호 확인"
 					color="#fadf99"
 					hint="At least 8 characters"
-					@click:append="show4 = !show4"
+					@click:append="show2 = !show2"
 					outlined
 				/>
 			</div>
 			<div>
 				<p>성별</p>
-				<v-radio-group ref="gender" v-model="gender" required>
+				<v-radio-group ref="gender" v-model="loginForm.gender" required>
 					<v-radio label="남" value="0" />
 					<v-radio label="여" value="1" />
 				</v-radio-group>
 			</div>
 
 			<v-menu
-				v-model="menu2"
+				v-model="menu"
 				:close-on-content-click="false"
 				:nudge-right="40"
 				transition="scale-transition"
@@ -111,8 +118,8 @@
 			>
 				<template v-slot:activator="{ on }">
 					<v-text-field
-						ref="birth_year"
-						v-model="birth_year"
+						ref="birth_date"
+						v-model="loginForm.birth_date"
 						label="생년월일"
 						prepend-icon="mdi-calendar"
 						readonly
@@ -120,75 +127,67 @@
 						color="#fadf99"
 					/>
 				</template>
-				<v-date-picker
-					v-model="birth_year"
-					@input="menu2 = false"
-					color="#fadf99"
-				/>
+				<v-date-picker v-model="loginForm.birth_date" @input="menu = false" color="#fadf99" />
 			</v-menu>
-			<div
-				style="width: 100%; height: 20px; margin: 0 auto; text-align: center;"
-			>
-				<button class="signUp_btn submit" @click="resetForm">
-					Cancel
-				</button>
-				<button class="signUp_btn submit" @click="submit">
-					Submit
-				</button>
+			<div style="width: 100%; height: 20px; margin: 0 auto; text-align: center;">
+				<button class="signUp_btn submit" @click="resetForm">취소</button>
+				<button class="signUp_btn submit" @click="submit">확인</button>
 			</div>
 		</v-form>
 	</div>
 </template>
 <script>
-import axios from "axios";
 export default {
 	name: "SignUp",
 	data: () => ({
-		here: false,
-		name: "",
+		loginForm: {
+			email: "",
+			username: "",
+			password: "",
+			re_password: "",
+			gender: 0,
+			birth_date: new Date().toISOString().substring(0, 10),
+			nickname: "",
+			phone: "",
+			uploadFile: "",
+		},
+		file: "",
 		valid: true,
 		loading: true,
-		show3: false,
-		show4: false,
-		password: "Password",
-		firstpassword: "",
-		secondpassword: "",
-		file: "",
-		birth_year: new Date().toISOString().substr(0, 10),
-		email: "",
-		gender: 0,
-		menu2: false,
-		nickname: "",
+		show1: false,
+		show2: false,
+		menu: false,
 		errorMessages: "",
 		isnicknameduplicated: true,
 		isemailduplicated: true,
 		rules: {
 			required: value => !!value || "Required.",
-			min: v => v.length >= 8 || "Min 8 characters",
+			min: v => (v && v.length >= 8) || "Min 8 characters",
 			email: value => {
 				const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 				return pattern.test(value) || "Invalid e-mail.";
+			},
+			phone: value => {
+				const pattern = /^\d{2,3}-\d{3,4}-\d{4}$/;
+				return pattern.test(value) || "Invalid phoneNumber";
 			},
 		},
 	}),
 	computed: {
 		form() {
 			return {
-				email: this.email,
-				name: this.name,
-				firstpassword: this.firstpassword,
-				secondpassword: this.secondpassword,
-				gender: this.gender,
-				birth_year: this.birth_year,
-				nickname: this.nickname,
+				email: this.loginForm.email,
+				username: this.loginForm.username,
+				password: this.loginForm.password,
+				re_password: this.loginForm.re_password,
+				gender: this.loginForm.gender,
+				birth_date: this.loginForm.birth_date,
+				nickname: this.loginForm.nickname,
+				phone: this.loginForm.phone,
 			};
 		},
 	},
-	mounted() {
-		if (this.$route.fullPath == "/signUp") {
-			this.here = true;
-		}
-	},
+	mounted() {},
 	methods: {
 		duplicatednickname() {
 			if (this.isnicknameduplicated === false) {
@@ -223,47 +222,25 @@ export default {
 				}
 			});
 			if (this.formHasErrors === false) {
-				var formData = new FormData();
-				formData.append("email", this.email);
-				formData.append("password", this.firstpassword);
-				formData.append("phone", "010-9749-9959");
-				formData.append("gender", this.gender);
-				formData.append("username", this.name);
-				//formData.append("latitude", this.latitude);
-				//formData.append("longitude", this.longitude);
-				formData.append("nickname", this.nickname);
 				if (
 					this.$refs.profile.file == null ||
 					this.$refs.profile.file === ""
 				) {
-					formData.append("uploadFile", null);
+					this.loginForm.uploadFile = null;
 				} else {
-					formData.append("uploadFile", this.$refs.profile.file);
+					this.loginForm.uploadFile = this.$refs.profile.file;
 				}
 
-				for (var key of formData.entries()) {
-					console.log(key[0] + ", " + key[1]);
-				} // 폼데이터 로그 출력법
-				// axios
-				// 	.post("http://192.168.77.80:8080/v1/signup", formData)
-				// 	.then(response => {
-				// 		console.log(
-				// 			"response : ",
-				// 			JSON.stringify(response, null, 2),
-				// 		);
-				// 		if (response.status == 200) {
-				// 			alert("회원 가입 성공");
-				// 			this.$router.push("/");
-				// 		} else {
-				// 			alert("회원 가입 실패");
-				// 			resetForm();
-				// 		}
-				// 	})
-				// 	.catch(error => {
-				// 		console.log("failed", error);
-				// 	});
-			} else {
-				alert("제대로 입력하삼ㅡㅡ");
+				this.$store
+					.dispatch("user/signUp", this.loginForm)
+					.then(response => {
+						console.log(response);
+						console.log("회원가입이 완료되었습니다.");
+						this.$router.push("/login");
+					})
+					.catch(error => {
+						console.log(error);
+					});
 			}
 		},
 		changenick() {
@@ -275,51 +252,44 @@ export default {
 			this.$refs["email"].validate(true);
 		},
 		nicknamecheck() {
-			// axios
-			// 	.get(
-			// 		"http://192.168.77.80:8080/v1/check/nickname/" +
-			// 			this.nickname,
-			// 	)
-			// 	.then(response => {
-			// 		console.log(
-			// 			"response : ",
-			// 			JSON.stringify(response, null, 2),
-			// 		);
-			// 		if (response.data === false) {
-			// 			alert("중복된 닉네임입니다");
-			// 			this.isnicknameduplicated = true;
-			// 		} else {
-			// 			alert("사용가능한 닉네임입니다");
-			// 			this.isnicknameduplicated = false;
-			// 		}
-			// 		this.$refs["nickname"].validate(true);
-			// 	})
-			// 	.catch(error => {
-			// 		console.log("failed", error);
-			// 		this.isnicknameduplicated = true;
-			// 	});
+			this.$store
+				.dispatch("user/checkNickname", this.loginForm.nickname)
+				.then(response => {
+					console.log(response);
+					if (response.data === false) {
+						alert("중복된 닉네임입니다");
+						this.isnicknameduplicated = true;
+					} else {
+						alert("사용가능한 닉네임입니다");
+						this.isnicknameduplicated = false;
+					}
+					this.$refs["nickname"].validate(true);
+				})
+				.catch(error => {
+					console.log(error);
+					this.isnicknameduplicated = true;
+				});
 		},
 		emailcheck() {
-			// axios
-			// 	.get("http://192.168.77.80:8080/v1/check/email/" + this.email)
-			// 	.then(response => {
-			// 		console.log(
-			// 			"response : ",
-			// 			JSON.stringify(response, null, 2),
-			// 		);
-			// 		if (response.data === false) {
-			// 			alert("중복된 이메일입니다");
-			// 			this.isemailduplicated = true;
-			// 		} else {
-			// 			alert("사용가능한 이메일입니다");
-			// 			this.isemailduplicated = false;
-			// 		}
-			// 		this.$refs["email"].validate(true);
-			// 	})
-			// 	.catch(error => {
-			// 		console.log("failed", error);
-			// 		this.isemailduplicated = true;
-			// 	});
+			if (this.rules.email(this.loginForm.email) === true) {
+				this.$store
+					.dispatch("user/checkEmail", this.loginForm.email)
+					.then(response => {
+						console.log(response);
+						if (response.data === false) {
+							alert("중복된 이메일입니다");
+							this.isemailduplicated = true;
+						} else {
+							alert("사용가능한 이메일입니다");
+							this.isemailduplicated = false;
+						}
+						this.$refs["email"].validate(true);
+					})
+					.catch(error => {
+						console.log(error);
+						this.isemailduplicated = true;
+					});
+			}
 		},
 		exceedHandler(file) {
 			console.log(this.$refs.profile);

@@ -16,17 +16,28 @@
 import Layout from "@/components/Layout";
 import GoTop from "@/components/GoTop";
 import First from "@/components/First";
+import { mapState, mapGetters, mapMutations } from "vuex";
+
 export default {
 	components: {
 		Layout,
 		GoTop,
 		First,
 	},
-	data() {
-		return {
-			isFirst: true,
-		};
+	mounted() {
+		// console.log(this.$store.getters.isFirst);
+		// // this.$store.commit("auth/TOGGLE_ISFIRST");
+		// this.TOGGLE_ISFIRST();
+		// console.log(this.$store.getters.isFirst);
 	},
+	computed: {
+		// ...mapState("auth", ["isFirst"]),
+		...mapGetters(["isFirst"]),
+	},
+	data() {
+		return {};
+	},
+	methods: {},
 };
 </script>
 <style>
