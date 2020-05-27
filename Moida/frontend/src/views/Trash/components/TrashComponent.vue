@@ -1,26 +1,28 @@
 <template>
-	<div class="trashwrapper" max-width="300" outlined>
-		<div class="trashdescription">
-			<div style="margin:0 auto">
-				{{ trash.description }}
-				{{ trash.mood }}
+	<div class="trashwrapper" max-width="300" outlined :id="trash.id">
+		<div id="player" class="video">
+			<div class="videovideo">
+				<iframe
+					width="100%"
+					height="170"
+					:src="this.videourl"
+					frameborder="0"
+					allowfullscreen
+					loading="lazy"
+				></iframe>
+			</div>
+			<div class="videodisc">{{ trash.music.musicname }}</div>
+		</div>
+		<v-divider></v-divider>
+
+		<div class="trashother">
+			<div class="trashdescription">
+				<div style="margin:0 auto">
+					{{ trash.description }}
+				</div>
 			</div>
 		</div>
-		<div class="trashother">
-			<div id="player" class="video">
-				<div style="width:100%; height:50">
-					<iframe
-						width="100%"
-						height="50"
-						:src="this.videourl"
-						frameborder="0"
-						allowfullscreen
-						loading="lazy"
-					></iframe>
-				</div>
-				<div class="videodisc">{{ trash.musictitle }}</div>
-			</div>
-
+		<div class="trashtest">
 			<div class="trashbottom">
 				<v-divider></v-divider>
 				<div class="trashbottombottom">
@@ -38,7 +40,7 @@
 							<v-icon style="height:100%" color="pink lighten-4"
 								>mdi-heart</v-icon
 							>
-							{{ trash.likes }}
+							{{ trash.likecount }}
 						</v-btn>
 					</div>
 				</div>
@@ -48,12 +50,18 @@
 </template>
 
 <script>
+import $ from "jquery";
+
 export default {
 	name: "TrashComponent",
 	props: {
 		trash: {
 			type: Object,
 			default: {},
+		},
+		items: {
+			type: Array,
+			default: [],
 		},
 	},
 	data() {
@@ -65,16 +73,29 @@ export default {
 	},
 	created() {
 		this.videourl =
-			"https://www.youtube-nocookie.com/embed/" + this.trash.videoid;
+			"https://www.youtube-nocookie.com/embed/" +
+			this.trash.music.videoid;
 	},
 	mounted() {
 		let today = new Date();
 		let getday = new Date(this.trash.date);
 		this.lefttime = Math.abs(today.getHours() - getday.getHours());
+		var colorcode = "";
+
+		for (var i = 0; i < this.items.length; i++) {
+			if (this.items[i].text == this.trash.mood) {
+				colorcode = this.items[i].colorcode;
+				break;
+			}
+		}
+		console.log(colorcode);
+		$("#" + this.trash.id).css({
+			"background-color": colorcode,
+		});
 	},
 	methods: {
 		likeup() {
-			this.trash.likes = this.trash.likes + 1;
+			this.trash.likecount = this.trash.likecount + 1;
 		},
 	},
 };
@@ -86,9 +107,6 @@ export default {
 	max-width: 300px;
 	margin: 5px;
 	border-radius: 10px;
-	max-height: 400px;
-	border-radius: 5px;
-
 	border: 1px solid rgba(192, 192, 192, 0.363);
 	/* box-shadow: 0.5px 0.5px 3px rgb(192, 192, 192); */
 }
@@ -98,19 +116,26 @@ export default {
 	text-align: center;
 	align-items: center;
 	margin: 0 auto;
-	display: flex;
 	padding: 15px;
 }
 .trashother {
-	height: 130px;
-	position: relative;
+	height: 90%;
 }
 .timewrap {
 	height: 100%;
 	align-items: center;
 }
 .video {
-	height: 60%;
+	height: 200px;
+}
+.videovideo {
+	width: 100%;
+
+	border: 4px solid #000;
+	-moz-border-radius: 10px 10px 0 0;
+	border-radius: 10px 10px 0 0;
+	overflow: hidden;
+	height: 170px;
 }
 .videodisc {
 	font-size: 10px;
@@ -122,8 +147,7 @@ export default {
 	display: inline-block;
 }
 .timecontent {
-	width: 70%;
-	height: 100%;
+	width: 60%;
 	margin-left: 2px;
 	display: inline-block;
 	text-align: left;
@@ -131,16 +155,23 @@ export default {
 .trashbottombottom {
 	align-items: center;
 	height: 100%;
+	width: 100%;
 }
 .trashbottom {
-	height: 35px;
+	height: 100%;
 	bottom: 0;
+	align-items: center;
 	width: 100%;
 	position: absolute;
+}
+.trashtest {
+	height: 40px;
+	position: relative;
 }
 .bottomleft {
 	height: 100%;
 	width: 60%;
+	align-items: center;
 	display: inline-block;
 }
 .bottomright {

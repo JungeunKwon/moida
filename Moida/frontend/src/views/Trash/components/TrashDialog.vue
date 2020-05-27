@@ -6,19 +6,40 @@
 			</div>
 		</template>
 		<v-card v-if="!innerdialog">
-			<img src="https://media.giphy.com/media/1Ye9oNy0TAC0G7bN4t/giphy.gif" />
+			<div>
+				<v-img
+					style="height:200px; width:100%; text-align:center;"
+					src="https://media.giphy.com/media/jAYUbVXgESSti/giphy.gif"
+					@click="closemodal"
+				>
+					<div style="margin-top: 10px;">
+						<v-avatar left>
+							<v-img :src="thumbnail"></v-img>
+						</v-avatar>
+						{{ musicname }}
+					</div>
+				</v-img>
+			</div>
 		</v-card>
 		<v-card v-if="innerdialog">
 			<v-card-text>
-				<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
+				<v-chip-group
+					v-model="selection"
+					active-class="deep-purple accent-4 white--text"
+					column
+				>
 					<div style="margin: 0 auto; width:80%">
 						<v-row align="center" justify="start">
-							<v-col v-for="(item, i) in items" :key="item.text" class="shrink">
+							<v-col
+								v-for="(item, i) in items"
+								:key="item.text"
+								class="shrink"
+							>
 								<v-chip>
 									<v-avatar left>
 										<v-img :src="item.src"></v-img>
 									</v-avatar>
-									{{item.text}}
+									{{ item.text }}
 								</v-chip>
 							</v-col>
 						</v-row>
@@ -26,8 +47,7 @@
 				</v-chip-group>
 				<div style="margin: 0 auto; width:70%">
 					<p class="font-weight-bold">
-						해당 감정에 자주 듣는 노래 url을
-						입력해주세요.(유투브)
+						해당 감정에 자주 듣는 노래 url을 입력해주세요.(유투브)
 					</p>
 					<div style="margin: 0 auto; width:100%">
 						<v-text-field
@@ -40,7 +60,12 @@
 							style="display: inline-block; width: 80%;"
 						/>
 
-						<v-btn text style="display: inline-block; width: 20%;" @click="inserttodack">입력</v-btn>
+						<v-btn
+							text
+							style="display: inline-block; width: 20%;"
+							@click="inserttodack"
+							>입력</v-btn
+						>
 					</div>
 				</div>
 			</v-card-text>
@@ -62,7 +87,18 @@ export default {
 			innerdialog: true,
 			url: "",
 			selection: {},
+			thumbnail: "",
+			musicname: "",
+			videoid: "",
 		};
+	},
+	watch: {
+		trashdialog: function(newVal, oldVal) {
+			if (!this.trashdialog) {
+				this.innerdialog = true;
+				this.url = "";
+			}
+		},
 	},
 	methods: {
 		inserttodack() {
@@ -72,6 +108,7 @@ export default {
 				alert("옳바른 유투브 주소를 입력해주세요.");
 				return;
 			}
+			this.innerdialog = false;
 			axios
 				.get("https://www.googleapis.com/youtube/v3/videos", {
 					params: {
@@ -84,29 +121,44 @@ export default {
 					console.log(
 						response.data.items[0].snippet.thumbnails.high.url,
 					);
-					postMusic({
-						likecount: 0,
-						mood: item.text,
-						thumbnails:
-							response.data.items[0].snippet.thumbnails.high.url,
-						musicname:
-							response.data.items[0].snippet.localized.title,
-						videoid: videoId,
-					}).then(response => {
-						console.log(response);
-					});
+					this.musicname =
+						response.data.items[0].snippet.localized.title;
+					this.videoid =
+						"https://www.youtube-nocookie.com/embed/" + videoId;
+					(this.thumbnail =
+						response.data.items[0].snippet.thumbnails.high.url),
+						postMusic({
+							likecount: 0,
+							mood: item.text,
+							thumbnail:
+								response.data.items[0].snippet.thumbnails.high
+									.url,
+							musicname:
+								response.data.items[0].snippet.localized.title,
+							videoid: videoId,
+						})
+							.then(response => {
+								console.log(response);
+								setTimeout(() => {
+									this.innerdialog = true;
+									this.trashdialog = false;
+								}, 1000);
+							})
+							.catch(err => {
+								alert("오류입니다!");
+								console.log("err : " + err);
+								this.innerdialog = true;
+								//this.trashdialog = false;
+							});
 				})
 				.catch(err => {
 					alert("오류입니다!");
 					console.log("err : " + err);
+					this.innerdialog = true;
+					//this.trashdialog = false;
 				});
-
-			this.innerdialog = false;
-			setTimeout(() => {
-				this.innerdialog = true;
-				this.trashdialog = false;
-			}, 3000);
 		},
+		closemodal() {},
 		youtube_parser2(url) {
 			var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
 

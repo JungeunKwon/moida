@@ -6,8 +6,18 @@
 			</TrashDialog>
 		</div>
 		<div class="masonry" v-lazy-container="{ selector: 'card' }">
-			<div v-for="(intrash, index) in trash" :key="intrash.id" class="card">
-				<TrashCom @load="rendered" class="card-content" :trash="intrash" :index="index" />
+			<div
+				v-for="(intrash, index) in trash"
+				:key="intrash.id"
+				class="card"
+			>
+				<TrashCom
+					:items="items"
+					@load="rendered"
+					class="card-content"
+					:trash="intrash"
+					:index="index"
+				/>
 			</div>
 		</div>
 		<v-divider></v-divider>
@@ -24,11 +34,12 @@
 				<div style="display: inline-block; width: 20%; ">
 					<TrashInsertDialog
 						:items="items"
-						mood="슬픔"
+						:mood="mood"
+						:trash="trash"
 						moodsrc="https://cdn.vuetifyjs.com/images/john.png"
 						:content="trashcontent"
 					>
-						<v-btn text id="bottomtrashbtn">
+						<v-btn text id="bottomtrashbtn" @click="getmood">
 							<v-icon x-large>mdi-heart-box</v-icon>
 						</v-btn>
 					</TrashInsertDialog>
@@ -44,7 +55,7 @@ import TrashDialog from "./components/TrashDialog";
 import TrashInsertDialog from "./components/TrashInsertDialog";
 import TrashCom from "./components/TrashComponent.vue";
 import axios from "axios";
-import { getEtrash, postEtrash } from "../../api/etrash";
+import { getEtrash, postEtrash, sentimentanalysis } from "../../api/etrash";
 export default {
 	name: "Trash",
 	components: {
@@ -58,6 +69,7 @@ export default {
 			imageCounter: 0,
 			imagesCount: 0,
 			trashcontent: "",
+			mood: "슬픔",
 			selection: 0,
 			url: "",
 			items: [
@@ -65,219 +77,65 @@ export default {
 					id: 0,
 					text: "화남",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
+					colorcode: "#88EF9A7F",
 				},
 				{
 					id: 1,
 					text: "슬픔",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
+					colorcode: "#B39DDB7F",
 				},
 				{
 					id: 2,
 					text: "짜증",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
+					colorcode: "#E6EE9C7F",
 				},
 				{
 					id: 3,
 					text: "우울",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
+					colorcode: "#90CAF97F",
 				},
 				{
 					id: 4,
 					text: "행복",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
+					colorcode: "#F48FB17F",
 				},
 				{
 					id: 5,
 					text: "기쁨",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
+					colorcode: "#FFF59D7F",
 				},
 			],
-			trash: [
-				// {
-				// 	id: 0,
-				// 	description: "죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 12:00:00",
-				// 	likes: 25,
-				// 	videoid: "cXMcfCeMvKg",
-				// 	musictitle: "San E - Tour Bus",
-				// },
-				// {
-				// 	id: 1,
-				// 	description:
-				// 		"죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 13:00:00",
-				// 	likes: 20,
-				// 	videoid: "oUUhO5rO01k",
-				// 	musictitle:
-				// 		"추억의 걸그룹 노래들로 싹쓸이 해왔어 😘 | PLAYLIST",
-				// },
-				// {
-				// 	id: 2,
-				// 	description:
-				// 		"죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 14:00:00",
-				// 	likes: 19,
-				// 	videoid: "wMgGxo9yppA",
-				// 	musictitle:
-				// 		"[MV] Here I Am Again (다시 난, 여기) - Baek Yerin (백예린) | Crash Landing on You (사랑의 불시착) OST Pt. 4 [ENG]",
-				// },
-				// {
-				// 	id: 3,
-				// 	description: "죽고싶죽고싶다죽고싶다죽고싶다죽고싶다죽고다",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 14:00:00",
-				// 	likes: 19,
-				// 	videoid: "wMgGxo9yppA",
-				// 	musictitle:
-				// 		"[MV] Here I Am Again (다시 난, 여기) - Baek Yerin (백예린) | Crash Landing on You (사랑의 불시착) OST Pt. 4 [ENG]",
-				// },
-				// {
-				// 	id: 4,
-				// 	description:
-				// 		"죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 14:00:00",
-				// 	likes: 19,
-				// 	videoid: "wMgGxo9yppA",
-				// 	musictitle:
-				// 		"[MV] Here I Am Again (다시 난, 여기) - Baek Yerin (백예린) | Crash Landing on You (사랑의 불시착) OST Pt. 4 [ENG]",
-				// },
-				// {
-				// 	id: 5,
-				// 	description:
-				// 		"죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 14:00:00",
-				// 	likes: 19,
-				// 	videoid: "wMgGxo9yppA",
-				// 	musictitle:
-				// 		"[MV] Here I Am Again (다시 난, 여기) - Baek Yerin (백예린) | Crash Landing on You (사랑의 불시착) OST Pt. 4 [ENG]",
-				// },
-				// {
-				// 	id: 6,
-				// 	description:
-				// 		"죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 14:00:00",
-				// 	likes: 19,
-				// 	videoid: "wMgGxo9yppA",
-				// 	musictitle:
-				// 		"[MV] Here I Am Again (다시 난, 여기) - Baek Yerin (백예린) | Crash Landing on You (사랑의 불시착) OST Pt. 4 [ENG]",
-				// },
-				// {
-				// 	id: 7,
-				// 	description: "죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 12:00:00",
-				// 	likes: 25,
-				// 	videoid: "cXMcfCeMvKg",
-				// 	musictitle: "San E - Tour Bus",
-				// },
-				// {
-				// 	id: 8,
-				// 	description:
-				// 		"죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 13:00:00",
-				// 	likes: 20,
-				// 	videoid: "oUUhO5rO01k",
-				// 	musictitle:
-				// 		"추억의 걸그룹 노래들로 싹쓸이 해왔어 😘 | PLAYLIST",
-				// },
-				// {
-				// 	id: 9,
-				// 	description:
-				// 		"죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 14:00:00",
-				// 	likes: 19,
-				// 	videoid: "wMgGxo9yppA",
-				// 	musictitle:
-				// 		"[MV] Here I Am Again (다시 난, 여기) - Baek Yerin (백예린) | Crash Landing on You (사랑의 불시착) OST Pt. 4 [ENG]",
-				// },
-				// {
-				// 	id: 10,
-				// 	description: "죽고싶죽고싶다죽고싶다죽고싶다죽고싶다죽고다",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 14:00:00",
-				// 	likes: 19,
-				// 	videoid: "wMgGxo9yppA",
-				// 	musictitle:
-				// 		"[MV] Here I Am Again (다시 난, 여기) - Baek Yerin (백예린) | Crash Landing on You (사랑의 불시착) OST Pt. 4 [ENG]",
-				// },
-				// {
-				// 	id: 11,
-				// 	description:
-				// 		"죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 14:00:00",
-				// 	likes: 19,
-				// 	videoid: "wMgGxo9yppA",
-				// 	musictitle:
-				// 		"[MV] Here I Am Again (다시 난, 여기) - Baek Yerin (백예린) | Crash Landing on You (사랑의 불시착) OST Pt. 4 [ENG]",
-				// },
-				// {
-				// 	id: 12,
-				// 	description:
-				// 		"죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 14:00:00",
-				// 	likes: 19,
-				// 	videoid: "wMgGxo9yppA",
-				// 	musictitle:
-				// 		"[MV] Here I Am Again (다시 난, 여기) - Baek Yerin (백예린) | Crash Landing on You (사랑의 불시착) OST Pt. 4 [ENG]",
-				// },
-				// {
-				// 	id: 13,
-				// 	description:
-				// 		"죽고싶다죽고싶다죽고싶다죽고싶다죽고싶다죽고죽고싶다죽고싶다죽고싶다죽고싶다죽고",
-				// 	mood: "슬픔",
-				// 	musicid: 0,
-				// 	date: "2020-05-20 14:00:00",
-				// 	likes: 19,
-				// 	videoid: "wMgGxo9yppA",
-				// 	musictitle:
-				// 		"[MV] Here I Am Again (다시 난, 여기) - Baek Yerin (백예린) | Crash Landing on You (사랑의 불시착) OST Pt. 4 [ENG]",
-				// },
-			],
+			trash: [],
 		};
 	},
 	created() {
-		// let masonryEvents = ["load", "resize"];
-		// let vm = this;
-		// masonryEvents.forEach(function(event) {
-		// 	window.addEventListener(event, vm.resizeAllMasonryItems);
-		// });
-	},
-	mounted() {
-		getEtrash()
-			.then(response => {
-				this.trash = response.data.content;
-				console.log(response.data);
-			})
-			.catch(error => {});
 		let masonryEvents = ["load", "resize"];
 		let vm = this;
 		masonryEvents.forEach(function(event) {
 			window.addEventListener(event, vm.resizeAllMasonryItems);
 		});
 		vm.resizeAllMasonryItems();
+	},
+	mounted() {
+		let masonryEvents = ["load", "resize"];
+		let vm = this;
+		masonryEvents.forEach(function(event) {
+			window.addEventListener(event, vm.resizeAllMasonryItems);
+		});
+		getEtrash()
+			.then(response => {
+				this.trash = response.data.content;
+				console.log(response.data.content);
+			})
+			.then(() => {
+				vm.resizeAllMasonryItems();
+			})
+			.catch(error => {});
 	},
 	watch: {
 		imagesCount: function() {
@@ -288,6 +146,21 @@ export default {
 	},
 
 	methods: {
+		getmood() {
+			if (this.content == "") {
+				alert("내용을 적어주세요!!!");
+				return;
+			}
+			sentimentanalysis({
+				description: this.content,
+			})
+				.then(response => {
+					//this.mood = response.data.mood;
+					console.log(this.mood);
+				})
+				.catch(error => {});
+			this.mood = "행복";
+		},
 		calculateImageCount() {
 			this.imagesCount = this.trash.length;
 		},
