@@ -2,6 +2,8 @@ package com.ssafy.moida.web.dto.etrash;
 
 
 
+import java.time.LocalDateTime;
+
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.etrash.Etrash;
 import com.ssafy.moida.domain.music.Music;
@@ -19,7 +21,8 @@ public class EtrashResponseDto {
 	private Long id;
 	private String description;
 	private String mood;
-	private int likecount;
+	private Long likecount;
+	LocalDateTime deletedate;
 	private Account account;
 	private Music music;
 	
@@ -29,6 +32,7 @@ public class EtrashResponseDto {
 		this.description = entity.getDescription();
 		this.mood = entity.getMood();
 		this.likecount = entity.getLikecount();
+		this.deletedate = entity.getDeletedate();
 		this.account = entity.getAccount();
 		this.music = entity.getMusic();
 	}

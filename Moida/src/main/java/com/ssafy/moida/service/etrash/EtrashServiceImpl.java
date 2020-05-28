@@ -1,6 +1,8 @@
 package com.ssafy.moida.service.etrash;
 
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,15 +32,16 @@ public class EtrashServiceImpl implements EtrashService{
 	
 	@Transactional(readOnly = true)
 	public Page<EtrashResponseDto> findByMood(EtrashAllRequestDTO requestDto) {
-		
-		return etrashRepository.findByMood(requestDto.getMood(),requestDto.getPageable())
+		LocalDateTime now = LocalDateTime.now();
+		return etrashRepository.findByMoodAndDeletedateGreaterThan(requestDto.getMood(),now,requestDto.getPageable())
 				.map(EtrashResponseDto::new);
 			
 	}
 
 	@Transactional(readOnly = true)
-	public Page<EtrashResponseDto> findAll(EtrashAllRequestDTO requestDto) {		
-		return etrashRepository.findAll(requestDto.getPageable())
+	public Page<EtrashResponseDto> findAll(EtrashAllRequestDTO requestDto) {	
+		LocalDateTime now = LocalDateTime.now();
+		return etrashRepository.findAllByDeletedateGreaterThan(now,requestDto.getPageable())
 				.map(EtrashResponseDto::new);
 	}
 
@@ -66,6 +69,11 @@ public class EtrashServiceImpl implements EtrashService{
 	public Page<Music> musicrecommend(String mood) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Long likecount(Long id) {
+		return etrashRepository.findById(id).get().updateEtrashLike();
 	}
 
 	

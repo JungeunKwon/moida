@@ -9,7 +9,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class DiaryFindByGroupDayRequest {
 	private Long groupid;
 	private String year;
