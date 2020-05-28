@@ -25,15 +25,7 @@
 				<v-divider></v-divider>
 				<div class="trashbottombottom">
 					<div class="bottomleft">
-						<div class="timewrap">
-							<v-chip class="time" color="red accent-1">
-								{{
-								lefttime
-								}}
-							</v-chip>
-
-							<div class="timecontent">시간 뒤 펑~!</div>
-						</div>
+						<v-chip class="time" color="red accent-1">{{ lefttime }}</v-chip>
 					</div>
 					<div class="bottomright">
 						<v-btn icon @click="likeup">
@@ -49,7 +41,7 @@
 
 <script>
 import $ from "jquery";
-
+import { etrashLike } from "../../../api/etrash";
 export default {
 	name: "TrashComponent",
 	props: {
@@ -64,7 +56,7 @@ export default {
 	},
 	data() {
 		return {
-			lefttime: 0,
+			lefttime: "",
 			videourl: "",
 			heightclass: false,
 		};
@@ -75,25 +67,42 @@ export default {
 			this.trash.music.videoid;
 	},
 	mounted() {
-		let today = new Date();
-		let getday = new Date(this.trash.date);
-		this.lefttime = Math.abs(today.getHours() - getday.getHours());
 		var colorcode = "";
-
+		setInterval(this.caltime, 1000);
 		for (var i = 0; i < this.items.length; i++) {
 			if (this.items[i].text == this.trash.mood) {
 				colorcode = this.items[i].colorcode;
 				break;
 			}
 		}
-		console.log(colorcode);
 		$("#" + this.trash.id).css({
 			"background-color": colorcode,
 		});
 	},
 	methods: {
+		caltime() {
+			let today = new Date();
+			let getday = new Date(this.trash.deletedate);
+
+			var diff = getday.getTime() - today.getTime();
+
+			var msec = diff;
+			var hh = Math.floor(msec / 1000 / 60 / 60);
+			msec -= hh * 1000 * 60 * 60;
+			var mm = Math.floor(msec / 1000 / 60);
+			msec -= mm * 1000 * 60;
+			var ss = Math.floor(msec / 1000);
+			msec -= ss * 1000;
+			this.lefttime = hh + "시간 " + mm + "분";
+		},
 		likeup() {
-			this.trash.likecount = this.trash.likecount + 1;
+			etrashLike(this.trash.id)
+				.then(response => {
+					this.trash.likecount = response.data;
+				})
+				.catch(error => {
+					console.log(error);
+				});
 		},
 	},
 };
@@ -106,11 +115,9 @@ export default {
 	margin: 5px;
 	border-radius: 10px;
 	border: 1px solid rgba(192, 192, 192, 0.363);
-	box-shadow: 0.5px 0.5px 3px rgb(192, 192, 192);
+	box-shadow: 1px 1px 7px rgba(192, 192, 192, 0.534);
 }
-.trashwrapper :hover {
-	opacity: 0.5;
-}
+
 .trashdescription {
 	height: auto;
 	text-align: center;
@@ -155,6 +162,7 @@ export default {
 	align-items: center;
 	height: 100%;
 	width: 100%;
+	padding: 5px;
 }
 .trashbottom {
 	height: 100%;
@@ -164,20 +172,22 @@ export default {
 	position: absolute;
 }
 .trashtest {
-	height: 40px;
+	height: 45px;
 	position: relative;
 }
 .bottomleft {
-	height: 100%;
-	width: 60%;
+	height: 40px;
+	/* width: 60%; */
 	align-items: center;
-	display: inline-block;
+	/* display: inline-block; */
+	float: left;
 }
 .bottomright {
-	height: 100%;
-	width: 15%;
+	height: 40px;
+	/* width: 15%; */
 	align-items: center;
 	text-align: right;
-	display: inline-block;
+	float: right;
+	/* display: inline-block; */
 }
 </style>

@@ -1,4 +1,4 @@
-import { login, signUp, checkEmail, checkNickname } from "@/api/user";
+import { login, signUp, checkEmail, checkNickname, getInfo } from "@/api/user";
 
 const state = {
 	token: "",
@@ -60,6 +60,22 @@ const actions = {
 				.catch(error => {
 					reject(error.response);
 				});
+		});
+	},
+	getInfo({ commit }, token) {
+		return new Promise((resolve, reject) => {
+			getInfo()
+				.then(response => {
+					const info = response.data;
+					commit("SET_EMAIL", info.email);
+					commit("SET_USERNAME", info.username);
+					commit("SET_GENDER", info.gender);
+					commit("SET_NICKNAME", info.nickname);
+					commit("SET_PHONE", info.phone);
+					commit("SET_PROFILE_IMG", info.profile_img);
+					resolve();
+				})
+				.catch(error => reject());
 		});
 	},
 	signUp({ commit }, signupForm) {
