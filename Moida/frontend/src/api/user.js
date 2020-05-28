@@ -7,3 +7,25 @@ export function login(data) {
 		data,
 	});
 }
+
+export function signUp(data) {
+	return request({
+		url: "/v1/signup",
+		method: "post",
+		data,
+	});
+}
+
+export function checkNickname(data) {
+	return request({
+		url: `/v1/check/nickname/${data}`,
+		method: "get",
+	});
+}
+
+export function checkEmail(data) {
+	return request({
+		url: `/v1/check/email/${data}`,
+		method: "get",
+	});
+}

@@ -1,7 +1,5 @@
 package com.ssafy.moida.web.dto.diary;
 
-import com.ssafy.moida.domain.account.Account;
-import com.ssafy.moida.domain.group.GroupTB;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,14 +10,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class DiaryUpdateRequest {
-	
+	private Long id;
 	private String description;
 	private String mood;
 	private String imgurl;
 	
 	@Builder
-	public DiaryUpdateRequest(String description, String mood, String imgurl) {
+	public DiaryUpdateRequest(Long id,String description, String mood, String imgurl) {
 		super();
+		this.id = id;
 		this.description = description;
 		this.mood = mood;
 		this.imgurl = imgurl;
