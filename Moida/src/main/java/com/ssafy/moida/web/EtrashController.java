@@ -76,6 +76,7 @@ public class EtrashController {
 			) throws IllegalArgumentException, IOException{
 		return etrashService.findAll(new EtrashAllRequestDTO(pageable, null));
 	}
+	
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
@@ -86,6 +87,18 @@ public class EtrashController {
 			) throws IllegalArgumentException, IOException{
 	
 		return etrashService.findByMood(new EtrashAllRequestDTO(pageable,mood));
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "감쓰 좋아요 증가", httpMethod = "GET", notes = "감쓰의 좋아요 수를 증가 시킨다.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@GetMapping(value = "/etrash/like/{id}")
+	public ResponseEntity<Long> likecount(@PathVariable Long id
+			) throws IllegalArgumentException, IOException{
+	
+		return new ResponseEntity<Long>(etrashService.likecount(id),HttpStatus.OK);
 	}
 	
 	
