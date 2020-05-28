@@ -1,6 +1,7 @@
 import { login, signUp, checkEmail, checkNickname } from "@/api/user";
 
 const state = {
+	isFirst: true,
 	token: "",
 	email: "",
 	username: "",
@@ -14,6 +15,9 @@ const state = {
 const mutations = {
 	SET_TOKEN: (state, token) => {
 		state.token = token;
+	},
+	TOGGLE_ISFIRST: (state, flag) => {
+		state.isFirst = flag;
 	},
 	SET_EMAIL: (state, email) => {
 		state.email = email;
@@ -37,14 +41,21 @@ const mutations = {
 
 const actions = {
 	//test
-	setTest({ commit }, text) {
-		commit("SET_USERNAME", text);
-		commit("SET_PHONE", text);
+	// setTest({
+	// 	commit
+	// }, text) {
+	// 	commit("SET_USERNAME", text);
+	// 	commit("SET_PHONE", text);
+	// },
+	logout({
+		commit
+	}) {
+		commit("TOGGLE_ISFIRST", true);
+		commit("SET_TOKEN", "");
 	},
 	// user login
 	login({ commit }, userInfo) {
 		userInfo;
-		console.log("store ::: login ::: ");
 		console.log(userInfo);
 		return new Promise((resolve, reject) => {
 			login({

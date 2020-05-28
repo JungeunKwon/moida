@@ -2,11 +2,9 @@ import router from "./router";
 import store from "./store";
 
 const whiteList = ["/login", "/signUp"]; // no redirect whitelist
-
 router.beforeEach(async (to, from, next) => {
     const hasToken = store.getters.token;
     if (hasToken) {
-        console.log(to.path)
         if (to.path === "/login") {
             next({
                 path: "/"
