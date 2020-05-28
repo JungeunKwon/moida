@@ -10,7 +10,9 @@
 		<router-link to="/trash" class="myTag t2">일기</router-link>
 		<router-link to="/shared" class="myTag t3">공다</router-link>
 		<router-link to="/myPage" class="myTag t4">my</router-link>
-		<router-link @click.native="logout" class="myTag t5">logout</router-link>
+		<router-link to="/login" @click.native="logout" class="myTag t5">
+			logout
+		</router-link>
 	</div>
 </template>
 
@@ -23,9 +25,6 @@ export default {
 		async logout() {
 			await this.$store.dispatch("user/logout");
 			this.$router.push("/login");
-		},
-		test() {
-			console.log("test");
 		},
 	},
 };
@@ -88,7 +87,6 @@ export default {
 .t5 {
 	top: 340px;
 	background-color: #e2f0cb;
-	cursor: pointer;
 }
 
 .paper {
