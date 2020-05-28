@@ -34,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 				.authorizeRequests() //다음 리퀘스트에 대한 사용권한체크
-					.antMatchers("/css/**","/js/**", "/","/login", "/*/signin", "/*/signup", "/*/check/**").permitAll() //앤트매처 로그인시
+					.antMatchers("/favicon.ico", "/css/**","/js/**", "/","/login", "/*/signin", "/*/signup", "/*/check/**").permitAll() //앤트매처 로그인시
 					.antMatchers(HttpMethod.GET, "api/**").permitAll() //get요청 열기
 					.antMatchers(HttpMethod.OPTIONS, "api/**").permitAll() //get요청 열기
 					.anyRequest().authenticated().and().cors() //그외 유저롤만 접근
