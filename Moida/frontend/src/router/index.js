@@ -6,8 +6,7 @@ import SignUp from "../components/SignUp.vue";
 
 Vue.use(VueRouter);
 
-const routes = [
-	{
+const routes = [{
 		path: "/login",
 		name: "Login",
 		component: Login,
@@ -23,10 +22,10 @@ const routes = [
 		component: SharedDiary,
 	},
 	{
-		path: "/trash",
+		path: "/",
 		name: "Trash",
 		component: () =>
-			import(/* webpackChunkName: "trash" */ "../views/Trash/index.vue"),
+			import( /* webpackChunkName: "trash" */ "../views/Trash/index.vue"),
 	},
 	{
 		path: "/myPage",

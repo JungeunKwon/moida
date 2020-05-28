@@ -4,8 +4,11 @@ import store from "./store";
 const whiteList = ["/login", "/signUp"]; // no redirect whitelist
 router.beforeEach(async (to, from, next) => {
     const hasToken = store.getters.token;
+    console.log("토큰 :: " + hasToken);
+    console.log("isFirst ::" + store.getters.isFirst);
     if (hasToken) {
         if (to.path === "/login") {
+            await store.commit("user/TOGGLE_ISFIRST", false);
             next({
                 path: "/"
             });
