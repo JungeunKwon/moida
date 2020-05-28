@@ -1,19 +1,14 @@
-import {
-	login,
-	signUp,
-	checkEmail,
-	checkNickname
-} from "@/api/user";
+import { login, signUp, checkEmail, checkNickname } from "@/api/user";
 
 const state = {
-	token:
-		"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTU5MDQ4NDMyMiwiZXhwIjoxNTkyNjQ0MzIyfQ.ypqzzPDvmmWQ7X_fErMWsKhyYYKJdCVivgQ-8GYxVIM",
+	token: "",
 	email: "",
 	username: "",
 	gender: "",
 	nickname: "Nickname",
 	phone: "",
-	profile_img: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+	profile_img:
+		"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
 };
 
 const mutations = {
@@ -42,24 +37,20 @@ const mutations = {
 
 const actions = {
 	//test
-	setTest({
-		commit
-	}, text) {
+	setTest({ commit }, text) {
 		commit("SET_USERNAME", text);
 		commit("SET_PHONE", text);
 	},
 	// user login
-	login({
-		commit
-	}, userInfo) {
+	login({ commit }, userInfo) {
 		userInfo;
 		console.log("store ::: login ::: ");
 		console.log(userInfo);
 		return new Promise((resolve, reject) => {
 			login({
-					email: userInfo.email.trim(),
-					password: userInfo.password,
-				})
+				email: userInfo.email.trim(),
+				password: userInfo.password,
+			})
 				.then(response => {
 					if (response.data.code == undefined) {
 						commit("SET_TOKEN", response.data);
@@ -71,9 +62,7 @@ const actions = {
 				});
 		});
 	},
-	signUp({
-		commit
-	}, signupForm) {
+	signUp({ commit }, signupForm) {
 		const formData = new FormData();
 		formData.append("email", signupForm.email);
 		formData.append("password", signupForm.password);
@@ -88,37 +77,39 @@ const actions = {
 		} // 폼데이터 로그 출력법
 
 		return new Promise((resolve, reject) => {
-			signUp(formData).then(response => {
-				resolve(response)
-			}).catch(error => {
-				reject(error)
-			})
-		})
+			signUp(formData)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
 	},
-	checkEmail({
-		commit
-	}, email) {
+	checkEmail({ commit }, email) {
 		console.log("modules > user > action > checkEmail : " + email);
 		return new Promise((resolve, reject) => {
-			checkEmail(email).then(response => {
-				resolve(response)
-			}).catch(error => {
-				reject(error)
-			})
-		})
+			checkEmail(email)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
 	},
-	checkNickname({
-		commit
-	}, nickname) {
+	checkNickname({ commit }, nickname) {
 		console.log("modules > user > action > checkNickname : " + nickname);
 		return new Promise((resolve, reject) => {
-			checkNickname(nickname).then(response => {
-				resolve(response)
-			}).catch(error => {
-				reject(error)
-			})
-		})
-	}
+			checkNickname(nickname)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
+	},
 };
 
 export default {
