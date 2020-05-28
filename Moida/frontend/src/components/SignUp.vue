@@ -235,7 +235,7 @@ export default {
 					.dispatch("user/signUp", this.loginForm)
 					.then(response => {
 						console.log(response);
-						console.log("회원가입이 완료되었습니다.");
+						alert("회원가입이 완료되었습니다.");
 						this.$router.push("/login");
 					})
 					.catch(error => {

@@ -6,6 +6,7 @@ import {
 } from "@/api/user";
 
 const state = {
+	isFirst: true,
 	token: "",
 	email: "",
 	username: "",
@@ -18,6 +19,9 @@ const state = {
 const mutations = {
 	SET_TOKEN: (state, token) => {
 		state.token = token;
+	},
+	TOGGLE_ISFIRST: (state, flag) => {
+		state.isFirst = flag;
 	},
 	SET_EMAIL: (state, email) => {
 		state.email = email;
@@ -41,18 +45,23 @@ const mutations = {
 
 const actions = {
 	//test
-	setTest({
+	// setTest({
+	// 	commit
+	// }, text) {
+	// 	commit("SET_USERNAME", text);
+	// 	commit("SET_PHONE", text);
+	// },
+	logout({
 		commit
-	}, text) {
-		commit("SET_USERNAME", text);
-		commit("SET_PHONE", text);
+	}) {
+		commit("TOGGLE_ISFIRST", true);
+		commit("SET_TOKEN", "");
 	},
 	// user login
 	login({
 		commit
 	}, userInfo) {
 		userInfo;
-		console.log("store ::: login ::: ");
 		console.log(userInfo);
 		return new Promise((resolve, reject) => {
 			login({
@@ -87,37 +96,43 @@ const actions = {
 		} // 폼데이터 로그 출력법
 
 		return new Promise((resolve, reject) => {
-			signUp(formData).then(response => {
-				resolve(response)
-			}).catch(error => {
-				reject(error)
-			})
-		})
+			signUp(formData)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
 	},
 	checkEmail({
 		commit
 	}, email) {
 		console.log("modules > user > action > checkEmail : " + email);
 		return new Promise((resolve, reject) => {
-			checkEmail(email).then(response => {
-				resolve(response)
-			}).catch(error => {
-				reject(error)
-			})
-		})
+			checkEmail(email)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
 	},
 	checkNickname({
 		commit
 	}, nickname) {
 		console.log("modules > user > action > checkNickname : " + nickname);
 		return new Promise((resolve, reject) => {
-			checkNickname(nickname).then(response => {
-				resolve(response)
-			}).catch(error => {
-				reject(error)
-			})
-		})
-	}
+			checkNickname(nickname)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
+	},
 };
 
 export default {

@@ -20,10 +20,12 @@ export default {
 	components: {},
 	mounted() {},
 	methods: {
-		logout() {
-			this.$store.commit("auth/TOGGLE_ISFIRST");
-			this.$store.commit("user/SET_TOKEN", "");
+		async logout() {
+			await this.$store.dispatch("user/logout");
 			this.$router.push("/login");
+		},
+		test() {
+			console.log("test");
 		},
 	},
 };
