@@ -24,14 +24,8 @@ export default {
 		GoTop,
 		First,
 	},
-	mounted() {
-		// console.log(this.$store.getters.isFirst);
-		// // this.$store.commit("auth/TOGGLE_ISFIRST");
-		// this.TOGGLE_ISFIRST();
-		// console.log(this.$store.getters.isFirst);
-	},
+	mounted() {},
 	computed: {
-		// ...mapState("auth", ["isFirst"]),
 		...mapGetters(["isFirst"]),
 	},
 	data() {

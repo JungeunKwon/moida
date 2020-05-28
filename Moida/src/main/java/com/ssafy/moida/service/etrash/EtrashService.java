@@ -20,4 +20,5 @@ public interface EtrashService {
 	Page<Music> musicrecommend(String mood);
 	Page<EtrashResponseDto> findByMood(EtrashAllRequestDTO requestDto);
 	Page<EtrashResponseDto> findAll(EtrashAllRequestDTO requestDto);
+	Long likecount(Long id);
 }
