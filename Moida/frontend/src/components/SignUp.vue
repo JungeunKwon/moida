@@ -26,7 +26,9 @@
 					color="#fadf99"
 					style="float: left; width: calc(100% - 100px);"
 				/>
-				<button @click="emailcheck" class="signUp_btn dupli">중복체크</button>
+				<button @click="emailcheck" class="signUp_btn dupli">
+					중복체크
+				</button>
 			</div>
 			<div class="signUp_input">
 				<v-text-field
@@ -40,13 +42,17 @@
 					@change="changenick"
 					style="float: left; width: calc(100% - 100px);"
 				/>
-				<button @click="nicknamecheck" class="signUp_btn dupli">중복체크</button>
+				<button @click="nicknamecheck" class="signUp_btn dupli">
+					중복체크
+				</button>
 			</div>
 			<div class="signUp_input">
 				<v-text-field
 					ref="username"
 					v-model="loginForm.username"
-					:rules="[() => !!loginForm.username || 'This field is required']"
+					:rules="[
+						() => !!loginForm.username || 'This field is required',
+					]"
 					label="이름"
 					required
 					color="#fadf99"
@@ -68,15 +74,12 @@
 				<v-text-field
 					ref="password"
 					v-model="loginForm.password"
-					:append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
 					:rules="[rules.required, rules.min]"
-					:type="show1 ? 'text' : 'password'"
 					name="input-10-2"
 					label="비밀번호"
 					color="#fadf99"
 					hint="At least 8 characters"
 					class="input-group--focused"
-					@click:append="show1 = !show1"
 					outlined
 				/>
 			</div>
@@ -85,18 +88,15 @@
 				<v-text-field
 					ref="re_password"
 					v-model="loginForm.re_password"
-					:append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
 					:rules="[
 						() =>
 							loginForm.password === loginForm.re_password ||
 							'The password you entered dont match',
 					]"
-					:type="show2 ? 'text' : 'password'"
 					name="input-10-2"
 					label="비밀번호 확인"
 					color="#fadf99"
 					hint="At least 8 characters"
-					@click:append="show2 = !show2"
 					outlined
 				/>
 			</div>
@@ -127,10 +127,18 @@
 						color="#fadf99"
 					/>
 				</template>
-				<v-date-picker v-model="loginForm.birth_date" @input="menu = false" color="#fadf99" />
+				<v-date-picker
+					v-model="loginForm.birth_date"
+					@input="menu = false"
+					color="#fadf99"
+				/>
 			</v-menu>
-			<div style="width: 100%; height: 20px; margin: 0 auto; text-align: center;">
-				<button class="signUp_btn submit" @click="resetForm">취소</button>
+			<div
+				style="width: 100%; height: 20px; margin: 0 auto; text-align: center;"
+			>
+				<button class="signUp_btn submit" @click="resetForm">
+					취소
+				</button>
 				<button class="signUp_btn submit" @click="submit">확인</button>
 			</div>
 		</v-form>
@@ -154,8 +162,6 @@ export default {
 		file: "",
 		valid: true,
 		loading: true,
-		show1: false,
-		show2: false,
 		menu: false,
 		errorMessages: "",
 		isnicknameduplicated: true,
