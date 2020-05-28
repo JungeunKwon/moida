@@ -1,23 +1,24 @@
 <template>
 	<div class="trashcontainer">
+		<div class="sort">
+			<v-container id="dropdown-example">
+				<v-overflow-btn
+					v-model="sorted"
+					:items="sortlist"
+					label="정렬"
+					target="#dropdown-example"
+					@change="changesort"
+				></v-overflow-btn>
+			</v-container>
+		</div>
 		<div class="trashtop">
 			<TrashDialog :items="items">
 				<div class="todack" dark>토닥토닥</div>
 			</TrashDialog>
 		</div>
 		<div class="masonry" v-lazy-container="{ selector: 'card' }">
-			<div
-				v-for="(intrash, index) in trash"
-				:key="intrash.id"
-				class="card"
-			>
-				<TrashCom
-					:items="items"
-					@load="rendered"
-					class="card-content"
-					:trash="intrash"
-					:index="index"
-				/>
+			<div v-for="(intrash, index) in trash" :key="intrash.id" class="card">
+				<TrashCom :items="items" @load="rendered" class="card-content" :trash="intrash" :index="index" />
 			</div>
 		</div>
 		<v-divider></v-divider>
@@ -69,8 +70,15 @@ export default {
 			imageCounter: 0,
 			imagesCount: 0,
 			trashcontent: "",
+			sorted: "",
 			mood: "슬픔",
 			selection: 0,
+			sortlist: [
+				{ text: "좋아요순" },
+				{ text: "최신순" },
+				{ text: "남은시간순" },
+				{ text: "내가쓴글" },
+			],
 			url: "",
 			items: [
 				{
@@ -161,6 +169,46 @@ export default {
 				.catch(error => {});
 			this.mood = "행복";
 		},
+		changesort() {
+			console.log(this.sorted);
+			if (this.sorted == "좋아요순") {
+				this.sortedArrayByLike();
+			} else if (this.sorted == "최신순") {
+				this.sortedArrayByDate();
+			} else if (this.sorted == "남은시간순") {
+				this.sortedArrayByDeleteDate();
+			} else if (this.sorted == "내가쓴글") {
+				this.sortedArrayByMine();
+			}
+		},
+		sortedArrayByLike() {
+			function compare(a, b) {
+				if (a.likecount < b.likecount) return -1;
+				if (a.likecount > b.likecount) return 1;
+				return 0;
+			}
+			return this.trash.sort(compare);
+		},
+		sortedArrayByDate() {
+			return this.trash.sort(
+				(a, b) => new Date(a.createdate) - new Date(b.createdate),
+			);
+		},
+		sortedArrayByDeleteDate() {
+			return this.trash.sort(
+				(a, b) => new Date(a.deletedate) - new Date(b.deletedate),
+			);
+		},
+		sortedArrayByMine() {
+			var templist = [];
+			var nowemail = this.$store.getters.email;
+			for (var i = 0; i < this.trash.length; i++) {
+				if (this.trash[i].account.email == nowemail) {
+					templist.push(this.trash[i]);
+				}
+			}
+			return templist;
+		},
 		calculateImageCount() {
 			this.imagesCount = this.trash.length;
 		},
@@ -230,14 +278,22 @@ export default {
 };
 </script>
 <style>
+.sort {
+	height: 80px;
+	display: block;
+	width: 200px;
+}
 .masonry {
 	display: grid;
 	grid-gap: 15px;
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 	grid-auto-rows: 0;
-	height: 90%;
+	height: 80%;
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+.card-content:hover {
+	opacity: 0.8;
 }
 .bottomtrash {
 	height: 10%;

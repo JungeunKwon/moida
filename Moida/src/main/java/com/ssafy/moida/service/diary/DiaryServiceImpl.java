@@ -47,7 +47,6 @@ public class DiaryServiceImpl implements DiaryService{
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByGroupTB(Long id, Pageable pageable) {
 		GroupTB group = groupTBRepository.findById(id).get();
-		//System.out.println("그룹 아이디 "+group.getId());
 		return diaryRepository.findByGroupTBAndDeletedateIsNull(group, pageable)
 				.map(DiaryResponseDTO::new);
 	}
@@ -86,8 +85,18 @@ public class DiaryServiceImpl implements DiaryService{
 	}
 
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findByMonth(DiaryFindByGroupDayRequest dto,Pageable pageable) {
-		return diaryRepository.findByMood(dto.getGroupid(), dto.getYear(), dto.getMonth(),dto.getDay(), pageable)
+	public Page<DiaryResponseDTO> findByDay( String datetime, Long groupid, Pageable pageable) {
+		int year = Integer.parseInt(datetime.split("-")[0]);
+		int month = Integer.parseInt(datetime.split("-")[1]);
+		int day = Integer.parseInt(datetime.split("-")[2]);
+		
+		LocalDateTime date = LocalDateTime.now();
+		date = date.withYear(year).withMonth(month).withDayOfMonth(day).withHour(0).withMinute(0).withSecond(0).withNano(0);
+		
+		
+		GroupTB group = groupTBRepository.findById(groupid).get();
+		System.out.println(date);
+		return diaryRepository.findByGroupTBAndCreateDateLessThanAndCreateDateGreaterThanAndDeletedateIsNull(group,date.plusDays(1),date, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 

@@ -18,10 +18,18 @@
 				@focus="pwCheck = false"
 			/>
 			<span v-if="pwCheck" class="errorMsg">{{ pwMsg }}</span>
-			<button id="login_btn" @click="login()" @keyup.enter="login()">로그인</button>
+			<button
+				id="login_btn"
+				@click="handlerLogin()"
+				@keyup.enter="handlerLogin()"
+			>
+				로그인
+			</button>
 			<div id="login_bottom">
 				<hr id="div_line" />
-				<span class="login_bottom_text" @click="findPW">비밀번호 찾기</span>
+				<span class="login_bottom_text" @click="findPW"
+					>비밀번호 찾기</span
+				>
 				<!-- <img id="text_div" src="../assets/icons/text_div.png" />
 				<span class="login_bottom_text" @click="signUp">회원가입</span>-->
 			</div>
@@ -30,7 +38,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 export default {
 	name: "Login",
 	data() {
@@ -45,13 +53,14 @@ export default {
 		};
 	},
 	methods: {
-		...mapMutations("user", ["TOGGLE_ISFIRST"]),
+		...mapMutations("auth", ["TOGGLE_ISFIRST"]),
+		...mapActions("user", ["login", "getInfo"]),
 		emailValidation(email) {
 			let regExp = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 			if (regExp.test(email)) return true;
 			else return false;
 		},
-		login() {
+		handlerLogin() {
 			if (!this.emailValidation(this.email)) {
 				this.emailCheck = true;
 				return;
@@ -60,17 +69,18 @@ export default {
 				this.pwCheck = true;
 				return;
 			}
-			this.$store
-				.dispatch("user/login", {
-					email: this.email,
-					password: this.password,
-				})
+			this.login({
+				email: this.email,
+				password: this.password,
+			})
 				.then(response => {
 					// console.log(response);
 					// console.log(response.data.code);
 					if (response.data.code == undefined) {
-						this.TOGGLE_ISFIRST(false);
-						this.$router.push("/");
+						this.getInfo().then(() => {
+							this.TOGGLE_ISFIRST();
+							this.$router.push("/");
+						});
 					} else {
 						alert("아이디와 비밀번호를 확인해주세요.");
 					}

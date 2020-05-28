@@ -24,5 +24,5 @@ public interface DiaryService {
 	Page<DiaryResponseDTO> findByDescriptionAndByDeletedateIsNull(String description,Pageable pageable);
 	Page<DiaryResponseDTO> findByAccountAndByDeletedateIsNull(Account account,Pageable pageable);
 	Page<DiaryResponseDTO> findByMoodAndByDeletedateIsNull(String mood,Pageable pageable);
-	Page<DiaryResponseDTO> findByMonth(DiaryFindByGroupDayRequest dto,Pageable pageable);
+	Page<DiaryResponseDTO> findByDay( String datetime, Long groupid ,Pageable pageable);
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -104,11 +105,13 @@ public class DiaryController {
 	})
 	@ApiOperation(value = "다이어리 그룹 날짜 검색", httpMethod = "GET", notes = "다이어리 그룹에서 날짜로 검색.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@GetMapping(value = "/diary/search/day")
-	public Page<DiaryResponseDTO> findByGroupYear(@RequestBody DiaryFindByGroupDayRequest dto ,Pageable pageable
+	@GetMapping(value = "/diary/search/day/{datetime}/{groupid}")
+	public Page<DiaryResponseDTO> findByGroupDay(@PathVariable String datetime, @PathVariable Long groupid, Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
 	
-		return diaryService.findByMonth(dto,pageable);
+		System.out.println(datetime);
+		System.out.println(groupid);
+		return diaryService.findByDay(datetime,groupid,pageable);
 	}
 	
 }
