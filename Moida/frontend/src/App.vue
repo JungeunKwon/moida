@@ -16,17 +16,22 @@
 import Layout from "@/components/Layout";
 import GoTop from "@/components/GoTop";
 import First from "@/components/First";
+import { mapState, mapGetters, mapMutations } from "vuex";
+
 export default {
 	components: {
 		Layout,
 		GoTop,
 		First,
 	},
-	data() {
-		return {
-			isFirst: true,
-		};
+	mounted() {},
+	computed: {
+		...mapGetters(["isFirst"]),
 	},
+	data() {
+		return {};
+	},
+	methods: {},
 };
 </script>
 <style>

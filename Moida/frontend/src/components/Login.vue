@@ -22,14 +22,15 @@
 			<div id="login_bottom">
 				<hr id="div_line" />
 				<span class="login_bottom_text" @click="findPW">비밀번호 찾기</span>
-				<img id="text_div" src="../assets/icons/text_div.png" />
-				<span class="login_bottom_text" @click="signUp">회원가입</span>
+				<!-- <img id="text_div" src="../assets/icons/text_div.png" />
+				<span class="login_bottom_text" @click="signUp">회원가입</span>-->
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
 	name: "Login",
 	data() {
@@ -43,9 +44,8 @@ export default {
 			pwCheck: false,
 		};
 	},
-	mounted() {},
-
 	methods: {
+		...mapMutations("user", ["TOGGLE_ISFIRST"]),
 		emailValidation(email) {
 			let regExp = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 			if (regExp.test(email)) return true;
@@ -56,26 +56,30 @@ export default {
 				this.emailCheck = true;
 				return;
 			}
-
 			if (this.password == "") {
 				this.pwCheck = true;
 				return;
 			}
-
 			this.$store
 				.dispatch("user/login", {
 					email: this.email,
 					password: this.password,
 				})
 				.then(response => {
-					console.log(response);
+					// console.log(response);
+					// console.log(response.data.code);
+					if (response.data.code == undefined) {
+						this.TOGGLE_ISFIRST(false);
+						this.$router.push("/");
+					} else {
+						alert("아이디와 비밀번호를 확인해주세요.");
+					}
 				})
 				.catch(error => {
 					console.log(error);
 				});
 		},
 		signUp() {
-			console.log("왜않놔와");
 			this.$router.push("/signUp");
 		},
 		findPW() {},

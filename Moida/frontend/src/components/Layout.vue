@@ -10,7 +10,9 @@
 		<router-link to="/trash" class="myTag t2">일기</router-link>
 		<router-link to="/shared" class="myTag t3">공다</router-link>
 		<router-link to="/myPage" class="myTag t4">my</router-link>
-		<router-link to="/trash" class="myTag t5">login</router-link>
+		<router-link to="/login" @click.native="logout" class="myTag t5">
+			logout
+		</router-link>
 	</div>
 </template>
 
@@ -19,7 +21,12 @@ export default {
 	name: "Layout",
 	components: {},
 	mounted() {},
-	methods: {},
+	methods: {
+		async logout() {
+			await this.$store.dispatch("user/logout");
+			this.$router.push("/login");
+		},
+	},
 };
 </script>
 <style>

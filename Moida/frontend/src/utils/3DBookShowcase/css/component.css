@@ -12,6 +12,32 @@
 	font-style: normal;
 }
 
+.bk-tag {
+	cursor: pointer;
+	font-family: "KyoboHand";
+	position: fixed;
+	left: 520px;
+	width: 110px;
+	text-align: center;
+	font-size: 20px;
+	color: rgb(87, 78, 78) !important;
+	padding: 10px 20px 10px 20px;
+	box-shadow: 1px 1px 3px rgba(102, 102, 102, 0.534);
+}
+
+.bk-tag:hover {
+	filter: brightness(90%);
+}
+
+.bt1 {
+	background-color: #fbd6c6;
+}
+
+.bt2 {
+	top: 100px;
+	background-color: #cde4db;
+}
+
 .bk-list {
 	list-style: none;
 	position: relative;

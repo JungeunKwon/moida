@@ -28,6 +28,8 @@
 						</div>
 						<div class="bk-page">
 							<div class="bk-content bk-content-current">
+								<router-link to="/login" v-if="opened" class="bk-tag bt1">로그인</router-link>
+								<router-link to="/signUp" v-if="opened" class="bk-tag bt2">회원가입</router-link>
 								<slot />
 							</div>
 						</div>
@@ -49,6 +51,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations } from "vuex";
 export default {
 	data() {
 		return {
@@ -57,6 +60,7 @@ export default {
 		};
 	},
 	mounted() {},
+	computed: {},
 	methods: {
 		openDiary() {
 			this.opened = true;
@@ -64,17 +68,3 @@ export default {
 	},
 };
 </script>
-
-<style>
-#signUp_title {
-	font-family: "KyoboHand";
-	position: fixed;
-	right: -90px;
-	text-align: center;
-	font-size: 20px;
-	background-color: #cde4db;
-	color: white;
-	padding: 10px 20px 10px 20px;
-	box-shadow: 1px 1px 3px rgba(102, 102, 102, 0.534);
-}
-</style>
