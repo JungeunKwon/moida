@@ -1,9 +1,4 @@
-import {
-	login,
-	signUp,
-	checkEmail,
-	checkNickname
-} from "@/api/user";
+import { login, signUp, checkEmail, checkNickname } from "@/api/user";
 
 const state = {
 	isFirst: true,
@@ -13,7 +8,8 @@ const state = {
 	gender: "",
 	nickname: "Nickname",
 	phone: "",
-	profile_img: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+	profile_img:
+		"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
 };
 
 const mutations = {
@@ -58,16 +54,14 @@ const actions = {
 		commit("SET_TOKEN", "");
 	},
 	// user login
-	login({
-		commit
-	}, userInfo) {
+	login({ commit }, userInfo) {
 		userInfo;
 		console.log(userInfo);
 		return new Promise((resolve, reject) => {
 			login({
-					email: userInfo.email.trim(),
-					password: userInfo.password,
-				})
+				email: userInfo.email.trim(),
+				password: userInfo.password,
+			})
 				.then(response => {
 					if (response.data.code == undefined) {
 						commit("SET_TOKEN", response.data);
@@ -79,9 +73,7 @@ const actions = {
 				});
 		});
 	},
-	signUp({
-		commit
-	}, signupForm) {
+	signUp({ commit }, signupForm) {
 		const formData = new FormData();
 		formData.append("email", signupForm.email);
 		formData.append("password", signupForm.password);
@@ -105,9 +97,7 @@ const actions = {
 				});
 		});
 	},
-	checkEmail({
-		commit
-	}, email) {
+	checkEmail({ commit }, email) {
 		console.log("modules > user > action > checkEmail : " + email);
 		return new Promise((resolve, reject) => {
 			checkEmail(email)
@@ -119,9 +109,7 @@ const actions = {
 				});
 		});
 	},
-	checkNickname({
-		commit
-	}, nickname) {
+	checkNickname({ commit }, nickname) {
 		console.log("modules > user > action > checkNickname : " + nickname);
 		return new Promise((resolve, reject) => {
 			checkNickname(nickname)
