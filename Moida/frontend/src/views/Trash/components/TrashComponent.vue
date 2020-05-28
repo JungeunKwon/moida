@@ -17,9 +17,7 @@
 
 		<div class="trashother">
 			<div class="trashdescription">
-				<div style="margin:0 auto">
-					{{ trash.description }}
-				</div>
+				<div style="margin:0 auto">{{ trash.description }}</div>
 			</div>
 		</div>
 		<div class="trashtest">
@@ -28,18 +26,18 @@
 				<div class="trashbottombottom">
 					<div class="bottomleft">
 						<div class="timewrap">
-							<v-chip class="time" color="red accent-1">{{
+							<v-chip class="time" color="red accent-1">
+								{{
 								lefttime
-							}}</v-chip>
+								}}
+							</v-chip>
 
 							<div class="timecontent">시간 뒤 펑~!</div>
 						</div>
 					</div>
 					<div class="bottomright">
 						<v-btn icon @click="likeup">
-							<v-icon style="height:100%" color="pink lighten-4"
-								>mdi-heart</v-icon
-							>
+							<v-icon style="height:100%" color="pink lighten-4">mdi-heart</v-icon>
 							{{ trash.likecount }}
 						</v-btn>
 					</div>
@@ -108,9 +106,11 @@ export default {
 	margin: 5px;
 	border-radius: 10px;
 	border: 1px solid rgba(192, 192, 192, 0.363);
-	/* box-shadow: 0.5px 0.5px 3px rgb(192, 192, 192); */
+	box-shadow: 0.5px 0.5px 3px rgb(192, 192, 192);
 }
-
+.trashwrapper :hover {
+	opacity: 0.5;
+}
 .trashdescription {
 	height: auto;
 	text-align: center;
@@ -130,7 +130,6 @@ export default {
 }
 .videovideo {
 	width: 100%;
-
 	border: 4px solid #000;
 	-moz-border-radius: 10px 10px 0 0;
 	border-radius: 10px 10px 0 0;

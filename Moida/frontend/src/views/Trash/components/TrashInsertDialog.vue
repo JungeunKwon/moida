@@ -54,33 +54,21 @@
 			</div>
 		</template>
 		<v-card v-if="!innerdialog">
-			<img
-				src="https://media.giphy.com/media/1Ye9oNy0TAC0G7bN4t/giphy.gif"
-			/>
+			<img src="https://media.giphy.com/media/1Ye9oNy0TAC0G7bN4t/giphy.gif" />
 		</v-card>
 		<v-card v-if="innerdialog && !isMusic">
 			<v-card-text>
-				<p class="font-weight-bold">
-					해당 감정이 맞나요? 아니면 다시 선택해주세요.
-				</p>
+				<p class="font-weight-bold">해당 감정이 맞나요? 아니면 다시 선택해주세요.</p>
 				<v-chip>
 					<v-avatar left>
 						<v-img :src="moodsrc"></v-img>
 					</v-avatar>
 					{{ mood }}
 				</v-chip>
-				<v-chip-group
-					v-model="selection"
-					active-class="deep-purple accent-4 white--text"
-					column
-				>
+				<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
 					<div style="margin: 0 auto; width:80%">
 						<v-row align="center" justify="start">
-							<v-col
-								v-for="(item, i) in items"
-								:key="item.text"
-								class="shrink"
-							>
+							<v-col v-for="item in items" :key="item.text" class="shrink">
 								<v-chip>
 									<v-avatar left>
 										<v-img :src="item.src"></v-img>
@@ -91,13 +79,14 @@
 						</v-row>
 					</div>
 				</v-chip-group>
+				<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
+				<v-col cols="12">
+					<v-subheader class="pl-0">Time</v-subheader>
+					<v-slider v-model="time" thumb-label="always" :max="24"></v-slider>
+				</v-col>
+
 				<div style="margin: 0 auto; width:100%">
-					<v-btn
-						text
-						style="display: inline-block; width: 20%;"
-						@click="getmusic"
-						>노래선택</v-btn
-					>
+					<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">노래선택</v-btn>
 				</div>
 			</v-card-text>
 		</v-card>
@@ -129,11 +118,7 @@
 										loading="lazy"
 									></iframe>
 								</div>
-								<div
-									style="width:100%; height:50px; text-align:center"
-								>
-									{{ music.musicname }}
-								</div>
+								<div style="width:100%; height:50px; text-align:center">{{ music.musicname }}</div>
 							</v-card>
 						</v-item>
 					</v-item-group>
@@ -142,12 +127,7 @@
 			</div>
 
 			<div style="margin: 0 auto; width:100%">
-				<v-btn
-					text
-					style="display: inline-block; width: 20%;"
-					@click="inserttrash"
-					>노래선택</v-btn
-				>
+				<v-btn text style="display: inline-block; width: 20%;" @click="inserttrash">노래선택</v-btn>
 			</div>
 		</v-card>
 	</v-dialog>
@@ -171,6 +151,7 @@ export default {
 			trashdialog: false,
 			innerdialog: true,
 			isMusic: false,
+			time: 0,
 			url: "",
 			selection: 0,
 			musiclist: [],
@@ -209,6 +190,7 @@ export default {
 				likecount: 0,
 				mood: item.text,
 				description: this.content,
+				deleteTime: this.time,
 				music: {
 					id: this.selectid,
 				},

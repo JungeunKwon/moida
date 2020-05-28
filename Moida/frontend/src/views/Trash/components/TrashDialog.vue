@@ -31,7 +31,7 @@
 					<div style="margin: 0 auto; width:80%">
 						<v-row align="center" justify="start">
 							<v-col
-								v-for="(item, i) in items"
+								v-for="item in items"
 								:key="item.text"
 								class="shrink"
 							>
