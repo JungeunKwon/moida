@@ -78,7 +78,7 @@ export default {
 					// console.log(response.data.code);
 					if (response.data.code == undefined) {
 						this.getInfo().then(() => {
-							this.TOGGLE_ISFIRST();
+							this.TOGGLE_ISFIRST(false);
 							this.$router.push("/");
 						});
 					} else {
