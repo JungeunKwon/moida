@@ -12,6 +12,7 @@ service.interceptors.request.use(
 		if (store.getters.token) {
 			config.headers["X-AUTH-TOKEN"] = store.getters.token;
 			config.headers["Access-Control-Allow-Origin"] = "*";
+			config.headers["Content-Type"] = "application/json";
 		}
 		return config;
 	},
