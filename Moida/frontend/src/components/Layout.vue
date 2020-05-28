@@ -114,7 +114,6 @@ export default {
 	z-index: 4;
 	height: calc(100% - 50px);
 	width: calc(100% - 100px);
-	padding: 10px 0 10px 0;
-	overflow: auto;
+	overflow: hidden;
 }
 </style>
