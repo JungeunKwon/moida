@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import SharedDiary from "../views/SharedDiary/index.vue";
-import Trash from "../views/Trash.vue";
 import Login from "../components/Login.vue";
 import SignUp from "../components/SignUp.vue";
 
@@ -18,12 +17,6 @@ const routes = [
 		name: "SignUp",
 		component: SignUp,
 	},
-	{
-		path: "/",
-		name: "Trash",
-		component: Trash,
-	},
-
 	{
 		path: "/shared",
 		name: "SharedDiary",
