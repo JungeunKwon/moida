@@ -6,7 +6,7 @@ const getters = {
 	nickname: state => state.user.nickname,
 	phone: state => state.user.phone,
 	profile_img: state => state.user.profile_img,
-	isFirst: state => state.auth.isFirst,
+	isFirst: state => state.user.isFirst,
 };
 
 export default getters;

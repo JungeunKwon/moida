@@ -45,7 +45,7 @@ export default {
 		};
 	},
 	methods: {
-		...mapMutations("auth", ["TOGGLE_ISFIRST"]),
+		...mapMutations("user", ["TOGGLE_ISFIRST"]),
 		emailValidation(email) {
 			let regExp = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 			if (regExp.test(email)) return true;
@@ -69,7 +69,7 @@ export default {
 					// console.log(response);
 					// console.log(response.data.code);
 					if (response.data.code == undefined) {
-						this.TOGGLE_ISFIRST();
+						this.TOGGLE_ISFIRST(false);
 						this.$router.push("/");
 					} else {
 						alert("아이디와 비밀번호를 확인해주세요.");

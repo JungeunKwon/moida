@@ -28,8 +28,8 @@
 						</div>
 						<div class="bk-page">
 							<div class="bk-content bk-content-current">
-								<div v-if="opened" class="bk-tag bt1" @click.stop="goLogin">로그인</div>
-								<div v-if="opened" class="bk-tag bt2" @click.stop="goSignUp">회원가입</div>
+								<router-link to="/login" v-if="opened" class="bk-tag bt1">로그인</router-link>
+								<router-link to="/signUp" v-if="opened" class="bk-tag bt2">회원가입</router-link>
 								<slot />
 							</div>
 						</div>
@@ -64,12 +64,6 @@ export default {
 	methods: {
 		openDiary() {
 			this.opened = true;
-		},
-		goLogin() {
-			this.$router.push("/login");
-		},
-		goSignUp() {
-			this.$router.push("/signUp");
 		},
 	},
 };
