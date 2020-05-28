@@ -3,7 +3,7 @@
 		<div id="cover"></div>
 		<div class="paper p1"></div>
 		<div class="paper p2"></div>
-		<div class="paper p3" id="test">
+		<div class="paper p3">
 			<slot />
 		</div>
 		<router-link to="/trash" class="myTag t1">감쓰</router-link>
@@ -46,7 +46,7 @@ export default {
 .myTag {
 	z-index: 3;
 	position: fixed;
-	right: 30px;
+	right: 20px;
 	width: 80px;
 	height: 45px;
 	box-shadow: 1px 1px 5px gray;

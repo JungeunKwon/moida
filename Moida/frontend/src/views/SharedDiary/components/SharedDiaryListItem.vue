@@ -1,21 +1,27 @@
 <template>
-	<div style="padding: 10px; display: inline-block;">
-		<v-card @click="openDiaryDetail()" id="sharedDiaryItem" class="mx-auto" max-width="300">
-			<v-img :src="item.imgUrl" height="200px" />
-			<div id="diaryInfo">
-				<div id="subjectDiv">
-					<div id="roomId">{{ item.id }}</div>
-					<div id="roomSubject">{{ item.subject }}</div>
+	<div style="padding: 20px; display: inline-block;">
+		<SharedDiaryDetail :detail="detail">
+			<v-card
+				@click="openDiaryDetail()"
+				id="sharedDiaryItem"
+				class="mx-auto"
+				max-width="300"
+			>
+				<v-img :src="item.imgUrl" height="200px" />
+				<div id="diaryInfo">
+					<div id="subjectDiv">
+						<div id="roomId">{{ item.id }}</div>
+						<div id="roomSubject">{{ item.subject }}</div>
+					</div>
+					<div id="hostDiv">
+						<img id="hostIcon" src="@/assets/icons/host.png" />
+						<div id="hostName">{{ item.host_nickname }}</div>
+					</div>
+					<div style="clear: both;" />
+					<div id="desc">{{ item.description }}</div>
 				</div>
-				<div id="hostDiv">
-					<img id="hostIcon" src="@/assets/icons/host.png" />
-					<div id="hostName">{{ item.host_nickname }}</div>
-				</div>
-				<div style="clear: both;" />
-				<div id="desc">{{ item.description }}</div>
-			</div>
-			<SharedDiaryDetail v-if="dialog" :detail="detail" :dialog="dialog" />
-		</v-card>
+			</v-card>
+		</SharedDiaryDetail>
 	</div>
 </template>
 
@@ -26,13 +32,13 @@ export default {
 	components: { SharedDiaryDetail },
 	data() {
 		return {
-			dialog: false,
 			detail: {
 				id: 123450,
 				subject:
 					"3학년 1반 모여라 ~ 긴글 테스트 용임 %^^% 불만 있으신지? 3학년 1반 모여라 ~ 긴글 테스트 용임 %^^% 불만 있으신지?",
 				host_id: 0,
 				host_nickname: "방장",
+				host_img: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg",
 				isPrivate: true,
 				imgUrl: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg",
 				description:
@@ -50,7 +56,6 @@ export default {
 		openDiaryDetail() {
 			// axios _ getRoomDetail
 			this.getRoomDetail();
-			this.dialog = true;
 		},
 	},
 };
