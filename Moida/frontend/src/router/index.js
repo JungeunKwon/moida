@@ -1,12 +1,29 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-// import About from "../views/About.vue";
 import SharedDiary from "../views/SharedDiary/index.vue";
-//import Trash from "../views/Trash/index.vue";
+import Trash from "../views/Trash.vue";
+import Login from "../components/Login.vue";
+import SignUp from "../components/SignUp.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
+	{
+		path: "/login",
+		name: "Login",
+		component: Login,
+	},
+	{
+		path: "/signUp",
+		name: "SignUp",
+		component: SignUp,
+	},
+	{
+		path: "/",
+		name: "Trash",
+		component: Trash,
+	},
+
 	{
 		path: "/shared",
 		name: "SharedDiary",
@@ -17,6 +34,11 @@ const routes = [
 		name: "Trash",
 		component: () =>
 			import(/* webpackChunkName: "trash" */ "../views/Trash/index.vue"),
+	},
+	{
+		path: "/myPage",
+		name: "MyPage",
+		component: () => import("../views/myPage/index.vue"),
 	},
 ];
 

@@ -1,4 +1,9 @@
-import { login } from "@/api/user";
+import {
+	login,
+	signUp,
+	checkEmail,
+	checkNickname
+} from "@/api/user";
 
 const state = {
 	token:
@@ -6,9 +11,9 @@ const state = {
 	email: "",
 	username: "",
 	gender: "",
-	nickname: "",
+	nickname: "Nickname",
 	phone: "",
-	profile_img: "",
+	profile_img: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
 };
 
 const mutations = {
@@ -36,23 +41,84 @@ const mutations = {
 };
 
 const actions = {
+	//test
+	setTest({
+		commit
+	}, text) {
+		commit("SET_USERNAME", text);
+		commit("SET_PHONE", text);
+	},
 	// user login
-	login({ commit }, userInfo) {
-		const { email, password } = userInfo;
+	login({
+		commit
+	}, userInfo) {
+		userInfo;
+		console.log("store ::: login ::: ");
+		console.log(userInfo);
 		return new Promise((resolve, reject) => {
 			login({
-				email: username.trim(),
-				password: password,
-			})
+					email: userInfo.email.trim(),
+					password: userInfo.password,
+				})
 				.then(response => {
-					commit("SET_TOKEN", response.data);
+					if (response.data.code == undefined) {
+						commit("SET_TOKEN", response.data);
+					}
 					resolve(response);
 				})
 				.catch(error => {
-					reject(error);
+					reject(error.response);
 				});
 		});
 	},
+	signUp({
+		commit
+	}, signupForm) {
+		const formData = new FormData();
+		formData.append("email", signupForm.email);
+		formData.append("password", signupForm.password);
+		formData.append("phone", signupForm.phone);
+		formData.append("gender", signupForm.gender);
+		formData.append("username", signupForm.username);
+		formData.append("nickname", signupForm.nickname);
+		formData.append("uploadFile", signupForm.uploadFile);
+
+		for (var key of formData.entries()) {
+			console.log(key[0] + ", " + key[1]);
+		} // 폼데이터 로그 출력법
+
+		return new Promise((resolve, reject) => {
+			signUp(formData).then(response => {
+				resolve(response)
+			}).catch(error => {
+				reject(error)
+			})
+		})
+	},
+	checkEmail({
+		commit
+	}, email) {
+		console.log("modules > user > action > checkEmail : " + email);
+		return new Promise((resolve, reject) => {
+			checkEmail(email).then(response => {
+				resolve(response)
+			}).catch(error => {
+				reject(error)
+			})
+		})
+	},
+	checkNickname({
+		commit
+	}, nickname) {
+		console.log("modules > user > action > checkNickname : " + nickname);
+		return new Promise((resolve, reject) => {
+			checkNickname(nickname).then(response => {
+				resolve(response)
+			}).catch(error => {
+				reject(error)
+			})
+		})
+	}
 };
 
 export default {

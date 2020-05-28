@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import com.ssafy.moida.domain.account.Account;
@@ -27,11 +28,15 @@ public class Etrash extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, length = 255)
+	@Lob
+	@Column(nullable = false)
 	private String description;
 	
 	@Column(nullable = false, length = 10)
 	private String mood;
+	
+	@Column(nullable = false)
+	private int likecount;
 	
 	@ManyToOne
 	@JoinColumn(name="account_id")
@@ -47,19 +52,25 @@ public class Etrash extends BaseEntity{
 		this.mood = mood;
 	}
 	
-	public void updateMusic(Music music) {
+	public void updateEtrashLike() {
+		this.likecount++;
+	}
+	
+	public Long updateMusic(Music music) {
 		this.music = music;
-		
+		return this.music.getId();
 	}
 	
 	@Builder
-	public Etrash(Long id, String description, String mood, Account account,Music music) {
+	public Etrash(Long id, String description, String mood, int likecount, Account account, Music music) {
 		this.id = id;
 		this.description = description;
 		this.mood = mood;
+		this.likecount = likecount;
 		this.account = account;
 		this.music = music;
 	}
+	
 	
 	
 	

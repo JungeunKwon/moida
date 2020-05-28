@@ -27,7 +27,7 @@ public class JwtTokenProvider {
 	@Value("Spring.jwt.secret")
 	private String secretKey;
 	
-	private Long tokenValidMilisecond = 1000L * 60 * 60; //1시간 후 만료
+	private Long tokenValidMilisecond = 1000L * 60 * 60 *600; //1시간 후 만료
 	
 	private final UserDetailsService userDetailsService;
 	

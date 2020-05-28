@@ -1,6 +1,9 @@
 <template>
 	<v-app id="app">
-		<Layout id="app-view">
+		<First v-if="isFirst" id="app-view">
+			<router-view :key="$route.fullPath" />
+		</First>
+		<Layout v-else id="app-view">
 			<v-fade-transition mode="out-in">
 				<router-view :key="$route.fullPath" />
 			</v-fade-transition>
@@ -12,13 +15,29 @@
 <script>
 import Layout from "@/components/Layout";
 import GoTop from "@/components/GoTop";
+import First from "@/components/First";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 export default {
 	components: {
 		Layout,
 		GoTop,
+		First,
 	},
-	mounted() {},
+	mounted() {
+		// console.log(this.$store.getters.isFirst);
+		// // this.$store.commit("auth/TOGGLE_ISFIRST");
+		// this.TOGGLE_ISFIRST();
+		// console.log(this.$store.getters.isFirst);
+	},
+	computed: {
+		// ...mapState("auth", ["isFirst"]),
+		...mapGetters(["isFirst"]),
+	},
+	data() {
+		return {};
+	},
+	methods: {},
 };
 </script>
 <style>
@@ -39,6 +58,9 @@ export default {
 	font-style: normal;
 }
 #app {
+	/* background-image: url("./assets/images/background.png"); */
+	background-repeat: no-repeat;
+	background-size: cover;
 	height: 100%;
 	overflow: hidden;
 	font-family: "Noto Sans KR", sans-serif;

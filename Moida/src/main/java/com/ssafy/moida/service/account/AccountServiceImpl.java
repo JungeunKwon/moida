@@ -59,22 +59,22 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Transactional(readOnly = true)
-	public Account findByEmail(SignInRequestDto requestDto) {
+	public Account findByEmail(SignInRequestDto requestDto) throws BaseException {
 		return accountRepository.findByEmail(requestDto.getEmail())
-				.orElseThrow(() -> new IllegalArgumentException("해당 사용자 없습니다."));
+				.orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
 	}
 
 	@Transactional(readOnly = true)
-	public Account findById(String id) {
+	public Account findById(String id) throws NumberFormatException, BaseException {
 		return accountRepository.findById(Long.valueOf(id))
-				.orElseThrow(() -> new IllegalArgumentException("해당 사용자 없습니다."));
+				.orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
 	}
 
 	@Transactional(readOnly = true)
-	public String signIn(SignInRequestDto requestDto) {
+	public String signIn(SignInRequestDto requestDto) throws BaseException {
 		Account account = findByEmail(requestDto);
 		if (!passwordEncoder.matches(requestDto.getPassword(), account.getPassword()))
-			throw new IllegalArgumentException("비밀번호를 틀림");
+			throw new BaseException(EnumAccountException.PASS_NOT_CORRECT);
 		return JwtTokenProvider.createToken(String.valueOf(account.getId()), account.getRoles());
 	}
 

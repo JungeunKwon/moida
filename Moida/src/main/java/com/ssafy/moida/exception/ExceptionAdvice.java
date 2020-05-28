@@ -19,7 +19,7 @@ public class ExceptionAdvice {
 	public final ResponseService responseService;
 	
 	@ExceptionHandler(BaseException.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseStatus(HttpStatus.OK)
 	public CommonResult userNotFoundException(HttpServletRequest request, BaseException e) {
 		return responseService.getFailResult(e);
 	}

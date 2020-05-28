@@ -18,6 +18,7 @@ import lombok.Setter;
 public class EtrashSaveRequestDto {
 	private String description;
 	private String mood;
+	private int likecount;
 	private Account account;
 	private Music music;
 	
@@ -25,16 +26,18 @@ public class EtrashSaveRequestDto {
 		return Etrash.builder()
 				.description(description)
 				.mood(mood)
+				.likecount(likecount)
 				.account(account)
 				.music(music)
 				.build();
 	}
 	
 	@Builder
-	public EtrashSaveRequestDto(String description, String mood, Account account,Music music) {
+	public EtrashSaveRequestDto(String description, String mood,int likecount, Account account,Music music) {
 		super();
 		this.description = description;
 		this.mood = mood;
+		this.likecount = likecount;
 		this.account = account;
 		this.music = music;
 	}

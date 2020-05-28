@@ -1,6 +1,8 @@
 package com.ssafy.moida.domain.group;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,9 +15,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 public class AccountGroup {
@@ -28,13 +30,17 @@ public class AccountGroup {
 	private Account account;
 	
 	@ManyToOne
-	@JoinColumn(name="groupTB_id")
+	@JoinColumn(name="grouptb_id")
 	private GroupTB groupTB;
 
+	@Column
+	private Long groupId;
+	
 	@Builder
-	public AccountGroup(Long id, Account account, GroupTB groupTB) {
+	public AccountGroup(Long id, Account account, GroupTB groupTB, Long groupId) {
 		this.id = id;
 		this.account = account;
 		this.groupTB  = groupTB;
-	}
+		this.groupId = groupId;
+	}	
 }

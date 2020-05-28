@@ -9,8 +9,8 @@
 		<router-link to="/trash" class="myTag t1">감쓰</router-link>
 		<router-link to="/trash" class="myTag t2">일기</router-link>
 		<router-link to="/shared" class="myTag t3">공다</router-link>
-		<router-link to="/trash" class="myTag t4">my</router-link>
-		<router-link to="/trash" class="myTag t5">login</router-link>
+		<router-link to="/myPage" class="myTag t4">my</router-link>
+		<router-link @click.native="logout" class="myTag t5">logout</router-link>
 	</div>
 </template>
 
@@ -19,7 +19,13 @@ export default {
 	name: "Layout",
 	components: {},
 	mounted() {},
-	methods: {},
+	methods: {
+		logout() {
+			this.$store.commit("auth/TOGGLE_ISFIRST");
+			this.$store.commit("user/SET_TOKEN", "");
+			this.$router.push("/login");
+		},
+	},
 };
 </script>
 <style>
@@ -28,7 +34,6 @@ export default {
 	position: fixed;
 	left: 0;
 	bottom: 0;
-	/* background-color: #bed7d1; */
 	background-color: rgb(250, 223, 153);
 	margin: 0 auto;
 	height: calc(100% - 30px);
@@ -81,6 +86,7 @@ export default {
 .t5 {
 	top: 340px;
 	background-color: #e2f0cb;
+	cursor: pointer;
 }
 
 .paper {
