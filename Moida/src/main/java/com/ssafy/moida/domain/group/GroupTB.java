@@ -59,7 +59,7 @@ public class GroupTB extends BaseEntity {
 	@OneToMany(mappedBy = "groupTB")
 	private List<AccountGroup> account = new ArrayList<>();
 
-	public void updateDeleteDate(LocalDateTime deleteTime) {
+	public void updatedeleteDate(LocalDateTime deleteTime) {
 		this.deleteTime = deleteTime;
 	}
 	

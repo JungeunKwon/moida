@@ -33,14 +33,14 @@ public class EtrashServiceImpl implements EtrashService{
 	@Transactional(readOnly = true)
 	public Page<EtrashResponseDto> findByMood(EtrashAllRequestDTO requestDto) {
 		LocalDateTime now = LocalDateTime.now();
-		return etrashRepository.findByMoodAndDeletedateGreaterThan(requestDto.getMood(),now,requestDto.getPageable())
+		return etrashRepository.findByMoodAnddeleteDateGreaterThan(requestDto.getMood(),now,requestDto.getPageable())
 				.map(EtrashResponseDto::new);		
 	}
 
 	@Transactional(readOnly = true)
 	public Page<EtrashResponseDto> findAll(EtrashAllRequestDTO requestDto) {	
 		LocalDateTime now = LocalDateTime.now();
-		return etrashRepository.findAllByDeletedateGreaterThan(now,requestDto.getPageable())
+		return etrashRepository.findAllBydeleteDateGreaterThan(now,requestDto.getPageable())
 				.map(EtrashResponseDto::new);
 	}
 

@@ -13,12 +13,12 @@ import com.ssafy.moida.domain.group.GroupTB;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long>{
 	
-	Page<Diary> findByDescriptionAndDeletedateIsNull(String description,Pageable pageable);
-	Page<Diary> findByAccountAndDeletedateIsNull(Account account,Pageable pageable);
-	Page<Diary> findByMoodAndDeletedateIsNull(String mood,Pageable pageable);
-	Page<Diary> findByGroupTBAndDeletedateIsNull(GroupTB groupTB,Pageable pageable);
+	Page<Diary> findByDescriptionAnddeleteDateIsNull(String description,Pageable pageable);
+	Page<Diary> findByAccountAnddeleteDateIsNull(Account account,Pageable pageable);
+	Page<Diary> findByMoodAnddeleteDateIsNull(String mood,Pageable pageable);
+	Page<Diary> findByGroupTBAnddeleteDateIsNull(GroupTB groupTB,Pageable pageable);
 	
 	
-	Page<Diary> findByGroupTBAndCreateDateLessThanAndCreateDateGreaterThanAndDeletedateIsNull(GroupTB group, LocalDateTime dateplus1day, LocalDateTime datetime,Pageable pageable);
+	Page<Diary> findByGroupTBAndCreateDateLessThanAndCreateDateGreaterThanAnddeleteDateIsNull(GroupTB group, LocalDateTime dateplus1day, LocalDateTime datetime,Pageable pageable);
 	
 }

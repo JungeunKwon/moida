@@ -21,8 +21,8 @@ public interface DiaryService {
 	
 	Page<DiaryResponseDTO> findAll(Pageable pageable);
 	
-	Page<DiaryResponseDTO> findByDescriptionAndByDeletedateIsNull(String description,Pageable pageable);
-	Page<DiaryResponseDTO> findByAccountAndByDeletedateIsNull(Account account,Pageable pageable);
-	Page<DiaryResponseDTO> findByMoodAndByDeletedateIsNull(String mood,Pageable pageable);
+	Page<DiaryResponseDTO> findByDescriptionAndBydeleteDateIsNull(String description,Pageable pageable);
+	Page<DiaryResponseDTO> findByAccountAndBydeleteDateIsNull(Account account,Pageable pageable);
+	Page<DiaryResponseDTO> findByMoodAndBydeleteDateIsNull(String mood,Pageable pageable);
 	Page<DiaryResponseDTO> findByDay( String datetime, Long groupid ,Pageable pageable);
 }

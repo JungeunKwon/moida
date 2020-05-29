@@ -79,7 +79,7 @@ public class GroupServiceImpl implements GroupService {
 	@Transactional
 	public void deleteGroup(Long groupId) throws BaseException {
 		GroupTB group = groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
-		group.updateDeleteDate(LocalDateTime.now());
+		group.updatedeleteDate(LocalDateTime.now());
 	}
 	
 	@Transactional(readOnly = true)

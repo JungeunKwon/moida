@@ -47,7 +47,7 @@ public class DiaryServiceImpl implements DiaryService{
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByGroupTB(Long id, Pageable pageable) {
 		GroupTB group = groupTBRepository.findById(id).get();
-		return diaryRepository.findByGroupTBAndDeletedateIsNull(group, pageable)
+		return diaryRepository.findByGroupTBAnddeleteDateIsNull(group, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
@@ -66,21 +66,21 @@ public class DiaryServiceImpl implements DiaryService{
 	}
 
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findByDescriptionAndByDeletedateIsNull(String description, Pageable pageable) {
+	public Page<DiaryResponseDTO> findByDescriptionAndBydeleteDateIsNull(String description, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return diaryRepository.findByDescriptionAndDeletedateIsNull(description, pageable)
+		return diaryRepository.findByDescriptionAnddeleteDateIsNull(description, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findByAccountAndByDeletedateIsNull(Account account, Pageable pageable) {
-		return diaryRepository.findByAccountAndDeletedateIsNull(account, pageable)
+	public Page<DiaryResponseDTO> findByAccountAndBydeleteDateIsNull(Account account, Pageable pageable) {
+		return diaryRepository.findByAccountAnddeleteDateIsNull(account, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findByMoodAndByDeletedateIsNull(String mood, Pageable pageable) {
-		return diaryRepository.findByMoodAndDeletedateIsNull(mood, pageable)
+	public Page<DiaryResponseDTO> findByMoodAndBydeleteDateIsNull(String mood, Pageable pageable) {
+		return diaryRepository.findByMoodAnddeleteDateIsNull(mood, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
@@ -96,7 +96,7 @@ public class DiaryServiceImpl implements DiaryService{
 		
 		GroupTB group = groupTBRepository.findById(groupid).get();
 		System.out.println(date);
-		return diaryRepository.findByGroupTBAndCreateDateLessThanAndCreateDateGreaterThanAndDeletedateIsNull(group,date.plusDays(1),date, pageable)
+		return diaryRepository.findByGroupTBAndCreateDateLessThanAndCreateDateGreaterThanAnddeleteDateIsNull(group,date.plusDays(1),date, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 

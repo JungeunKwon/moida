@@ -20,7 +20,7 @@ public class DiaryResponseDTO {
 
 	private Long id;
 	private String description;
-	private LocalDateTime deletedate;
+	private LocalDateTime deleteDate;
 	private String mood;
 	private String imgurl;
 	private Account account;
@@ -34,7 +34,7 @@ public class DiaryResponseDTO {
 		super();
 		this.id = diary.getId();
 		this.description = diary.getDescription();
-		this.deletedate = diary.getDeletedate();
+		this.deleteDate = diary.getDeleteDate();
 		this.mood = diary.getMood();
 		this.imgurl = diary.getImgurl();
 		this.account = diary.getAccount();
