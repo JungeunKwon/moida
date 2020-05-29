@@ -47,7 +47,7 @@ public class DiaryServiceImpl implements DiaryService{
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByGroupTB(Long id, Pageable pageable) {
 		GroupTB group = groupTBRepository.findById(id).get();
-		return diaryRepository.findByGroupTBAnddeleteDateIsNull(group, pageable)
+		return diaryRepository.findByGroupTBAndDeleteDateIsNull(group, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
@@ -68,19 +68,19 @@ public class DiaryServiceImpl implements DiaryService{
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByDescriptionAndBydeleteDateIsNull(String description, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return diaryRepository.findByDescriptionAnddeleteDateIsNull(description, pageable)
+		return diaryRepository.findByDescriptionAndDeleteDateIsNull(description, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByAccountAndBydeleteDateIsNull(Account account, Pageable pageable) {
-		return diaryRepository.findByAccountAnddeleteDateIsNull(account, pageable)
+		return diaryRepository.findByAccountAndDeleteDateIsNull(account, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByMoodAndBydeleteDateIsNull(String mood, Pageable pageable) {
-		return diaryRepository.findByMoodAnddeleteDateIsNull(mood, pageable)
+		return diaryRepository.findByMoodAndDeleteDateIsNull(mood, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
@@ -96,7 +96,7 @@ public class DiaryServiceImpl implements DiaryService{
 		
 		GroupTB group = groupTBRepository.findById(groupid).get();
 		System.out.println(date);
-		return diaryRepository.findByGroupTBAndCreateDateLessThanAndCreateDateGreaterThanAnddeleteDateIsNull(group,date.plusDays(1),date, pageable)
+		return diaryRepository.findByGroupTBAndCreateDateLessThanAndCreateDateGreaterThanAndDeleteDateIsNull(group,date.plusDays(1),date, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
