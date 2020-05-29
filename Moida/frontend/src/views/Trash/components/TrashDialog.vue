@@ -23,18 +23,10 @@
 		</v-card>
 		<v-card v-if="innerdialog">
 			<v-card-text>
-				<v-chip-group
-					v-model="selection"
-					active-class="deep-purple accent-4 white--text"
-					column
-				>
+				<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
 					<div style="margin: 0 auto; width:80%">
 						<v-row align="center" justify="start">
-							<v-col
-								v-for="item in items"
-								:key="item.text"
-								class="shrink"
-							>
+							<v-col v-for="item in items" :key="item.text" class="shrink">
 								<v-chip>
 									<v-avatar left>
 										<v-img :src="item.src"></v-img>
@@ -46,9 +38,7 @@
 					</div>
 				</v-chip-group>
 				<div style="margin: 0 auto; width:70%">
-					<p class="font-weight-bold">
-						해당 감정에 자주 듣는 노래 url을 입력해주세요.(유투브)
-					</p>
+					<p class="font-weight-bold">해당 감정에 자주 듣는 노래 url을 입력해주세요.(유투브)</p>
 					<div style="margin: 0 auto; width:100%">
 						<v-text-field
 							v-model="url"
@@ -60,12 +50,7 @@
 							style="display: inline-block; width: 80%;"
 						/>
 
-						<v-btn
-							text
-							style="display: inline-block; width: 20%;"
-							@click="inserttodack"
-							>입력</v-btn
-						>
+						<v-btn text style="display: inline-block; width: 20%;" @click="inserttodack">입력</v-btn>
 					</div>
 				</div>
 			</v-card-text>
@@ -86,7 +71,7 @@ export default {
 			trashdialog: false,
 			innerdialog: true,
 			url: "",
-			selection: {},
+			selection: null,
 			thumbnail: "",
 			musicname: "",
 			videoid: "",
@@ -97,13 +82,20 @@ export default {
 			if (!this.trashdialog) {
 				this.innerdialog = true;
 				this.url = "";
+				this.thumbnail = "";
+				this.musicname = "";
 			}
 		},
 	},
 	methods: {
 		inserttodack() {
 			var videoId = this.youtube_parser2(this.url);
+			if (this.selection == null) {
+				alert("감정을 선택해주세요.");
+				return;
+			}
 			var item = this.items[this.selection];
+
 			if (videoId == false) {
 				alert("옳바른 유투브 주소를 입력해주세요.");
 				return;
@@ -118,9 +110,6 @@ export default {
 					},
 				})
 				.then(response => {
-					console.log(
-						response.data.items[0].snippet.thumbnails.high.url,
-					);
 					this.musicname =
 						response.data.items[0].snippet.localized.title;
 					this.videoid =
@@ -142,7 +131,7 @@ export default {
 								setTimeout(() => {
 									this.innerdialog = true;
 									this.trashdialog = false;
-								}, 1000);
+								}, 1500);
 							})
 							.catch(err => {
 								alert("오류입니다!");

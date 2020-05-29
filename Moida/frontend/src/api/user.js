@@ -7,6 +7,12 @@ export function login(data) {
 		data,
 	});
 }
+export function getInfo() {
+	return request({
+		url: "/v1/account",
+		method: "get",
+	});
+}
 
 export function signUp(data) {
 	return request({

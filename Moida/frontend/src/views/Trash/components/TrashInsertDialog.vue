@@ -54,7 +54,7 @@
 			</div>
 		</template>
 		<v-card v-if="!innerdialog">
-			<img src="https://media.giphy.com/media/1Ye9oNy0TAC0G7bN4t/giphy.gif" />
+			<img src="https://media.giphy.com/media/oupKcowRzsad2/giphy.gif" />
 		</v-card>
 		<v-card v-if="innerdialog && !isMusic">
 			<v-card-text>
@@ -82,7 +82,7 @@
 				<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
 				<v-col cols="12">
 					<v-subheader class="pl-0">Time</v-subheader>
-					<v-slider v-model="time" thumb-label="always" :max="24"></v-slider>
+					<v-slider v-model="time" thumb-label="always" thumb-color="red" :max="24"></v-slider>
 				</v-col>
 
 				<div style="margin: 0 auto; width:100%">
@@ -203,7 +203,7 @@ export default {
 						this.innerdialog = true;
 						this.isMusic = false;
 						window.location.reload();
-					}, 1000);
+					}, 2000);
 				})
 				.catch(error => {
 					alert("오류입니다!");

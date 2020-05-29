@@ -26,3 +26,9 @@ export function getEtrashByMood(mood) {
 		method: "get",
 	});
 }
+export function etrashLike(id) {
+	return request({
+		url: "/v1/etrash/like/" + id,
+		method: "get",
+	});
+}
