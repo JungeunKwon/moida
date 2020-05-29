@@ -2,18 +2,20 @@
 	<div class="full-calendar-body">
 		<div class="weeks">
 			<strong class="week" v-for="dayIndex in 7" :key="dayIndex">
-				{{
-				(dayIndex - 1) | localeWeekDay(firstDay, locale)
-				}}
+				{{ (dayIndex - 1) | localeWeekDay(firstDay, locale) }}
 			</strong>
 		</div>
 		<div class="dates" ref="dates">
 			<div class="dates-bg">
-				<div class="week-row" v-for="week in currentDates" :key="week">
+				<div
+					class="week-row"
+					v-for="(week, idx) in currentDates"
+					:key="idx"
+				>
 					<div
 						class="day-cell"
-						v-for="day in week"
-						:key="day"
+						v-for="(day, idx) in week"
+						:key="idx"
 						:class="{
 							today: day.isToday,
 							'not-cur-month': !day.isCurMonth,
