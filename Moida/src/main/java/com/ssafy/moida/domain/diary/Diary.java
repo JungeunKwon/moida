@@ -36,7 +36,7 @@ public class Diary extends BaseEntity{
 	private String description;
 	
 	@Column(nullable = true)
-	private LocalDateTime deletedate;
+	private LocalDateTime deleteDate;
 	
 	@Column(nullable = true)
 	private String mood;
@@ -53,12 +53,12 @@ public class Diary extends BaseEntity{
 	private GroupTB groupTB;
 	
 	@Builder
-	public Diary(Long id, String description, LocalDateTime deletedate, String mood, String imgurl,
+	public Diary(Long id, String description, LocalDateTime deleteDate, String mood, String imgurl,
 			Account account, GroupTB groupTB) {
 		super();
 		this.id = id;
 		this.description = description;
-		this.deletedate = deletedate;
+		this.deleteDate = deleteDate;
 		this.mood = mood;
 		this.imgurl = imgurl;
 		this.account = account;
@@ -71,8 +71,8 @@ public class Diary extends BaseEntity{
 		this.imgurl = imgurl;
 	}
 	
-	public void deleteDiary(LocalDateTime deletedate) {
-		this.deletedate = deletedate;
+	public void deleteDiary(LocalDateTime deleteDate) {
+		this.deleteDate = deleteDate;
 	}
 	
 	
