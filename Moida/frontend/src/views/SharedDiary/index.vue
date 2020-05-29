@@ -1,51 +1,39 @@
 <template>
 	<div id="SharedDiary">
 		<div id="sharedListTop">
+			<createSharedDiary>
+				<div class="sharedMenu mini">
+					<img class="tape" src="../../assets/images/tape.png" />
+					<div class="sharedPaper mini">공다 만들기</div>
+				</div>
+			</createSharedDiary>
 			<div class="sharedMenu mini">
 				<img class="tape" src="../../assets/images/tape.png" />
-				<div class="sharedPaper mini">
-					공다 만들기
-				</div>
-			</div>
-			<div class="sharedMenu mini">
-				<img class="tape" src="../../assets/images/tape.png" />
-				<div class="sharedPaper mini">
-					내 공다 목록
-				</div>
+				<div class="sharedPaper mini">내 공다 목록</div>
 			</div>
 			<div class="sharedMenu large">
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper large">
 					<div id="searchTextDiv">
-						<input
-							type="text"
-							id="searchText"
-							v-model="searchText"
-						/>
+						<input type="text" id="searchText" v-model="searchText" />
 					</div>
-					<img
-						id="searchImg"
-						src="../../assets/icons/search.png"
-						@click="searchSharedDiary"
-					/>
+					<img id="searchImg" src="../../assets/icons/search.png" @click="searchSharedDiary" />
 				</div>
 			</div>
 		</div>
 		<div id="sharedListBottom">
-			<SharedDiaryListItem
-				v-for="(item, idx) in diaries"
-				:key="idx"
-				:item="item"
-			/>
+			<SharedDiaryListItem v-for="(item, idx) in diaries" :key="idx" :item="item" />
 		</div>
 	</div>
 </template>
 <script>
+import createSharedDiary from "./components/CreateSharedDiary";
 import SharedDiaryListItem from "./components/SharedDiaryListItem";
 export default {
 	name: "SharedDiary",
 	components: {
 		SharedDiaryListItem,
+		createSharedDiary,
 	},
 	data() {
 		return {
@@ -235,6 +223,7 @@ export default {
 	computed: {},
 	methods: {
 		searchSharedDiary() {},
+		createSharedDiary() {},
 	},
 };
 </script>

@@ -1,12 +1,7 @@
 <template>
 	<div style="padding: 20px; display: inline-block;">
 		<SharedDiaryDetail :detail="detail">
-			<v-card
-				@click="openDiaryDetail()"
-				id="sharedDiaryItem"
-				class="mx-auto"
-				max-width="300"
-			>
+			<v-card @click="openDiaryDetail()" id="sharedDiaryItem" class="mx-auto" max-width="300">
 				<v-img :src="item.imgUrl" height="200px" />
 				<div id="diaryInfo">
 					<div id="subjectDiv">

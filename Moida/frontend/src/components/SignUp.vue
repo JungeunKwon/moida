@@ -26,9 +26,7 @@
 					color="#fadf99"
 					style="float: left; width: calc(100% - 100px);"
 				/>
-				<button @click="emailcheck" class="signUp_btn dupli">
-					중복체크
-				</button>
+				<button @click="emailcheck" class="signUp_btn dupli">중복체크</button>
 			</div>
 			<div class="signUp_input">
 				<v-text-field
@@ -42,9 +40,7 @@
 					@change="changenick"
 					style="float: left; width: calc(100% - 100px);"
 				/>
-				<button @click="nicknamecheck" class="signUp_btn dupli">
-					중복체크
-				</button>
+				<button @click="nicknamecheck" class="signUp_btn dupli">중복체크</button>
 			</div>
 			<div class="signUp_input">
 				<v-text-field
@@ -81,6 +77,7 @@
 					hint="At least 8 characters"
 					class="input-group--focused"
 					outlined
+					type="password"
 				/>
 			</div>
 
@@ -98,6 +95,7 @@
 					color="#fadf99"
 					hint="At least 8 characters"
 					outlined
+					type="password"
 				/>
 			</div>
 			<div>
@@ -127,18 +125,10 @@
 						color="#fadf99"
 					/>
 				</template>
-				<v-date-picker
-					v-model="loginForm.birth_date"
-					@input="menu = false"
-					color="#fadf99"
-				/>
+				<v-date-picker v-model="loginForm.birth_date" @input="menu = false" color="#fadf99" />
 			</v-menu>
-			<div
-				style="width: 100%; height: 20px; margin: 0 auto; text-align: center;"
-			>
-				<button class="signUp_btn submit" @click="resetForm">
-					취소
-				</button>
+			<div style="width: 100%; height: 20px; margin: 0 auto; text-align: center;">
+				<button class="signUp_btn submit" @click="resetForm">취소</button>
 				<button class="signUp_btn submit" @click="submit">확인</button>
 			</div>
 		</v-form>
