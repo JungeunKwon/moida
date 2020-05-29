@@ -20,6 +20,7 @@ import lombok.ToString;
 @Getter
 @Entity
 @NoArgsConstructor
+@ToString
 public class AccountGroup {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

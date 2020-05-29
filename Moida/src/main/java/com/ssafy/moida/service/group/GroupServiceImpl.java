@@ -98,7 +98,9 @@ public class GroupServiceImpl implements GroupService {
 	
 	@Transactional(readOnly = true)
 	public List<AccountGroupResponseDto> findByGroupTBId(Long groupId) throws BaseException{
-		return accountGroupRepository.findByGroupId(groupId).stream()
+		GroupTB group =  groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		List<AccountGroup> list = group.getAccount();
+		return list.stream()
 				.map(AccountGroupResponseDto :: new)
 				.collect(Collectors.toList());
 	}
