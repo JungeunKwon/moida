@@ -19,7 +19,9 @@ public class GroupResponseDto {
 	private boolean isPrivate;
 	private String imgUrl;
 	private String description;
-	private Account host;
+	private Long hostId;
+	private String hostNickname;
+	private String hostProfileImg;
 	
 	public GroupResponseDto(GroupTB entity) {
 		this.id = entity.getId();
@@ -29,6 +31,8 @@ public class GroupResponseDto {
 		this.isPrivate = entity.isPrivate();
 		this.imgUrl = entity.getImgUrl();
 		this.description = entity.getDescription();
-		this.host = entity.getHost();
+		this.hostId = entity.getHost().getId();
+		this.hostNickname = entity.getHost().getNickname();
+		this.hostProfileImg = entity.getHost().getProfileImg();
 	}
 }
