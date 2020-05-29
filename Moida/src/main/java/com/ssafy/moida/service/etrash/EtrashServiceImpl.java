@@ -34,8 +34,7 @@ public class EtrashServiceImpl implements EtrashService{
 	public Page<EtrashResponseDto> findByMood(EtrashAllRequestDTO requestDto) {
 		LocalDateTime now = LocalDateTime.now();
 		return etrashRepository.findByMoodAndDeletedateGreaterThan(requestDto.getMood(),now,requestDto.getPageable())
-				.map(EtrashResponseDto::new);
-			
+				.map(EtrashResponseDto::new);		
 	}
 
 	@Transactional(readOnly = true)
@@ -67,13 +66,16 @@ public class EtrashServiceImpl implements EtrashService{
 
 	@Override
 	public Page<Music> musicrecommend(String mood) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
-	@Override
+	@Transactional
 	public Long likecount(Long id) {
-		return etrashRepository.findById(id).get().updateEtrashLike();
+		Long count = etrashRepository.findById(id).get().getLikecount();
+		count++;
+		etrashRepository.findById(id).get().updateEtrashLike(count);
+		return etrashRepository.findById(id).get().getLikecount();
 	}
 
 	

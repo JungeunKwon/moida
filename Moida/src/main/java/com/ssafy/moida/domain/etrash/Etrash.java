@@ -57,9 +57,8 @@ public class Etrash extends BaseEntity{
 		this.mood = mood;
 	}
 	
-	public Long updateEtrashLike() {
-		this.likecount++;
-		return likecount;
+	public void updateEtrashLike(Long count) {
+		this.likecount = count;
 	}
 	
 	public Long updateMusic(Music music) {

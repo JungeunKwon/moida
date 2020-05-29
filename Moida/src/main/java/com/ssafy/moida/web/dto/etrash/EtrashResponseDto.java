@@ -23,6 +23,7 @@ public class EtrashResponseDto {
 	private String mood;
 	private Long likecount;
 	LocalDateTime deletedate;
+	LocalDateTime createDate;
 	private Account account;
 	private Music music;
 	
@@ -35,6 +36,7 @@ public class EtrashResponseDto {
 		this.deletedate = entity.getDeletedate();
 		this.account = entity.getAccount();
 		this.music = entity.getMusic();
+		this.createDate = entity.getCreateDate();
 	}
 	
 	
