@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum EnumDiaryException implements EnumExceptionBase {
-	DIARY_NOT_FOUND("013", "다이어리를 찾을수 없습니다.");
+	DIARY_NOT_FOUND("051", "다이어리를 찾을수 없습니다.");
 	
 	private String code;
 	private String desc;
