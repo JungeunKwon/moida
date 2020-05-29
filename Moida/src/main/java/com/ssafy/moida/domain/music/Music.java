@@ -27,6 +27,7 @@ public class Music {
 	@Column(nullable = false)
 	private String mood;
 	
+	@Lob
 	@Column(nullable = false)
 	private String musicname;
 	
