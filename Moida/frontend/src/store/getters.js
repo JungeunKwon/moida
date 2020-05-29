@@ -7,6 +7,7 @@ const getters = {
 	phone: state => state.user.phone,
 	profile_img: state => state.user.profile_img,
 	//calendar
+	locale: state => state.calendar.locale,
 	currentMonth: state => state.calendar.currentMonth,
 	firstDay: state => state.calendar.firstDay,
 };

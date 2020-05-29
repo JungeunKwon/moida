@@ -2,14 +2,18 @@
 	<div class="comp-full-calendar">
 		<c-header>
 			<div slot="header-left">
-				<slot name="fc-header-left"> </slot>
+				<slot name="fc-header-left"></slot>
 			</div>
 
 			<div slot="header-right">
-				<slot name="fc-header-right"> </slot>
+				<slot name="fc-header-right"></slot>
 			</div>
 		</c-header>
-		<c-body> </c-body>
+		<c-body>
+			<div slot="body-card">
+				<slot name="fc-body-card"></slot>
+			</div>
+		</c-body>
 	</div>
 </template>
 
@@ -33,4 +37,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.comp-full-calendar {
+	// font-family: "elvetica neue", tahoma, "hiragino sans gb";
+	padding: 20px;
+	background: #fff;
+	margin: 0 auto;
+	ul,
+	p {
+		margin: 0;
+		padding: 0;
+	}
+}
+</style>
