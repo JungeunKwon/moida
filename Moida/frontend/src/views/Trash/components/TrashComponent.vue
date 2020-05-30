@@ -16,9 +16,7 @@
 		<v-divider></v-divider>
 
 		<div class="trashother">
-			<div class="trashdescription">
-				<div style="margin:0 auto">{{ trash.description }}</div>
-			</div>
+			<div class="trashdescription">{{this.trash.description}}</div>
 		</div>
 		<div class="trashtest">
 			<div class="trashbottom">
@@ -53,6 +51,7 @@ export default {
 			type: Array,
 			default: [],
 		},
+		index: {},
 	},
 	data() {
 		return {
@@ -61,6 +60,7 @@ export default {
 			heightclass: false,
 		};
 	},
+	computed: {},
 	created() {
 		this.videourl =
 			"https://www.youtube-nocookie.com/embed/" +
@@ -82,7 +82,8 @@ export default {
 	methods: {
 		caltime() {
 			let today = new Date();
-			let getday = new Date(this.trash.deletedate);
+
+			let getday = new Date(this.trash.deleteDate);
 
 			var diff = getday.getTime() - today.getTime();
 
@@ -93,8 +94,13 @@ export default {
 			msec -= mm * 1000 * 60;
 			var ss = Math.floor(msec / 1000);
 			msec -= ss * 1000;
-			this.lefttime = hh + "시간 " + mm + "분";
+			if (hh <= 0 && mm <= 0 && ss <= 0) {
+				console.log("??");
+				this.$emit("removeEtrash", this.index);
+			}
+			this.lefttime = hh + "시간 " + mm + "분 " + ss + "초";
 		},
+
 		likeup() {
 			etrashLike(this.trash.id)
 				.then(response => {
@@ -117,8 +123,8 @@ export default {
 	border: 1px solid rgba(192, 192, 192, 0.363);
 	box-shadow: 1px 1px 7px rgba(192, 192, 192, 0.534);
 }
-
 .trashdescription {
+	word-break: break-all;
 	height: auto;
 	text-align: center;
 	align-items: center;
@@ -133,7 +139,7 @@ export default {
 	align-items: center;
 }
 .video {
-	height: 200px;
+	height: 210px;
 }
 .videovideo {
 	width: 100%;
@@ -147,7 +153,6 @@ export default {
 	font-size: 10px;
 	text-align: right;
 	padding: 5px;
-	margin-bottom: 5px;
 }
 .time {
 	display: inline-block;
