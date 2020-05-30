@@ -17,6 +17,7 @@
 
 		<div class="trashother">
 			<div class="trashdescription">{{this.trash.description}}</div>
+			<div class="trashdate">{{this.trash.createDate.substring(0,10) }}</div>
 		</div>
 		<div class="trashtest">
 			<div class="trashbottom">
@@ -133,6 +134,12 @@ export default {
 }
 .trashother {
 	height: 90%;
+}
+.trashdate {
+	width: 100%;
+	text-align: right;
+	font-size: 10px;
+	padding: 5px;
 }
 .timewrap {
 	height: 100%;
