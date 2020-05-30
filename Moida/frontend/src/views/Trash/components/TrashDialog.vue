@@ -127,7 +127,6 @@ export default {
 							videoid: videoId,
 						})
 							.then(response => {
-								console.log(response);
 								setTimeout(() => {
 									this.innerdialog = true;
 									this.trashdialog = false;

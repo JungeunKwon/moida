@@ -12,15 +12,19 @@
 	height: 200px;
 }
 #musicList {
-	width: 100%;
+	width: 90%;
 	height: 100%;
+	margin: 0 auto;
+}
+.innermusiclist {
+	border: 1px solid rgba(192, 192, 192, 0.363);
+	box-shadow: 1px 1px 7px rgba(192, 192, 192, 0.534);
 }
 .music {
 	z-index: 1;
 	display: inline-block;
 	white-space: nowrap;
 	width: 100%;
-	height: 250px;
 	overflow-x: auto;
 	overflow-y: hidden;
 }
@@ -47,7 +51,7 @@
 </style>
 
 <template>
-	<v-dialog v-model="trashdialog" max-width="50%" style="padding:20px">
+	<v-dialog v-model="trashdialog" width="500px" style="padding:20px">
 		<template v-slot:activator="{ on }">
 			<div v-on="on">
 				<slot />
@@ -92,8 +96,8 @@
 		</v-card>
 		<v-card v-if="innerdialog && isMusic">
 			<p class="font-weight-bold">이 노래 한번 들어보세요.</p>
+			<img id="back_arrow" src="./back.png" @click="moveLeft" />
 			<div id="musicList">
-				<img id="back_arrow" src="./back.png" @click="moveLeft" />
 				<div id="category" class="music">
 					<v-item-group>
 						<span class="helper"></span>
@@ -104,8 +108,8 @@
 							v-slot:default="{ active, toggle }"
 						>
 							<v-card
-								:color="active ? 'primary' : 'grey lighten-1'"
-								style="height:200px"
+								:color="active ?  getcolor() : 'grey lighten-5'"
+								style="innermusiclist"
 								@click="tempclick(toggle, active, music.id)"
 							>
 								<div style="width:100%; height:150px">
@@ -123,8 +127,8 @@
 						</v-item>
 					</v-item-group>
 				</div>
-				<img id="next_arrow" src="./next.png" @click="moveRight" />
 			</div>
+			<img id="next_arrow" src="./next.png" @click="moveRight" />
 
 			<div style="margin: 0 auto; width:100%">
 				<v-btn text style="display: inline-block; width: 20%;" @click="inserttrash">노래선택</v-btn>
@@ -158,26 +162,28 @@ export default {
 			model: null,
 			width: null,
 			selectid: 0,
+			trash: [],
 		};
-	},
-	mounted() {
-		console.log(this.trashdialog);
 	},
 	watch: {
 		trashdialog: function(newVal, oldVal) {
 			if (!this.trashdialog) {
+				this.selection = 0;
+				this.time = 0;
 				this.innerdialog = true;
 				this.isMusic = false;
 			}
 		},
 	},
 	methods: {
+		getcolor() {
+			console.log(this.items[this.selection].colorcode);
+			return this.items[this.selection].colorcode;
+		},
 		getmusic() {
 			var item = this.items[this.selection];
-			console.log(item.text);
 			findByMood(item.text)
 				.then(response => {
-					console.log(response);
 					this.musiclist = response.data.content;
 					this.isMusic = true;
 				})
@@ -196,13 +202,12 @@ export default {
 				},
 			})
 				.then(response => {
-					console.log(response);
+					this.$emit("getEtrashMain");
 
 					setTimeout(() => {
 						this.trashdialog = false;
 						this.innerdialog = true;
 						this.isMusic = false;
-						window.location.reload();
 					}, 2000);
 				})
 				.catch(error => {
@@ -231,7 +236,6 @@ export default {
 
 			toggle();
 			this.selectid = id;
-			console.log("selectedid", id);
 		},
 	},
 };
