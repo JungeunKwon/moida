@@ -14,14 +14,16 @@ public class DiaryUpdateRequest {
 	private String description;
 	private String mood;
 	private String imgurl;
+	private int isPrivate;
 	
 	@Builder
-	public DiaryUpdateRequest(Long id,String description, String mood, String imgurl) {
+	public DiaryUpdateRequest(Long id,String description, String mood, String imgurl, int isPrivate) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.mood = mood;
 		this.imgurl = imgurl;
+		this.isPrivate = isPrivate;
 	}
 	
 	

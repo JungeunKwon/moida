@@ -23,6 +23,7 @@ public class DiaryResponseDTO {
 	private LocalDateTime deleteDate;
 	private String mood;
 	private String imgurl;
+	private int isPrivate;
 	private Account account;
 	private GroupTB groupTB;
 	private LocalDateTime createDate;
@@ -37,6 +38,7 @@ public class DiaryResponseDTO {
 		this.deleteDate = diary.getDeleteDate();
 		this.mood = diary.getMood();
 		this.imgurl = diary.getImgurl();
+		this.isPrivate = diary.getIsPrivate();
 		this.account = diary.getAccount();
 		this.groupTB = diary.getGroupTB();
 		this.createDate = diary.getCreateDate();

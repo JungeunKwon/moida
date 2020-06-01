@@ -46,6 +46,10 @@ public class Music {
 	@JoinColumn(name="account_id")
 	private Account account;
 
+	public void likecount(Long count) {
+		this.likecount = count;
+	}
+	
 	@Builder
 	public Music(Long id, String mood, String musicname, Long likecount, String videoid, Account account,String thumbnail) {
 		this.id = id;

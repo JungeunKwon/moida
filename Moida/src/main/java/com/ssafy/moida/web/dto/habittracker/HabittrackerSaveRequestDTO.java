@@ -9,7 +9,13 @@ import com.ssafy.moida.domain.group.GroupTB;
 import com.ssafy.moida.domain.habittracker.Habittracker;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
+@Getter
+@NoArgsConstructor
 public class HabittrackerSaveRequestDTO {
 	
 	private String subject;
