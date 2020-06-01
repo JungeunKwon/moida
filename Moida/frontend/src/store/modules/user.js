@@ -1,4 +1,10 @@
-import { login, signUp, checkEmail, checkNickname, getInfo } from "@/api/user";
+import {
+	login,
+	signUp,
+	checkEmail,
+	checkNickname,
+	getInfo
+} from "@/api/user";
 
 const state = {
 	isFirst: true,
@@ -8,8 +14,7 @@ const state = {
 	gender: "",
 	nickname: "Nickname",
 	phone: "",
-	profile_img:
-		"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+	profile_img: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
 };
 
 const mutations = {
@@ -40,13 +45,6 @@ const mutations = {
 };
 
 const actions = {
-	//test
-	// setTest({
-	// 	commit
-	// }, text) {
-	// 	commit("SET_USERNAME", text);
-	// 	commit("SET_PHONE", text);
-	// },
 	logout({
 		commit
 	}) {
@@ -54,14 +52,15 @@ const actions = {
 		commit("SET_TOKEN", "");
 	},
 	// user login
-	login({ commit }, userInfo) {
-		userInfo;
+	login({
+		commit
+	}, userInfo) {
 		console.log(userInfo);
 		return new Promise((resolve, reject) => {
 			login({
-				email: userInfo.email.trim(),
-				password: userInfo.password,
-			})
+					email: userInfo.email.trim(),
+					password: userInfo.password,
+				})
 				.then(response => {
 					if (response.data.code == undefined) {
 						commit("SET_TOKEN", response.data);
@@ -73,7 +72,9 @@ const actions = {
 				});
 		});
 	},
-	getInfo({ commit }, token) {
+	getInfo({
+		commit
+	}, token) {
 		return new Promise((resolve, reject) => {
 			getInfo()
 				.then(response => {
@@ -89,7 +90,9 @@ const actions = {
 				.catch(error => reject());
 		});
 	},
-	signUp({ commit }, signupForm) {
+	signUp({
+		commit
+	}, signupForm) {
 		const formData = new FormData();
 		formData.append("email", signupForm.email);
 		formData.append("password", signupForm.password);
@@ -113,7 +116,9 @@ const actions = {
 				});
 		});
 	},
-	checkEmail({ commit }, email) {
+	checkEmail({
+		commit
+	}, email) {
 		console.log("modules > user > action > checkEmail : " + email);
 		return new Promise((resolve, reject) => {
 			checkEmail(email)
@@ -125,7 +130,9 @@ const actions = {
 				});
 		});
 	},
-	checkNickname({ commit }, nickname) {
+	checkNickname({
+		commit
+	}, nickname) {
 		console.log("modules > user > action > checkNickname : " + nickname);
 		return new Promise((resolve, reject) => {
 			checkNickname(nickname)

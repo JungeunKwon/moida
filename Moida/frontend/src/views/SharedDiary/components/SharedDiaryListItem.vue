@@ -1,23 +1,21 @@
 <template>
-	<div style="padding: 20px; display: inline-block;">
-		<SharedDiaryDetail :detail="detail">
-			<v-card @click="openDiaryDetail()" id="sharedDiaryItem" class="mx-auto" max-width="300">
-				<v-img :src="item.imgUrl" height="200px" />
-				<div id="diaryInfo">
-					<div id="subjectDiv">
-						<div id="roomId">{{ item.id }}</div>
-						<div id="roomSubject">{{ item.subject }}</div>
-					</div>
-					<div id="hostDiv">
-						<img id="hostIcon" src="@/assets/icons/host.png" />
-						<div id="hostName">{{ item.host_nickname }}</div>
-					</div>
-					<div style="clear: both;" />
-					<div id="desc">{{ item.description }}</div>
+	<SharedDiaryDetail :detail="detail" :sharedDiaryId="item.id">
+		<div @click="openDiaryDetail()" id="sharedDiaryItem">
+			<v-img :src="item.imgUrl" height="200px" />
+			<div id="diaryInfo">
+				<div id="subjectDiv">
+					<div id="roomId">{{ item.id }}</div>
+					<div id="roomSubject">{{ item.subject }}</div>
 				</div>
-			</v-card>
-		</SharedDiaryDetail>
-	</div>
+				<div id="hostDiv">
+					<img id="hostIcon" :src="item.hostProfileImg" />
+					<div id="hostName">{{ item.hostNickname }}</div>
+				</div>
+				<div style="clear: both;" />
+				<div id="desc">{{ item.description }}</div>
+			</div>
+		</div>
+	</SharedDiaryDetail>
 </template>
 
 <script>
@@ -31,15 +29,14 @@ export default {
 				id: 123450,
 				subject:
 					"3학년 1반 모여라 ~ 긴글 테스트 용임 %^^% 불만 있으신지? 3학년 1반 모여라 ~ 긴글 테스트 용임 %^^% 불만 있으신지?",
-				host_id: 0,
-				host_nickname: "방장",
-				host_img: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg",
-				isPrivate: true,
+				hostId: 0,
+				hostNickname: "방장",
+				hostProfileImg:
+					"https://cdn.vuetifyjs.com/images/cards/sunshine.jpg",
 				imgUrl: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg",
 				description:
 					"오는 부끄러운 경, 벌써 위에도 봅니다. 써 별 아직 쉬이 딴은 별 이름을 지나고 북간도에 있습니다. 이름을 아스라히 마리아 까닭이요, 이국 거외다. 사람들의 하나에 계절이 헤일 묻힌 멀리 있습니다.",
-				limit: 5,
-				count: 3,
+				limitUser: 5,
 			},
 		};
 	},
@@ -58,14 +55,30 @@ export default {
 
 <style>
 #sharedDiaryItem {
+	overflow: hidden;
+	display: inline-block;
+	width: 24%;
+	margin: 5px;
 	border-radius: 5px;
-	border: 1px solid rgba(192, 192, 192, 0.363);
-	/* box-shadow: 0.5px 0.5px 3px rgb(192, 192, 192); */
+	/* border: 1px solid rgba(192, 192, 192, 0.363); */
+	box-shadow: 1px 1px 7px rgba(192, 192, 192, 0.589);
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 1200px) {
 	#sharedDiaryItem {
-		width: 65vw;
+		width: 32%;
+	}
+}
+
+@media screen and (max-width: 900px) {
+	#sharedDiaryItem {
+		width: 48%;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#sharedDiaryItem {
+		width: 95%;
 	}
 }
 
@@ -129,12 +142,17 @@ export default {
 
 #hostIcon {
 	float: left;
-	width: 13px;
+	height: 20px;
+	width: 20px;
+	object-fit: cover;
+	border-radius: 50%;
+	border: 1px solid silver;
+	margin-top: 2.5px;
 }
 
 #hostName {
 	float: left;
-	margin-left: 5px;
-	font-size: 12px;
+	margin-left: 3px;
+	font-size: 15px;
 }
 </style>

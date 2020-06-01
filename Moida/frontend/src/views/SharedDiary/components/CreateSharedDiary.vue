@@ -51,11 +51,17 @@
 			</div>
 			<div class="inputDiv">
 				<div>상세 설명</div>
-				<textarea class="input" id="description" @focus="descriptionMsg = ''" />
+				<textarea
+					class="input"
+					id="description"
+					@focus="descriptionMsg = ''"
+					rows="10"
+					v-model="sharedDiary.description"
+				/>
 				<div v-if="descriptionMsg != ''" class="errorMsg">{{descriptionMsg}}</div>
 			</div>
 			<div class="buttonDiv">
-				<button @click="createSharedDiary">만들기</button>
+				<button @click="createSD">만들기</button>
 				<button @click="dialog=false">취소</button>
 			</div>
 		</v-card>
@@ -63,6 +69,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
 	name: "CreateSharedDiary",
 	data() {
@@ -82,20 +89,38 @@ export default {
 	},
 	updated() {
 		if (!this.dialog) {
+			this.clear();
+		}
+	},
+	methods: {
+		...mapActions("sharedDiary", ["createSharedDiary"]),
+		exceedHandler(file) {
+			console.warn("File is too large!");
+		},
+		clear() {
 			this.sharedDiary.subject = "";
 			this.sharedDiary.limitUser = "";
 			this.sharedDiary.description = "";
 			this.limitUserMsg = "";
 			this.subjectMsg = "";
 			this.descriptionMsg = "";
-		}
-	},
-	methods: {
-		exceedHandler(file) {
-			console.warn("File is too large!");
 		},
-		createSharedDiary() {
+		createSD() {
 			if (!this.validate()) return;
+			this.createSharedDiary(this.sharedDiary)
+				.then(response => {
+					console.log(response);
+					if (response.data.code == undefined) {
+						alert("성공적으로 등록되었습니다!");
+						this.dialog = false;
+					} else {
+						this.clear();
+						alert("등록 실패");
+					}
+				})
+				.catch(error => {
+					console.log(error);
+				});
 		},
 		validate() {
 			var result = true;
@@ -111,6 +136,13 @@ export default {
 			if (this.sharedDiary.description.trim() == "") {
 				this.descriptionMsg = "상세 설명을 작성해주세요 >_<";
 				result = false;
+			}
+			if (
+				this.$refs.diaryImg.file == null ||
+				this.$refs.diaryImg.file === ""
+			) {
+				result = false;
+				alert("이미지를 삽입하여 주세요!");
 			}
 			return result;
 		},

@@ -1,7 +1,9 @@
 <template>
 	<v-dialog v-model="dialog" width="700">
 		<template v-slot:activator="{ on }">
-			<div v-on="on"><slot /></div>
+			<span v-on="on">
+				<slot />
+			</span>
 		</template>
 		<div id="roomDetail">
 			<div id="detailLeft">
@@ -10,9 +12,7 @@
 			<div id="detailRight">
 				<div id="detailSubject">
 					{{ detail.subject }}
-					<span id="detailCnt">
-						{{ detail.count }} / {{ detail.limit }}
-					</span>
+					<span id="detailCnt">{{ detail.count }} / {{ detail.limit }}</span>
 				</div>
 
 				<div id="detailDesc">{{ detail.description }}</div>
@@ -30,13 +30,14 @@ export default {
 			dialog: false,
 		};
 	},
-	mounted() {},
+	mounted() {
+		// this.getSharedDiaryDetail();
+	},
 };
 </script>
 
 <style>
 #roomDetail {
-	/* font-family: "MapoFlowerIsland"; */
 	background-color: white;
 	width: 100%;
 	height: 500px;
