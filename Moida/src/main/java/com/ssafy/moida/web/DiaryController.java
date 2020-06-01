@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -93,8 +94,8 @@ public class DiaryController {
 	})
 	@ApiOperation(value = "다이어리 삭제", httpMethod = "GET", notes = "id 값으로 다이어리 삭제하는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@GetMapping(value = "/diary/{id}")
-	public ResponseEntity<Long> deleteByid(@PathVariable Long id,Pageable pageable
+	@DeleteMapping(value = "/diary/{id}")
+	public ResponseEntity<Long> deleteByid(@PathVariable Long id
 			) throws IllegalArgumentException, IOException, BaseException{
 	
 		return new ResponseEntity<Long>(diaryService.deleteDiary(id), HttpStatus.OK);

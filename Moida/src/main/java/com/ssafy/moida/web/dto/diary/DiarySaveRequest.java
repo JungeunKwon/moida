@@ -20,6 +20,7 @@ public class DiarySaveRequest {
 	private String description;
 	private String mood;
 	private String imgurl;
+	private int isPrivate;
 	private Account account;
 	private GroupTB groupTB;
 	private Long groupid;
@@ -29,18 +30,20 @@ public class DiarySaveRequest {
 				.description(description)
 				.mood(mood)
 				.imgurl(imgurl)
+				.isPrivate(isPrivate)
 				.account(account)
 				.groupTB(groupTB)
 				.build();
 	}
 	
 	@Builder
-	public DiarySaveRequest(String description, String mood, String imgurl, Account account,
+	public DiarySaveRequest(String description, String mood, String imgurl, Account account, int isPrivate,
 			GroupTB groupTB) {
 		super();
 		this.description = description;
 		this.mood = mood;
 		this.imgurl = imgurl;
+		this.isPrivate = isPrivate;
 		this.account = account;
 		this.groupTB = groupTB;
 	}

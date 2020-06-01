@@ -1,5 +1,8 @@
 package com.ssafy.moida.domain.habittracker;
 
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,26 +19,32 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class AccountHabittracker {
+public class DoHabit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(nullable = false)
+	private LocalDateTime cleardate;
 	
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
 	
 	@ManyToOne
-	@JoinColumn(name="grouptb_id")
+	@JoinColumn(name="habittracker")
 	private Habittracker habittracker;
 	
 	@Builder
-	public AccountHabittracker(Long id, Account account, Habittracker habittracker) {
+	public DoHabit(Long id, LocalDateTime cleardate, Account account, Habittracker habittracker) {
 		super();
 		this.id = id;
+		this.cleardate = cleardate;
 		this.account = account;
 		this.habittracker = habittracker;
 	}
 	
 	
+	
+
 }

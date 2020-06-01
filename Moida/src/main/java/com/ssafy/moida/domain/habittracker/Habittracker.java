@@ -52,7 +52,9 @@ public class Habittracker extends BaseEntity{
 	@JoinColumn(name="groupTB_id")
 	private GroupTB groupTB;
 	
-	
+	public void delete(LocalDateTime deleteDate) {
+		this.deleteDate=deleteDate;
+	}
 	
 	public void updateinfo(String subject, String description, LocalDateTime startDate, LocalDateTime endDate) {
 		this.subject = subject;
