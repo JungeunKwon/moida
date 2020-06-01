@@ -24,4 +24,5 @@ public interface GroupService {
 	List<GroupResponseDto> findByNicknameLike(String nickname);
 	List<GroupResponseDto> findByDescriptionLike(String description);
 	List<AccountGroupGroupResponseDto> findGroupbyAccount() throws NumberFormatException, BaseException;
+	GroupResponseDto findByGroupId(Long groupId) throws BaseException;
 }

@@ -64,7 +64,8 @@ public class GroupController {
 										.uploadFile(uploadFile)
 										.description(description)
 										.build();
-		return new ResponseEntity<Long>(groupService.saveGroup(requestDto), HttpStatus.OK);
+		Long groupId = groupService.saveGroup(requestDto);
+		return new ResponseEntity<Long>(groupId, HttpStatus.OK);
 	}
 	
 	@ApiImplicitParams({
@@ -113,7 +114,7 @@ public class GroupController {
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "해당그룸모든멤버 조회", httpMethod = "GET", notes = "그룹아이디에 포함된 모든 멤버조회")
-	@GetMapping(value = "/group/{groupId}")
+	@GetMapping(value = "/group/user/{groupId}")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<AccountGroupResponseDto>> findByGroupTBId(@PathVariable Long groupId) throws BaseException{
 		return new ResponseEntity<List<AccountGroupResponseDto>>(groupService.findByGroupTBId(groupId), HttpStatus.OK);
@@ -181,5 +182,15 @@ public class GroupController {
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<AccountGroupGroupResponseDto>> findGoupByAccount() throws NumberFormatException, BaseException{
 		return new ResponseEntity<List<AccountGroupGroupResponseDto>>(groupService.findGroupbyAccount(), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "그룹 조회", httpMethod = "GET", notes = "그룹 아이디를 통한 그룹 조회 ")
+	@GetMapping(value = "/group/{groupId}")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<GroupResponseDto> findGroupByGroupId(@PathVariable Long groupId) throws BaseException{
+		return new ResponseEntity<GroupResponseDto>(groupService.findByGroupId(groupId), HttpStatus.OK);
 	}
 }
