@@ -1,42 +1,98 @@
 <template>
 	<div class="trashcontainer">
+		<div class="trashtop">
+			<TrashDialog :items="items">
+				<div class="todack" dark>토닥토닥</div>
+			</TrashDialog>
+		</div>
+		<div class="trashdrawer">
+			<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+		</div>
+		<v-navigation-drawer v-model="drawer" absolute temporary>
+			<v-list nav dense>
+				<v-list-group value="true">
+					<template v-slot:activator>
+						<v-list-item-title>정렬</v-list-item-title>
+					</template>
+					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+						<v-list-item v-for="(item) in sortlist" :key="item.id" @click="changesortSmall(item.text)">
+							<v-list-item-title>{{item.text}}</v-list-item-title>
+						</v-list-item>
+					</v-list-item-group>
+				</v-list-group>
+				<v-list-item-group v-model="group2" active-class="deep-purple--text text--accent-4">
+					<v-list-item @click="getEtrashByMoodMain('전체보기')">
+						<v-list-item-title>전체보기</v-list-item-title>
+					</v-list-item>
+					<v-list-item v-for="(item) in items" :key="item.id" @click="getEtrashByMoodMain(item.text)">
+						<v-list-item-title>{{item.text}}</v-list-item-title>
+					</v-list-item>
+				</v-list-item-group>
+			</v-list>
+		</v-navigation-drawer>
 		<div class="sort">
-			<v-container id="dropdown-example">
+			<!-- <v-container id="dropdown-example" class="filtertoggle">
 				<v-overflow-btn
 					v-model="sorted"
 					:items="sortlist"
 					label="정렬"
 					target="#dropdown-example"
 					@change="changesort"
+					class="sharedPaper mini"
 				></v-overflow-btn>
-			</v-container>
-		</div>
-		<div class="trashtop">
-			<TrashDialog :items="items">
-				<div class="todack" dark>토닥토닥</div>
-			</TrashDialog>
-		</div>
-		<div class="masonry" v-lazy-container="{ selector: 'card' }">
-			<div v-for="(intrash, index) in trash" :key="intrash.id" class="card">
-				<TrashCom :items="items" @load="rendered" class="card-content" :trash="intrash" :index="index" />
+			</v-container>-->
+			<div class="sharedMenu sel">
+				<img class="tape" src="../../assets/images/tape.png" />
+				<div class="sharedPaper mini" style="width:100px">
+					<v-select
+						:items="sortlist"
+						@change="changesort"
+						color="gray"
+						label="정렬"
+						v-model="sorted"
+						outline
+					></v-select>
+				</div>
+			</div>
+			<div class="sharedMenu min" @click="getEtrashByMoodMain('전체보기')">
+				<img class="tape" src="../../assets/images/tape.png" />
+				<div class="sharedPaper mini">전체보기</div>
+			</div>
+			<div
+				class="sharedMenu min"
+				v-for="(item,index) in items"
+				:key="item.id"
+				@click="getEtrashByMoodMain(item.text)"
+			>
+				<img class="tape" src="../../assets/images/tape.png" />
+				<div class="sharedPaper mini" :background-color="getcolor(index)">{{item.text}}</div>
 			</div>
 		</div>
-		<v-divider></v-divider>
-
+		<div class="trashmiddle">
+			<div class="masonry" v-lazy-container="{ selector: 'card' }">
+				<div v-for="(intrash, index) in trash" :key="intrash.id" class="card">
+					<TrashCom
+						:items="items"
+						@load="rendered"
+						@removeEtrash="removeEtrash"
+						class="card-content"
+						:trash="intrash"
+						:index="index"
+					/>
+				</div>
+			</div>
+		</div>
 		<div class="bottomtrash">
 			<div class="bottombottomtrash">
-				<v-text-field
-					v-model="trashcontent"
-					@keyup.enter="trashinsert"
-					ref="url"
-					required
-					style="display: inline-block; width: 80%; "
-				/>
+				<div style="display: inline-block; width: 80%; border:1px;">
+					<v-text-field v-model="trashcontent" @keyup.enter="trashinsert" required />
+				</div>
 				<div style="display: inline-block; width: 20%; ">
 					<TrashInsertDialog
 						:items="items"
 						:mood="mood"
 						:trash="trash"
+						@getEtrashMain="getEtrashMain"
 						moodsrc="https://cdn.vuetifyjs.com/images/john.png"
 						:content="trashcontent"
 					>
@@ -56,7 +112,12 @@ import TrashDialog from "./components/TrashDialog";
 import TrashInsertDialog from "./components/TrashInsertDialog";
 import TrashCom from "./components/TrashComponent.vue";
 import axios from "axios";
-import { getEtrash, postEtrash, sentimentanalysis } from "../../api/etrash";
+import {
+	getEtrash,
+	postEtrash,
+	sentimentanalysis,
+	getEtrashByMood,
+} from "../../api/etrash";
 export default {
 	name: "Trash",
 	components: {
@@ -72,6 +133,9 @@ export default {
 			trashcontent: "",
 			sorted: "",
 			mood: "슬픔",
+			drawer: false,
+			group: null,
+			group2: null,
 			selection: 0,
 			sortlist: [
 				{ text: "좋아요순" },
@@ -118,6 +182,7 @@ export default {
 					colorcode: "#FFF59D7F",
 				},
 			],
+			origintrash: [],
 			trash: [],
 		};
 	},
@@ -135,15 +200,7 @@ export default {
 		masonryEvents.forEach(function(event) {
 			window.addEventListener(event, vm.resizeAllMasonryItems);
 		});
-		getEtrash()
-			.then(response => {
-				this.trash = response.data.content;
-				console.log(response.data.content);
-			})
-			.then(() => {
-				vm.resizeAllMasonryItems();
-			})
-			.catch(error => {});
+		this.getEtrashMain();
 	},
 	watch: {
 		imagesCount: function() {
@@ -151,9 +208,56 @@ export default {
 				this.resizeAllMasonryItems();
 			}
 		},
+		group() {
+			this.drawer = false;
+			this.group2 = null;
+		},
+		group2() {
+			this.drawer = false;
+			this.group = null;
+		},
 	},
 
 	methods: {
+		getcolor(select) {
+			return this.items[select].colorcode;
+		},
+		removeEtrash(index) {
+			let vm = this;
+			console.log("지우기", index);
+			this.trash.splice(index, 1);
+			vm.resizeAllMasonryItems();
+		},
+		getEtrashByMoodMain(passmood) {
+			this.sorted = "";
+			if (passmood == "전체보기") {
+				this.getEtrashMain();
+			} else {
+				let vm = this;
+				getEtrashByMood(passmood)
+					.then(response => {
+						this.trash = response.data.content;
+						this.origintrash = response.data.content;
+					})
+					.then(() => {
+						vm.resizeAllMasonryItems();
+					})
+					.catch(error => {});
+			}
+		},
+		getEtrashMain() {
+			let vm = this;
+			this.trashcontent = "";
+			getEtrash()
+				.then(response => {
+					this.trash = response.data.content;
+					this.origintrash = response.data.content;
+				})
+				.then(() => {
+					vm.resizeAllMasonryItems();
+				})
+				.catch(error => {});
+		},
 		getmood() {
 			if (this.content == "") {
 				alert("내용을 적어주세요!!!");
@@ -162,15 +266,11 @@ export default {
 			sentimentanalysis({
 				description: this.content,
 			})
-				.then(response => {
-					//this.mood = response.data.mood;
-					console.log(this.mood);
-				})
+				.then(response => {})
 				.catch(error => {});
 			this.mood = "행복";
 		},
 		changesort() {
-			console.log(this.sorted);
 			if (this.sorted == "좋아요순") {
 				this.sortedArrayByLike();
 			} else if (this.sorted == "최신순") {
@@ -180,23 +280,38 @@ export default {
 			} else if (this.sorted == "내가쓴글") {
 				this.sortedArrayByMine();
 			}
+
+			this.resizeAllMasonryItems();
+		},
+		changesortSmall(sort) {
+			if (sort == "좋아요순") {
+				this.sortedArrayByLike();
+			} else if (sort == "최신순") {
+				this.sortedArrayByDate();
+			} else if (sort == "남은시간순") {
+				this.sortedArrayByDeleteDate();
+			} else if (sort == "내가쓴글") {
+				this.sortedArrayByMine();
+			}
+
+			this.resizeAllMasonryItems();
 		},
 		sortedArrayByLike() {
-			function compare(a, b) {
-				if (a.likecount < b.likecount) return -1;
-				if (a.likecount > b.likecount) return 1;
-				return 0;
-			}
-			return this.trash.sort(compare);
+			this.trash = this.origintrash;
+			return this.trash.sort((a, b) => b.likecount - a.likecount);
 		},
 		sortedArrayByDate() {
+			this.trash = this.origintrash;
+
 			return this.trash.sort(
-				(a, b) => new Date(a.createdate) - new Date(b.createdate),
+				(a, b) => new Date(b.createDate) - new Date(a.createDate),
 			);
 		},
 		sortedArrayByDeleteDate() {
+			this.trash = this.origintrash;
+
 			return this.trash.sort(
-				(a, b) => new Date(a.deletedate) - new Date(b.deletedate),
+				(a, b) => new Date(a.deleteDate) - new Date(b.deleteDate),
 			);
 		},
 		sortedArrayByMine() {
@@ -207,6 +322,7 @@ export default {
 					templist.push(this.trash[i]);
 				}
 			}
+			this.trash = templist;
 			return templist;
 		},
 		calculateImageCount() {
@@ -221,9 +337,7 @@ export default {
 				description: this.trashcontent,
 				mood: "슬픔",
 			})
-				.then(response => {
-					console.log(response);
-				})
+				.then(response => {})
 				.catch(error => {
 					reject(error);
 				});
@@ -270,33 +384,67 @@ export default {
 			 * Loop through the above list and execute the spanning function to
 			 * each list-item (i.e. each masonry item)
 			 */
+
 			for (let i = 0; i < allItems.length; i++) {
 				this.resizeMasonryItem(allItems[i]);
 			}
+		},
+		upDateTrash(trash) {
+			this.trash.push(trash);
 		},
 	},
 };
 </script>
 <style>
+.trashcontainer {
+	height: 100%;
+	margin: 0 auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
 .sort {
 	height: 80px;
 	display: block;
-	width: 200px;
+	width: 100%;
+	padding-left: 20px;
+	position: absolute;
+	top: 0;
+	z-index: 2;
+	/* box-shadow: 1px 1px 5px gray; */
 }
+.trashmiddle {
+	margin-top: 80px;
+	z-index: 1;
+	height: 100%;
+}
+
+.sharedMenu.min {
+	cursor: pointer;
+}
+
+.sharedMenu.min:hover {
+	transform: rotate(4deg);
+}
+
 .masonry {
 	display: grid;
 	grid-gap: 15px;
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 	grid-auto-rows: 0;
-	height: 80%;
-	overflow-y: auto;
-	overflow-x: hidden;
+	padding-right: 20px;
+	padding-left: 20px;
+	border: none;
+	margin-bottom: 100px;
 }
+
 .card-content:hover {
 	opacity: 0.8;
 }
 .bottomtrash {
-	height: 10%;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 70px;
 	margin: 0 auto;
 	background-color: #fce4ec;
 }
@@ -308,22 +456,76 @@ export default {
 	border: 1px solid rgba(192, 192, 192, 0.363);
 }
 
-#bottomtrashbtn {
+.v-text-field.v-input--is-focused > .v-input__control > .v-input__slot:after {
 	display: inline-block;
+	border: 0;
+	align-items: center;
+	text-align: center;
+}
+.theme--light.v-text-field > .v-input__control > .v-input__slot:before {
+	display: inline-block;
+	border: 0;
+	align-items: center;
+	text-align: center;
+}
+.v-text-field > .v-input__control > .v-input__slot {
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
+.trashdrawer {
+	display: none;
+}
+@media screen and (max-width: 769px) {
+	.masonry {
+		display: grid;
+		grid-gap: 15px;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		grid-auto-rows: 0;
+		margin-bottom: 100px;
+	}
+	.bottombottomtrash {
+		width: 100%;
+	}
+}
+@media screen and (max-width: 640px) {
+	.masonry {
+		display: grid;
+		grid-gap: 15px;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		grid-auto-rows: 0;
+
+		margin-bottom: 100px;
+	}
 }
 
 @media screen and (max-width: 500px) {
 	.masonry {
+		display: grid;
+		grid-gap: 15px;
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-	}
-	.bottombottomtrash {
-		width: 100%;
+		grid-auto-rows: 0;
+
+		margin-bottom: 100px;
 	}
 	#bottomtrashbtn {
 		display: none;
 	}
 }
+@media screen and (max-width: 810px) {
+	.trashmiddle {
+		margin-top: 20px;
+	}
+	.trashdrawer {
+		display: inline-block;
+		position: absolute;
+		left: 0px;
+		padding: 5px;
+	}
 
+	.sort {
+		display: none;
+	}
+}
 .trashtop {
 	position: fixed;
 	top: 15px;
@@ -336,10 +538,12 @@ export default {
 	width: 80%;
 	margin: 0 auto;
 }
-.trashcontainer {
-	height: 100%;
-	margin: 0 auto;
 
-	margin-bottom: 30px;
+.filtertoggle {
+	display: inline-block;
+	width: 200px;
+}
+.filtermood {
+	display: inline-block;
 }
 </style>
