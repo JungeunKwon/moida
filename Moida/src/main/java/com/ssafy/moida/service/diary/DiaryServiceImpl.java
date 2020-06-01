@@ -38,8 +38,8 @@ public class DiaryServiceImpl implements DiaryService{
 	@Transactional
 	public Long saveDiary(DiarySaveRequest dto) throws NumberFormatException, BaseException {
 		dto.setAccount(accountService.getAccount());
-		if(dto.getGroupid()!=null) {
-			dto.setGroupTB(groupTBRepository.findById(dto.getGroupid()).get());
+		if(dto.getGroupTB()!=null) {
+			dto.setGroupTB(dto.getGroupTB());
 		}
 		return diaryRepository.save(dto.toEntity()).getId();
 	}

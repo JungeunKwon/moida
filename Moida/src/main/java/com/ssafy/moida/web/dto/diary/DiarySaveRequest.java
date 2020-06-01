@@ -23,7 +23,7 @@ public class DiarySaveRequest {
 	private int isPrivate;
 	private Account account;
 	private GroupTB groupTB;
-	private Long groupid;
+
 	
 	public Diary toEntity() {
 		return Diary.builder()

@@ -44,16 +44,29 @@ public class Diary extends BaseEntity{
 	@Column(nullable = true)
 	private String imgurl;
 	
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private int isPrivate;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="groupTB_id")
 	private GroupTB groupTB;
+	
+	
+	
+	public void updateDiaryinfo(String description, String mood, String imgurl, int isPrivate) {
+		this.description = description;
+		this.mood = mood;
+		this.imgurl = imgurl;
+		this.isPrivate = isPrivate;
+	}
+	
+	public void deleteDiary(LocalDateTime deleteDate) {
+		this.deleteDate = deleteDate;
+	}
 	
 	@Builder
 	public Diary(Long id, String description, LocalDateTime deleteDate, String mood, String imgurl, int isPrivate,
@@ -67,17 +80,6 @@ public class Diary extends BaseEntity{
 		this.isPrivate = isPrivate;
 		this.account = account;
 		this.groupTB = groupTB;
-	}
-	
-	public void updateDiaryinfo(String description, String mood, String imgurl, int isPrivate) {
-		this.description = description;
-		this.mood = mood;
-		this.imgurl = imgurl;
-		this.isPrivate = isPrivate;
-	}
-	
-	public void deleteDiary(LocalDateTime deleteDate) {
-		this.deleteDate = deleteDate;
 	}
 	
 	
