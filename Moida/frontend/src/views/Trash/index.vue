@@ -15,8 +15,12 @@
 						<v-list-item-title>정렬</v-list-item-title>
 					</template>
 					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
-						<v-list-item v-for="(item) in sortlist" :key="item.id" @click="changesortSmall(item.text)">
-							<v-list-item-title>{{item.text}}</v-list-item-title>
+						<v-list-item v-for="item in sortlist" :key="item.id" @click="changesortSmall(item.text)">
+							<v-list-item-title>
+								{{
+								item.text
+								}}
+							</v-list-item-title>
 						</v-list-item>
 					</v-list-item-group>
 				</v-list-group>
@@ -24,8 +28,11 @@
 					<v-list-item @click="getEtrashByMoodMain('전체보기')">
 						<v-list-item-title>전체보기</v-list-item-title>
 					</v-list-item>
-					<v-list-item v-for="(item) in items" :key="item.id" @click="getEtrashByMoodMain(item.text)">
-						<v-list-item-title>{{item.text}}</v-list-item-title>
+					<v-list-item @click="changesortSmall('내가쓴글')">
+						<v-list-item-title>내가쓴글</v-list-item-title>
+					</v-list-item>
+					<v-list-item v-for="item in items" :key="item.id" @click="getEtrashByMoodMain(item.text)">
+						<v-list-item-title>{{ item.text }}</v-list-item-title>
 					</v-list-item>
 				</v-list-item-group>
 			</v-list>
@@ -58,14 +65,18 @@
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper mini">전체보기</div>
 			</div>
+			<div class="sharedMenu min" @click="changesortSmall('내가쓴글')">
+				<img class="tape" src="../../assets/images/tape.png" />
+				<div class="sharedPaper mini">내가쓴글</div>
+			</div>
 			<div
 				class="sharedMenu min"
-				v-for="(item,index) in items"
+				v-for="(item, index) in items"
 				:key="item.id"
 				@click="getEtrashByMoodMain(item.text)"
 			>
 				<img class="tape" src="../../assets/images/tape.png" />
-				<div class="sharedPaper mini" :background-color="getcolor(index)">{{item.text}}</div>
+				<div class="sharedPaper mini" :background-color="getcolor(index)">{{ item.text }}</div>
 			</div>
 		</div>
 		<div class="trashmiddle">
@@ -82,10 +93,11 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="bottomtrash">
 			<div class="bottombottomtrash">
-				<div style="display: inline-block; width: 80%; border:1px;">
-					<v-text-field v-model="trashcontent" @keyup.enter="trashinsert" required />
+				<div style="display: inline-block; width: 80%; padding:10px">
+					<input v-model="trashcontent" class="trashlogin_input" @keyup.enter="trashinsert" required />
 				</div>
 				<div style="display: inline-block; width: 20%; ">
 					<TrashInsertDialog
@@ -93,8 +105,10 @@
 						:mood="mood"
 						:trash="trash"
 						@getEtrashMain="getEtrashMain"
+						@closemodal="closemodal"
 						moodsrc="https://cdn.vuetifyjs.com/images/john.png"
 						:content="trashcontent"
+						:open="isOpen"
 					>
 						<v-btn text id="bottomtrashbtn" @click="getmood">
 							<v-icon x-large>mdi-heart-box</v-icon>
@@ -137,47 +151,59 @@ export default {
 			group: null,
 			group2: null,
 			selection: 0,
+			isOpen: false,
 			sortlist: [
 				{ text: "좋아요순" },
 				{ text: "최신순" },
 				{ text: "남은시간순" },
-				{ text: "내가쓴글" },
 			],
 			url: "",
 			items: [
 				{
 					id: 0,
-					text: "화남",
+					text: "기쁨",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
 					colorcode: "#88EF9A7F",
 				},
 				{
 					id: 1,
-					text: "슬픔",
+					text: "신뢰",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
 					colorcode: "#B39DDB7F",
 				},
 				{
 					id: 2,
-					text: "짜증",
+					text: "공포",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
 					colorcode: "#E6EE9C7F",
 				},
 				{
 					id: 3,
-					text: "우울",
+					text: "기대",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
 					colorcode: "#90CAF97F",
 				},
 				{
 					id: 4,
-					text: "행복",
+					text: "놀라움",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
 					colorcode: "#F48FB17F",
 				},
 				{
 					id: 5,
-					text: "기쁨",
+					text: "슬픔",
+					src: "https://cdn.vuetifyjs.com/images/john.png",
+					colorcode: "#FFF59D7F",
+				},
+				{
+					id: 6,
+					text: "혐오",
+					src: "https://cdn.vuetifyjs.com/images/john.png",
+					colorcode: "#FFF59D7F",
+				},
+				{
+					id: 7,
+					text: "분노",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
 					colorcode: "#FFF59D7F",
 				},
@@ -222,6 +248,9 @@ export default {
 		getcolor(select) {
 			return this.items[select].colorcode;
 		},
+		trashinsert() {
+			this.isOpen = true;
+		},
 		removeEtrash(index) {
 			let vm = this;
 			console.log("지우기", index);
@@ -230,6 +259,7 @@ export default {
 		},
 		getEtrashByMoodMain(passmood) {
 			this.sorted = "";
+
 			if (passmood == "전체보기") {
 				this.getEtrashMain();
 			} else {
@@ -244,6 +274,9 @@ export default {
 					})
 					.catch(error => {});
 			}
+		},
+		closemodal() {
+			this.isOpen = false;
 		},
 		getEtrashMain() {
 			let vm = this;
@@ -280,7 +313,6 @@ export default {
 			} else if (this.sorted == "내가쓴글") {
 				this.sortedArrayByMine();
 			}
-
 			this.resizeAllMasonryItems();
 		},
 		changesortSmall(sort) {
@@ -332,16 +364,6 @@ export default {
 			this.imagesCount++;
 		},
 
-		trashinsert() {
-			postEtrash({
-				description: this.trashcontent,
-				mood: "슬픔",
-			})
-				.then(response => {})
-				.catch(error => {
-					reject(error);
-				});
-		},
 		resizeMasonryItem(item) {
 			/* Get the grid object, its row-gap, and the size of its implicit rows */
 			let grid = document.getElementsByClassName("masonry")[0],
@@ -418,6 +440,11 @@ export default {
 	height: 100%;
 }
 
+.trashlogin_input {
+	width: 100%;
+	height: 60px;
+	border: 1px solid silver;
+}
 .sharedMenu.min {
 	cursor: pointer;
 }
@@ -444,7 +471,7 @@ export default {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	height: 70px;
+	height: 80px;
 	margin: 0 auto;
 	background-color: #fce4ec;
 }
@@ -537,6 +564,7 @@ export default {
 .bottombottomtrash {
 	width: 80%;
 	margin: 0 auto;
+	margin-bottom: 10px;
 }
 
 .filtertoggle {

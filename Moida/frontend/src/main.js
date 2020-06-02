@@ -9,8 +9,8 @@ import "element-ui/lib/theme-chalk/index.css";
 import "element-ui/lib/theme-chalk/display.css";
 import VueMasonry from "vue-masonry-css";
 import VueLazyload from "vue-lazyload";
-import ImgInputer from 'vue-img-inputer'
-import 'vue-img-inputer/dist/index.css'
+import ImgInputer from "vue-img-inputer";
+import "vue-img-inputer/dist/index.css";
 
 Vue.use(VueMasonry);
 Vue.use(VueLazyload, {
@@ -20,8 +20,8 @@ Vue.use(VueLazyload, {
 	attempt: 1,
 });
 Vue.config.productionTip = false;
-Vue.component('ImgInputer', ImgInputer);
-
+Vue.component("ImgInputer", ImgInputer);
+Vue.use(Element);
 new Vue({
 	vuetify,
 	router,
