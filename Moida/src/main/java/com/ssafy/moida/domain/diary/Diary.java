@@ -41,6 +41,7 @@ public class Diary extends BaseEntity{
 	@Column(nullable = true)
 	private String mood;
 	
+	@Lob
 	@Column(nullable = true)
 	private String imgurl;
 	

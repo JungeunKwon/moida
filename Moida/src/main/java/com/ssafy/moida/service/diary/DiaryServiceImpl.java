@@ -30,8 +30,9 @@ public class DiaryServiceImpl implements DiaryService{
 	private final GroupTBRepository groupTBRepository;
 	
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findAll(Pageable pageable) {
-		return diaryRepository.findAll(pageable)
+	public Page<DiaryResponseDTO> findAll(Pageable pageable) throws NumberFormatException, BaseException {
+		
+		return diaryRepository.find(accountService.getAccount().getId(), pageable)
 				.map(DiaryResponseDTO::new);
 	}
 

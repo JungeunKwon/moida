@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Follow extends BaseEntity {
+public class Follow extends BaseEntity{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,13 +28,14 @@ public class Follow extends BaseEntity {
 	@JoinColumn(name="follower_id")
 	private Account follower;
 	
-	@Column(name = "following_id")
-	private Long followingId;
+	@ManyToOne
+	@JoinColumn(name = "following_id")
+	private Account following;
 
 	@Builder
-	public Follow(Long id, Account follower, Long followingId) {
+	public Follow(Long id, Account follower, Account following) {
 		this.id = id;
 		this.follower = follower;
-		this.followingId = followingId;
+		this.following = following;
 	}
 }

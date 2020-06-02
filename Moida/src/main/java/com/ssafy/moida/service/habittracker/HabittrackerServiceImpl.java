@@ -3,7 +3,7 @@ package com.ssafy.moida.service.habittracker;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.stereotype.Service;
 
