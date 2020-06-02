@@ -96,7 +96,7 @@
 		</v-card>
 		<v-card v-if="innerdialog && isMusic">
 			<p class="font-weight-bold">이 노래 한번 들어보세요.</p>
-			<img id="back_arrow" src="./back.png" @click="moveLeft" />
+			<img id="back_arrow" src="../../../assets/icons/back.png" @click="moveLeft" />
 			<div id="musicList">
 				<div id="category" class="music">
 					<v-item-group>
@@ -128,7 +128,7 @@
 					</v-item-group>
 				</div>
 			</div>
-			<img id="next_arrow" src="./next.png" @click="moveRight" />
+			<img id="next_arrow" src="../../../assets/icons/next.png" @click="moveRight" />
 
 			<div style="margin: 0 auto; width:100%">
 				<v-btn text style="display: inline-block; width: 20%;" @click="inserttrash">노래선택</v-btn>
@@ -149,6 +149,7 @@ export default {
 		mood: "",
 		moodsrc: "",
 		content: "",
+		open: false,
 	},
 	data() {
 		return {
@@ -172,6 +173,14 @@ export default {
 				this.time = 0;
 				this.innerdialog = true;
 				this.isMusic = false;
+				this.$emit("closemodal");
+			}
+		},
+		open: function() {
+			if (this.open) {
+				this.trashdialog = true;
+			} else {
+				this.trashdialog = false;
 			}
 		},
 	},
@@ -181,6 +190,10 @@ export default {
 			return this.items[this.selection].colorcode;
 		},
 		getmusic() {
+			if (this.time == 0) {
+				alert("시간을 선택해주세요.");
+				return;
+			}
 			var item = this.items[this.selection];
 			findByMood(item.text)
 				.then(response => {
