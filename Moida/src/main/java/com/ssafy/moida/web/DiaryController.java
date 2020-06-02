@@ -68,7 +68,7 @@ public class DiaryController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
-	@ApiOperation(value = "모든 다이어리 검색", httpMethod = "GET", notes = "다이어리 피드 전부 검색 부분입니다.")
+	@ApiOperation(value = "모든 다이어리 검색", httpMethod = "GET", notes = "다이어리 피드 전부(공개/친구/내) 검색 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/diary")
 	public Page<DiaryResponseDTO> findAll(Pageable pageable

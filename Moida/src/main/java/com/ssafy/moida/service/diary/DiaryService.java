@@ -14,12 +14,15 @@ import com.ssafy.moida.web.dto.diary.DiaryUpdateRequest;
 
 public interface DiaryService {
 	
+	
+
+	
 	Long saveDiary(DiarySaveRequest dto) throws NumberFormatException, BaseException;
 	Page<DiaryResponseDTO> findByGroupTB(Long id , Pageable pagealbe);
 	DiaryResponseDTO updateinfo(DiaryUpdateRequest dto);
 	Long deleteDiary(Long id);
 	
-	Page<DiaryResponseDTO> findAll(Pageable pageable);
+	Page<DiaryResponseDTO> findAll(Pageable pageable) throws NumberFormatException, BaseException;
 	
 	Page<DiaryResponseDTO> findByDescriptionAndBydeleteDateIsNull(String description,Pageable pageable);
 	Page<DiaryResponseDTO> findByAccountAndBydeleteDateIsNull(Account account,Pageable pageable);

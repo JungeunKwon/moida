@@ -24,8 +24,13 @@ public class DiaryResponseDTO {
 	private String mood;
 	private String imgurl;
 	private int isPrivate;
-	private Account account;
-	private GroupTB groupTB;
+	
+	
+	private Long accountid;
+	private String nickname;
+	private String profileurl;
+	
+	
 	private LocalDateTime createDate;
 	private LocalDateTime modifiedDate;
 	
@@ -39,10 +44,13 @@ public class DiaryResponseDTO {
 		this.mood = diary.getMood();
 		this.imgurl = diary.getImgurl();
 		this.isPrivate = diary.getIsPrivate();
-		this.account = diary.getAccount();
-		this.groupTB = diary.getGroupTB();
 		this.createDate = diary.getCreateDate();
 		this.modifiedDate = diary.getModifiedDate();
+		
+		this.accountid = diary.getAccount().getId();
+		this.nickname = diary.getAccount().getNickname();
+		this.profileurl = diary.getAccount().getProfileImg();
+		
 	}
 	
 	

@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -50,6 +51,7 @@ implements UserDetails {
 	@Column(nullable = false, length = 30)
 	private int gender;
 	
+	@Lob
 	@Column(nullable = true, name="profile_Img")
 	private String profileImg;
 	
