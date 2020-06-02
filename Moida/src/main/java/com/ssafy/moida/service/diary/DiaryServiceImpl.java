@@ -30,16 +30,17 @@ public class DiaryServiceImpl implements DiaryService{
 	private final GroupTBRepository groupTBRepository;
 	
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findAll(Pageable pageable) {
-		return diaryRepository.findAll(pageable)
+	public Page<DiaryResponseDTO> findAll(Pageable pageable) throws NumberFormatException, BaseException {
+		
+		return diaryRepository.find(accountService.getAccount().getId(), pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
 	@Transactional
 	public Long saveDiary(DiarySaveRequest dto) throws NumberFormatException, BaseException {
 		dto.setAccount(accountService.getAccount());
-		if(dto.getGroupid()!=null) {
-			dto.setGroupTB(groupTBRepository.findById(dto.getGroupid()).get());
+		if(dto.getGroupTB()!=null) {
+			dto.setGroupTB(dto.getGroupTB());
 		}
 		return diaryRepository.save(dto.toEntity()).getId();
 	}
@@ -47,14 +48,14 @@ public class DiaryServiceImpl implements DiaryService{
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByGroupTB(Long id, Pageable pageable) {
 		GroupTB group = groupTBRepository.findById(id).get();
-		return diaryRepository.findByGroupTBAndDeletedateIsNull(group, pageable)
+		return diaryRepository.findByGroupTBAndDeleteDateIsNull(group, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
 	@Transactional
 	public DiaryResponseDTO updateinfo(DiaryUpdateRequest dto) {
 		Diary diary = diaryRepository.findById(dto.getId()).get();
-		diary.updateDiaryinfo(dto.getDescription(), dto.getMood(), dto.getImgurl());
+		diary.updateDiaryinfo(dto.getDescription(), dto.getMood(), dto.getImgurl(),dto.getIsPrivate());
 		return DiaryResponseDTO.builder().diary(diary).build();
 	}
 
@@ -66,21 +67,21 @@ public class DiaryServiceImpl implements DiaryService{
 	}
 
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findByDescriptionAndByDeletedateIsNull(String description, Pageable pageable) {
+	public Page<DiaryResponseDTO> findByDescriptionAndBydeleteDateIsNull(String description, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return diaryRepository.findByDescriptionAndDeletedateIsNull(description, pageable)
+		return diaryRepository.findByDescriptionAndDeleteDateIsNull(description, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findByAccountAndByDeletedateIsNull(Account account, Pageable pageable) {
-		return diaryRepository.findByAccountAndDeletedateIsNull(account, pageable)
+	public Page<DiaryResponseDTO> findByAccountAndBydeleteDateIsNull(Account account, Pageable pageable) {
+		return diaryRepository.findByAccountAndDeleteDateIsNull(account, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findByMoodAndByDeletedateIsNull(String mood, Pageable pageable) {
-		return diaryRepository.findByMoodAndDeletedateIsNull(mood, pageable)
+	public Page<DiaryResponseDTO> findByMoodAndBydeleteDateIsNull(String mood, Pageable pageable) {
+		return diaryRepository.findByMoodAndDeleteDateIsNull(mood, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 
@@ -96,7 +97,7 @@ public class DiaryServiceImpl implements DiaryService{
 		
 		GroupTB group = groupTBRepository.findById(groupid).get();
 		System.out.println(date);
-		return diaryRepository.findByGroupTBAndCreateDateLessThanAndCreateDateGreaterThanAndDeletedateIsNull(group,date.plusDays(1),date, pageable)
+		return diaryRepository.findByGroupTBAndCreateDateLessThanAndCreateDateGreaterThanAndDeleteDateIsNull(group,date.plusDays(1),date, pageable)
 				.map(DiaryResponseDTO::new);
 	}
 

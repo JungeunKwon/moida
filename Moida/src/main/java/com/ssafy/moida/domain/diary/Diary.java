@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,13 +36,17 @@ public class Diary extends BaseEntity{
 	private String description;
 	
 	@Column(nullable = true)
-	private LocalDateTime deletedate;
+	private LocalDateTime deleteDate;
 	
 	@Column(nullable = true)
 	private String mood;
 	
+	@Lob
 	@Column(nullable = true)
 	private String imgurl;
+	
+	@Column(nullable = false)
+	private int isPrivate;
 	
 	@ManyToOne
 	@JoinColumn(name="account_id")
@@ -51,27 +56,31 @@ public class Diary extends BaseEntity{
 	@JoinColumn(name="groupTB_id")
 	private GroupTB groupTB;
 	
+	
+	
+	public void updateDiaryinfo(String description, String mood, String imgurl, int isPrivate) {
+		this.description = description;
+		this.mood = mood;
+		this.imgurl = imgurl;
+		this.isPrivate = isPrivate;
+	}
+	
+	public void deleteDiary(LocalDateTime deleteDate) {
+		this.deleteDate = deleteDate;
+	}
+	
 	@Builder
-	public Diary(Long id, String description, LocalDateTime deletedate, String mood, String imgurl,
+	public Diary(Long id, String description, LocalDateTime deleteDate, String mood, String imgurl, int isPrivate,
 			Account account, GroupTB groupTB) {
 		super();
 		this.id = id;
 		this.description = description;
-		this.deletedate = deletedate;
+		this.deleteDate = deleteDate;
 		this.mood = mood;
 		this.imgurl = imgurl;
+		this.isPrivate = isPrivate;
 		this.account = account;
 		this.groupTB = groupTB;
-	}
-	
-	public void updateDiaryinfo(String description, String mood, String imgurl) {
-		this.description = description;
-		this.mood = mood;
-		this.imgurl = imgurl;
-	}
-	
-	public void deleteDiary(LocalDateTime deletedate) {
-		this.deletedate = deletedate;
 	}
 	
 	

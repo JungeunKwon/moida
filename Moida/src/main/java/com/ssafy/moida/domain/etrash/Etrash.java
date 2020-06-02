@@ -41,7 +41,7 @@ public class Etrash extends BaseEntity{
 	private Long likecount;
 	
 	@Column(nullable = true)
-	private LocalDateTime deletedate;
+	private LocalDateTime deleteDate;
 	
 	@ManyToOne
 	@JoinColumn(name="account_id")
@@ -57,9 +57,8 @@ public class Etrash extends BaseEntity{
 		this.mood = mood;
 	}
 	
-	public Long updateEtrashLike() {
-		this.likecount++;
-		return likecount;
+	public void updateEtrashLike(Long count) {
+		this.likecount = count;
 	}
 	
 	public Long updateMusic(Music music) {
@@ -68,14 +67,14 @@ public class Etrash extends BaseEntity{
 	}
 	
 	@Builder
-	public Etrash(Long id, String description, String mood, Long likecount, LocalDateTime deletedate, Account account, Music music) {
+	public Etrash(Long id, String description, String mood, Long likecount, LocalDateTime deleteDate, Account account, Music music) {
 		this.id = id;
 		this.description = description;
 		this.mood = mood;
 		this.likecount = likecount;
 		this.account = account;
 		this.music = music;
-		this.deletedate = deletedate;
+		this.deleteDate = deleteDate;
 	}
 	
 	

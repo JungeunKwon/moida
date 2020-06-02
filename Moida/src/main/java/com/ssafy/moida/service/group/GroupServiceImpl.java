@@ -62,6 +62,9 @@ public class GroupServiceImpl implements GroupService {
 	@Transactional
 	public Long saveAccountGroup(SaveAccountGroupRequestDto requestDto) throws NumberFormatException, BaseException {
 		GroupTB group = groupTBRepository.findById(requestDto.getGroupId()).orElseThrow(() -> new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		System.out.println(group.getLimitUser());
+		System.out.println(group.getAccount());
+		
 		if(group.getLimitUser()<group.getAccount().size()+1){
 			throw new BaseException(EnumGroupException.GROUP_IS_FULL);
 		}
@@ -79,7 +82,7 @@ public class GroupServiceImpl implements GroupService {
 	@Transactional
 	public void deleteGroup(Long groupId) throws BaseException {
 		GroupTB group = groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
-		group.updateDeleteDate(LocalDateTime.now());
+		group.updatedeleteDate(LocalDateTime.now());
 	}
 	
 	@Transactional(readOnly = true)
@@ -98,7 +101,9 @@ public class GroupServiceImpl implements GroupService {
 	
 	@Transactional(readOnly = true)
 	public List<AccountGroupResponseDto> findByGroupTBId(Long groupId) throws BaseException{
-		return accountGroupRepository.findByGroupId(groupId).stream()
+		GroupTB group =  groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		List<AccountGroup> list = group.getAccount();
+		return list.stream()
 				.map(AccountGroupResponseDto :: new)
 				.collect(Collectors.toList());
 	}
@@ -144,4 +149,24 @@ public class GroupServiceImpl implements GroupService {
 				.map(AccountGroupGroupResponseDto :: new)
 				.collect(Collectors.toList());
 	}
+	
+	@Transactional(readOnly = true)
+	public GroupResponseDto findByGroupId(Long groupId) throws BaseException {
+		GroupTB group = groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		return GroupResponseDto.builder()
+				.id(group.getId())
+				.subject(group.getSubject())
+				.limitUser(group.getLimitUser())
+				.deleteTime(group.getDeleteTime())
+				.isPrivate(group.isPrivate())
+				.imgUrl(group.getImgUrl())
+				.description(group.getDescription())
+				.hostId(group.getHost().getId())
+				.hostNickname(group.getHost().getNickname())
+				.hostProfileImg(group.getHost().getProfileImg())
+				.curUser(accountGroupRepository.countByGroupId(groupId))
+				.build();
+				
+	}
+	
 }

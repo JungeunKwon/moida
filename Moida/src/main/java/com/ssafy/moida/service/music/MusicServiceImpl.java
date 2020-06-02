@@ -41,14 +41,15 @@ public class MusicServiceImpl implements MusicService{
 
 	@Transactional(readOnly = true)
 	public Page<MusicFindByMoodResponseDTO> findByMood(MusicFindByMoodRequestDTO requestDto) {
-
+		
 		return musicRepository.findByMoodOrderByLikecountDesc(requestDto.getMood(), requestDto.getPageable())
 				.map(MusicFindByMoodResponseDTO::new);
 	}
 
 	@Transactional
 	public Long selectMusic(MusicSelcetMusicRequest requestDto) {
-		
+		Long count = musicRepository.findById(requestDto.getMusicid()).get().getLikecount();
+		musicRepository.findById(requestDto.getMusicid()).get().likecount(count+1);
 		return etrashService.updateEtrashMusic(etrashRepository.findById(requestDto.getEtrashid()).get(), musicRepository.findById(requestDto.getMusicid()).get());
 	}
 

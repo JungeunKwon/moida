@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum EnumMusicException implements EnumExceptionBase {
-	MUSIC_DUPLICATE("013", "중복된 노래 입니다.");
+	MUSIC_DUPLICATE("031", "중복된 노래 입니다.");
 	
 	private String code;
 	private String desc;

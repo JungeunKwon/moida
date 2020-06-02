@@ -14,7 +14,7 @@ import com.ssafy.moida.domain.etrash.Etrash;
 public interface EtrashRepository extends JpaRepository<Etrash, Long>{
 	
 	
-	Page<Etrash> findByMoodAndDeletedateGreaterThan(String mood,LocalDateTime now, Pageable pageable);
-	Page<Etrash> findAllByDeletedateGreaterThan(LocalDateTime deletedate, Pageable pageable);
+	Page<Etrash> findByMoodAndDeleteDateGreaterThan(String mood,LocalDateTime now, Pageable pageable);
+	Page<Etrash> findAllByDeleteDateGreaterThan(LocalDateTime deleteDate, Pageable pageable);
 	
 }

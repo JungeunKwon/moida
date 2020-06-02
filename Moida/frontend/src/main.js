@@ -20,9 +20,9 @@ Vue.use(VueLazyload, {
 	loading: "dist/loading.gif",
 	attempt: 1,
 });
+Vue.config.productionTip = false;
+Vue.component("ImgInputer", ImgInputer);
 Vue.use(Element);
-Vue.component('ImgInputer', ImgInputer);
-
 new Vue({
 	vuetify,
 	router,

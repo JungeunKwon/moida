@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,18 +58,18 @@ public class DiaryController {
 	})
 	@ApiOperation(value = "다이어리그룹조회", httpMethod = "GET", notes = "다이어리그룹으로 검색하는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@GetMapping(value = "/diary/search/group/{id}")
-	public Page<DiaryResponseDTO> findByGroup(@PathVariable Long id,Pageable pageable
+	@GetMapping(value = "/diary/search/group/{groupid}")
+	public Page<DiaryResponseDTO> findByGroup(@PathVariable Long groupid,Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
 	
-		return diaryService.findByGroupTB(id,pageable);
+		return diaryService.findByGroupTB(groupid,pageable);
 	}
 	
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
-	@ApiOperation(value = "모든 다이어리 검색", httpMethod = "GET", notes = "다이어리 피드 전부 검색 부분입니다.")
-	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@ApiOperation(value = "모든 다이어리 검색", httpMethod = "GET", notes = "다이어리 피드 전부(공개/친구/내) 검색 부분입니다.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/diary")
 	public Page<DiaryResponseDTO> findAll(Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
@@ -93,11 +94,11 @@ public class DiaryController {
 	})
 	@ApiOperation(value = "다이어리 삭제", httpMethod = "GET", notes = "id 값으로 다이어리 삭제하는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@GetMapping(value = "/diary/{id}")
-	public ResponseEntity<Long> deleteByid(@PathVariable Long id,Pageable pageable
+	@DeleteMapping(value = "/diary/{groupid}")
+	public ResponseEntity<Long> deleteByid(@PathVariable Long groupid
 			) throws IllegalArgumentException, IOException, BaseException{
 	
-		return new ResponseEntity<Long>(diaryService.deleteDiary(id), HttpStatus.OK);
+		return new ResponseEntity<Long>(diaryService.deleteDiary(groupid), HttpStatus.OK);
 	}
 	
 	@ApiImplicitParams({

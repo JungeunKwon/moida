@@ -21,40 +21,48 @@
 				</v-img>
 			</div>
 		</v-card>
-		<v-card v-if="innerdialog">
-			<v-card-text>
-				<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
-					<div style="margin: 0 auto; width:80%">
-						<v-row align="center" justify="start">
-							<v-col v-for="item in items" :key="item.text" class="shrink">
-								<v-chip>
-									<v-avatar left>
-										<v-img :src="item.src"></v-img>
-									</v-avatar>
-									{{ item.text }}
-								</v-chip>
-							</v-col>
-						</v-row>
-					</div>
-				</v-chip-group>
-				<div style="margin: 0 auto; width:70%">
-					<p class="font-weight-bold">해당 감정에 자주 듣는 노래 url을 입력해주세요.(유투브)</p>
-					<div style="margin: 0 auto; width:100%">
-						<v-text-field
-							v-model="url"
-							@keyup.enter="insert"
-							label="url"
-							ref="url"
-							required
-							:rules="[youtube_parser]"
-							style="display: inline-block; width: 80%;"
-						/>
 
-						<v-btn text style="display: inline-block; width: 20%;" @click="inserttodack">입력</v-btn>
-					</div>
+		<div v-if="innerdialog">
+			<div>
+				<div class="TrashMusicCardTitle" dark>토닥토닥</div>
+				<div class="TrashMusicCard">
+					<p class="font-weight-bold">다른 유저들에게 자신만의 노래를 추천해보세요.</p>
+
+					<v-card-text>
+						<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
+							<div style="margin: 0 auto; width:90%">
+								<v-row align="center" justify="start">
+									<v-col v-for="item in items" :key="item.text" class="shrink">
+										<v-chip>
+											<v-avatar left>
+												<v-img :src="item.src"></v-img>
+											</v-avatar>
+											{{ item.text }}
+										</v-chip>
+									</v-col>
+								</v-row>
+							</div>
+						</v-chip-group>
+						<div style="margin: 0 auto; width:70%">
+							<p class="font-weight-bold">해당 감정에 자주 듣는 노래 url을 입력해주세요.(유투브)</p>
+							<div style="margin: 0 auto; width:100%;">
+								<div style="display: inline-block; width: 80%; border:2px black">
+									<v-text-field
+										v-model="url"
+										@keyup.enter="insert"
+										label="url"
+										ref="url"
+										required
+										:rules="[youtube_parser]"
+									/>
+								</div>
+								<v-btn text style="display: inline-block; width: 20%;" @click="inserttodack">입력</v-btn>
+							</div>
+						</div>
+					</v-card-text>
 				</div>
-			</v-card-text>
-		</v-card>
+			</div>
+		</div>
 	</v-dialog>
 </template>
 <script>
@@ -127,7 +135,6 @@ export default {
 							videoid: videoId,
 						})
 							.then(response => {
-								console.log(response);
 								setTimeout(() => {
 									this.innerdialog = true;
 									this.trashdialog = false;
@@ -168,3 +175,24 @@ export default {
 	},
 };
 </script>
+<style >
+.TrashMusicCard {
+	background-color: palegoldenrod;
+
+	margin: 0 auto;
+	margin-top: -15px;
+	border-radius: 10px;
+	z-index: 1;
+}
+.TrashMusicCardTitle {
+	width: 120px;
+	height: 30px;
+	z-index: 2;
+	position: relative;
+	background-color: #b2dfdb;
+
+	border-radius: 5px;
+	color: white;
+	border: 1px solid rgba(192, 192, 192, 0.363);
+}
+</style>

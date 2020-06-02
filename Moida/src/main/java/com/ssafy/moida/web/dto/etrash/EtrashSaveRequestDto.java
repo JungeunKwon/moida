@@ -26,14 +26,14 @@ public class EtrashSaveRequestDto {
 	private Music music;
 	
 	public Etrash toEntity() {
-		LocalDateTime deletedate = LocalDateTime.now();
+		LocalDateTime deleteDate = LocalDateTime.now();
 		
 		
 		return Etrash.builder()
 				.description(description)
 				.mood(mood)
 				.likecount(likecount)
-				.deletedate(deletedate.plusHours(deleteTime))
+				.deleteDate(deleteDate.plusHours(deleteTime))
 				.account(account)
 				.music(music)
 				.build();
