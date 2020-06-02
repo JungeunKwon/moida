@@ -11,6 +11,12 @@
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper mini">내 공다 목록</div>
 			</div>
+			<div class="sharedMenu mini">
+				<img class="tape" src="../../assets/images/tape.png" />
+				<div class="sharedPaper mini">
+					<v-select :items="sels" v-model="searchSel" label="검색조건" color="gray" dense solo />
+				</div>
+			</div>
 			<div class="sharedMenu large">
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper large">
@@ -40,12 +46,17 @@ export default {
 		return {
 			searchText: "",
 			diaries: [],
+			sels: [
+				{ text: "제목", value: 0 },
+				{ text: "닉네임", value: 1 },
+				{ text: "내용", value: 2 },
+			],
+			searchSel: "",
 		};
 	},
 	mounted() {
 		this.getSharedDiary()
 			.then(response => {
-				console.log(response);
 				this.diaries = response.data;
 			})
 			.catch(error => {
@@ -54,14 +65,51 @@ export default {
 	},
 	computed: {},
 	methods: {
-		...mapActions("sharedDiary", ["getSharedDiary"]),
-		searchSharedDiary() {},
-		createSharedDiary() {},
+		...mapActions("sharedDiary", [
+			"getSharedDiary",
+			"searchBySubject",
+			"searchByDesc",
+			"searchByNickname",
+		]),
+		searchSharedDiary() {
+			console.log(this.searchSel);
+			if (this.searchText == "") return;
+			let temp = this.searchSel;
+			if (temp == 0) {
+				this.searchBySubject(this.searchText)
+					.then(response => {
+						this.diaries = response.data;
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			} else if (temp == 1) {
+				this.searchByNickname(this.searchText)
+					.then(response => {
+						this.diaries = response.data;
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			} else if (temp == 2) {
+				this.searchByDesc(this.searchText)
+					.then(response => {
+						this.diaries = response.data;
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			}
+		},
 	},
 };
 </script>
 
 <style>
+#sharedListTop > div:nth-child(4) > div > div > div > div.v-input__slot {
+	box-shadow: none;
+}
+
 #SharedDiary {
 	width: 100%;
 	height: 100%;
@@ -72,12 +120,10 @@ export default {
 
 #sharedListTop {
 	position: absolute;
-	/* background-color: white; */
 	width: 100%;
 	height: 100px;
 	z-index: 2;
 	padding-left: 10px;
-	/* box-shadow: 1px 1px 5px gray; */
 }
 
 .sharedMenu {
@@ -90,6 +136,8 @@ export default {
 }
 
 .sharedMenu > .tape {
+	position: relative;
+	z-index: 1;
 	width: 45px;
 	transform: rotate(20deg);
 	opacity: 0.5;
@@ -110,9 +158,19 @@ export default {
 	width: 85px;
 	cursor: pointer;
 }
+
 .sharedMenu > .sharedPaper.large,
 .sharedMenu.large {
 	width: 300px;
+}
+
+#sharedListTop > div:nth-child(4) > div > div {
+	margin: 0;
+	padding: 0;
+}
+
+#sharedListTop > div:nth-child(4) > div > div > div > div.v-input__slot {
+	padding-right: 0;
 }
 
 #searchTextDiv {

@@ -93,7 +93,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions("sharedDiary", ["createSharedDiary"]),
+		...mapActions("sharedDiary", ["createSharedDiary", "joinSharedDiary"]),
 		exceedHandler(file) {
 			console.warn("File is too large!");
 		},

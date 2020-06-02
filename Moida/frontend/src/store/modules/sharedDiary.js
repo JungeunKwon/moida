@@ -1,7 +1,11 @@
 import {
     createSharedDiary,
     getSharedDiary,
-    getSharedDiaryDetail
+    getSharedDiaryDetail,
+    searchBySubject,
+    searchByNickname,
+    searchByDesc,
+    joinSharedDiary
 } from "@/api/sharedDiary";
 
 const state = {};
@@ -46,9 +50,63 @@ const actions = {
                 });
         });
     },
-    getSharedDiaryDetail(diaryId) {
+    joinSharedDiary({
+        commit
+    }, info) {
+        return new Promise((resolve, reject) => {
+            joinSharedDiary(info)
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                })
+        })
+    },
+    getSharedDiaryDetail({
+        commit
+    }, diaryId) {
         return new Promise((resolve, reject) => {
             getSharedDiaryDetail(diaryId)
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                })
+        })
+    },
+    searchBySubject({
+        commit
+    }, text) {
+        return new Promise((resolve, reject) => {
+            searchBySubject(text)
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                })
+        })
+    },
+    searchByNickname({
+        commit
+    }, text) {
+        return new Promise((resolve, reject) => {
+            searchByNickname(text)
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                })
+        })
+    },
+    searchByDesc({
+        commit
+    }, text) {
+        return new Promise((resolve, reject) => {
+            searchByDesc(text)
                 .then(response => {
                     resolve(response);
                 })
