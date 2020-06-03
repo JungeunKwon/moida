@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.JsonObject;
+import com.ssafy.moida.component.SentimentalDataParser;
 import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.web.dto.sentimental.SentimentalRequestDto;
 
@@ -31,6 +34,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SentimentalController {
 	
+	private final SentimentalDataParser sentimentalDataParser;
+	
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
@@ -41,27 +46,35 @@ public class SentimentalController {
 		
 		String[] sentences = requestDto.getDescription().split("\\n");
 		String url = "http://api.adams.ai/datamixiApi/omAnalysis?key=8013557318792994835&query=";
+		
+		int[][] array;
+		
 		for(int i=0; i<sentences.length; ++i) {
-			url = url+sentences[i]+"&type=1";
+			url = url+URLEncoder.encode(sentences[i], "UTF-8")+"&type=1";
 			System.out.println(url);
 			URL reqeustUrl = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) reqeustUrl.openConnection();
 			
 			con.setRequestMethod("GET");
-			con.setRequestProperty("Accept-Charset", "UTF-8");
-			con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
-			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			String resultXmlText = "";
-			while((inputLine = br.readLine())!=null) {
-				resultXmlText+=inputLine;
+			con.setDoOutput(true);
+
+			int responseCode = con.getResponseCode();
+			if(responseCode == 400) {
+				System.out.println("400:: 해당 명령을 실행할 수 없음");
 			}
-			
-			br.close();
-			con.disconnect();
-			
-			System.out.println(resultXmlText);
-			
+			else if(responseCode==500) {
+				System.out.println("500:: 서버에러");
+			}
+			else {
+				BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				StringBuilder sb = new StringBuilder();
+				String line = "";
+				while((line=br.readLine())!=null) {
+					sb.append(line);
+				}
+				System.out.println(sb.toString());
+				sentimentalDataParser.JasonParser(sb.toString());
+			}
 		}
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
