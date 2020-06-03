@@ -34,7 +34,7 @@ const routes = [
 		component: WriteDiary,
 	},
 	{
-		path: "/",
+		path: "/trash",
 		name: "Trash",
 		component: () =>
 			import(/* webpackChunkName: "trash" */ "../views/Trash/index.vue"),

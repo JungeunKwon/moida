@@ -6,8 +6,8 @@
 		<div class="paper p3">
 			<slot />
 		</div>
-		<router-link to="/" class="myTag t1">감쓰</router-link>
-		<router-link to="/trash" class="myTag t2">일기</router-link>
+		<router-link to="/trash" class="myTag t1">감쓰</router-link>
+		<router-link to="/writediary" class="myTag t2">일기</router-link>
 		<router-link to="/shared" class="myTag t3">공다</router-link>
 		<router-link to="/myPage" class="myTag t4">my</router-link>
 		<router-link to="/login" @click.native="logout" class="myTag t5">logout</router-link>
