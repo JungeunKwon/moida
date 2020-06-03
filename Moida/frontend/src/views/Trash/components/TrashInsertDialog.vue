@@ -51,7 +51,7 @@
 </style>
 
 <template>
-	<v-dialog v-model="trashdialog" width="500px" style="padding:20px">
+	<v-dialog v-model="trashdialog" width="600px" style="padding:20px">
 		<template v-slot:activator="{ on }">
 			<div v-on="on">
 				<slot />
@@ -61,7 +61,18 @@
 			<img src="https://media.giphy.com/media/oupKcowRzsad2/giphy.gif" />
 		</v-card>
 		<v-card v-if="innerdialog && !isMusic">
-			<v-card-text>
+			<v-card-text id="trashinserttext">
+				<div style="padding:10px">
+					<v-textarea
+						v-model="trashcontent"
+						label="감정을 여기다 써주세요."
+						no-resize
+						counter
+						maxlength="500"
+						muilt-line
+					></v-textarea>
+				</div>
+				<v-btn @click="getmood">분석</v-btn>
 				<p class="font-weight-bold">해당 감정이 맞나요? 아니면 다시 선택해주세요.</p>
 				<v-chip>
 					<v-avatar left>
@@ -140,16 +151,12 @@
 import $ from "jquery";
 
 import { findByMood } from "../../../../src/api/music";
-import { postEtrash } from "../../../../src/api/etrash";
+import { postEtrash, sentimentanalysis } from "../../../../src/api/etrash";
 
 export default {
 	name: "TrashDialog",
 	props: {
 		items: {},
-		mood: "",
-		moodsrc: "",
-		content: "",
-		open: false,
 	},
 	data() {
 		return {
@@ -164,6 +171,9 @@ export default {
 			width: null,
 			selectid: 0,
 			trash: [],
+			trashcontent: "",
+			mood: "",
+			moodsrc: "",
 		};
 	},
 	watch: {
@@ -173,14 +183,24 @@ export default {
 				this.time = 0;
 				this.innerdialog = true;
 				this.isMusic = false;
-				this.$emit("closemodal");
+				this.trashcontent = "";
+				this.mood = "";
+				this.moodsrc = "";
+				$("#trashinserttext").css({
+					"background-color": "white",
+				});
 			}
 		},
-		open: function() {
-			if (this.open) {
-				this.trashdialog = true;
-			} else {
-				this.trashdialog = false;
+		selection: function(newVal, oldVal) {
+			var item = this.items[this.selection];
+
+			for (var i = 0; i < this.items.length; i++) {
+				if (this.items[i].text == item.text) {
+					$("#trashinserttext").css({
+						"background-color": this.items[i].colorcode,
+					});
+					break;
+				}
 			}
 		},
 	},
@@ -188,6 +208,49 @@ export default {
 		getcolor() {
 			console.log(this.items[this.selection].colorcode);
 			return this.items[this.selection].colorcode;
+		},
+		trashinsert() {
+			if (this.trashcontent == null || this.trashcontent == "") {
+				alert("글을 써주세요.");
+				return;
+			}
+			this.getmood();
+		},
+		getmood() {
+			if (this.trashcontent == "") {
+				alert("내용을 적어주세요!!!");
+				return;
+			}
+			sentimentanalysis({
+				description: this.content,
+			})
+				.then(response => {
+					for (var i = 0; i < this.items.length; i++) {
+						if (this.items[i].text == this.response.data) {
+							this.mood = this.items[i].text;
+							this.moodsrc = this.items[i].src;
+							this.selection = this.items[i].id;
+							$("#trashinserttext").css({
+								"background-color": this.items[i].colorcode,
+							});
+							break;
+						}
+					}
+				})
+				.catch(error => {});
+			this.mood = "기쁨";
+			for (var i = 0; i < this.items.length; i++) {
+				if (this.items[i].text == "기쁨") {
+					this.mood = this.items[i].text;
+					this.moodsrc = this.items[i].src;
+					this.selection = i;
+
+					$("#trashinserttext").css({
+						"background-color": this.items[i].colorcode,
+					});
+					break;
+				}
+			}
 		},
 		getmusic() {
 			if (this.time == 0) {
@@ -203,12 +266,16 @@ export default {
 				.catch(error => {});
 		},
 		inserttrash() {
+			if (this.trashcontent == "") {
+				alert("내용을 적어주세요!!!");
+				return;
+			}
 			var item = this.items[this.selection];
 			this.innerdialog = false;
 			postEtrash({
 				likecount: 0,
 				mood: item.text,
-				description: this.content,
+				description: this.trashcontent,
 				deleteTime: this.time,
 				music: {
 					id: this.selectid,
