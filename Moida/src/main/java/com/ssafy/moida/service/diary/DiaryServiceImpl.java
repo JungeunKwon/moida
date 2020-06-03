@@ -147,10 +147,10 @@ public class DiaryServiceImpl implements DiaryService{
 	}
 
 	@Transactional
-	public Long delteDiary(Long diaryid) throws NumberFormatException, BaseException {
+	public Long deletelikeDiary(Long diaryid) throws NumberFormatException, BaseException {
 		Account account = accountService.getAccount();
 		Diary diary = diaryRepository.findById(diaryid).get();
-		System.out.println("왜 안되냐고 시벌");
+		
 		DiaryLikes deleteid = diaryLikeRepository.findByDiaryAndAccount(diary, account);
 		diaryLikeRepository.deleteById(deleteid.getId());
 		

@@ -137,6 +137,10 @@ public class DiaryController {
 	public ResponseEntity<String> uploadImg2S3(@Valid @RequestParam("uploadFile") MultipartFile uploadFile) throws NumberFormatException, IllegalArgumentException, IOException, BaseException{
 		return new ResponseEntity<String>(diaryService.uploadImg2S3(uploadFile), HttpStatus.OK);
 	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
     @ApiOperation(value = "다이어리 닉네임 검색", httpMethod = "GET", notes = "다이어리 닉네임으로 검색.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/diary/search/nickname/{nickname}")
@@ -167,6 +171,6 @@ public class DiaryController {
 	public ResponseEntity<Long> delteLikeDiary(@PathVariable Long diaryid, Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
 		
-		return new ResponseEntity<Long>(diaryService.deleteDiary(diaryid), HttpStatus.OK);
+		return new ResponseEntity<Long>(diaryService.deletelikeDiary(diaryid), HttpStatus.OK);
 	}
 }
