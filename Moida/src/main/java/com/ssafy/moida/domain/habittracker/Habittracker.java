@@ -3,6 +3,8 @@ package com.ssafy.moida.domain.habittracker;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.common.BaseEntity;
@@ -51,6 +54,12 @@ public class Habittracker extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="groupTB_id")
 	private GroupTB groupTB;
+	
+	@OneToMany(mappedBy = "habittracker")
+	private List<AccountHabittracker> accountHabitList = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "habittracker")
+	private List<DoHabit> doHabitList = new ArrayList<>();
 	
 	public void delete(LocalDateTime deleteDate) {
 		this.deleteDate=deleteDate;

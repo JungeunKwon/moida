@@ -1,4 +1,4 @@
-package com.ssafy.moida.domain.habittracker;
+package com.ssafy.moida.domain.comment;
 
 import java.time.LocalDateTime;
 
@@ -8,9 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import com.ssafy.moida.domain.account.Account;
+import com.ssafy.moida.domain.common.BaseEntity;
+import com.ssafy.moida.domain.diary.Diary;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,30 +22,42 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class DoHabit {
+public class Comment extends BaseEntity{
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Lob
 	@Column(nullable = false)
-	private LocalDateTime cleardate;
+	private String description;
+	
+	@Column(nullable = false)
+	private Long likecount;
+	
+	@Column(nullable = true)
+	private LocalDateTime deleteDate;
 	
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
 	
 	@ManyToOne
-	@JoinColumn(name="habittracker_id")
-	private Habittracker habittracker;
-	
+	@JoinColumn(name="diary")
+	private Diary diary;
+
 	@Builder
-	public DoHabit(Long id, LocalDateTime cleardate, Account account, Habittracker habittracker) {
+	public Comment(Long id, String description, Long likecount, LocalDateTime deleteDate, Account account,
+			Diary diary) {
 		super();
 		this.id = id;
-		this.cleardate = cleardate;
+		this.description = description;
+		this.likecount = likecount;
+		this.deleteDate = deleteDate;
 		this.account = account;
-		this.habittracker = habittracker;
+		this.diary = diary;
 	}
+	
 	
 	
 	

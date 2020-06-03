@@ -3,6 +3,8 @@ package com.ssafy.moida.service.account;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -17,6 +19,8 @@ import com.ssafy.moida.component.DeleteS3;
 import com.ssafy.moida.component.UploadS3;
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.account.AccountRepository;
+import com.ssafy.moida.domain.group.AccountGroup;
+import com.ssafy.moida.domain.group.AccountGroupRepository;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.exception.EnumAccountException;
 import com.ssafy.moida.security.JwtTokenProvider;
@@ -32,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class AccountServiceImpl implements AccountService {
 
 	private final AccountRepository accountRepository;
+	private final AccountGroupRepository accountGroupRepository;
 	private final JwtTokenProvider JwtTokenProvider;
 	private final PasswordEncoder passwordEncoder;
 	private final UploadS3 uploadS3;
@@ -81,9 +86,13 @@ public class AccountServiceImpl implements AccountService {
 	@Transactional(readOnly = true)
 	public AccountResponseDto findByAccount() throws NumberFormatException, BaseException {
 		Account account = getAccount();
+		
+		System.out.println(account.getGroupList().toString());
+		
 		return AccountResponseDto.builder().id(account.getId()).email(account.getEmail())
 				.username(account.getUsername()).nickname(account.getNickname()).gender(account.getGender())
-				.phone(account.getPhone()).profileImg(account.getProfileImg()).roles(account.getRoles()).build();
+				.phone(account.getPhone()).profileImg(account.getProfileImg()).roles(account.getRoles())
+				.build();
 	}
 
 	@Transactional
@@ -134,6 +143,30 @@ public class AccountServiceImpl implements AccountService {
 	      Account tmp = (Account) authentication.getPrincipal();
 	      Account account = accountRepository.findByEmail(tmp.getEmail()).orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
 	      return account;
+	}
+
+	@Override
+	public AccountResponseDto findByNickname(String nickname) throws NumberFormatException, BaseException {
+		Account account = accountRepository.findByNickname(nickname).get();
+		List<AccountGroup> grouplist = accountGroupRepository.findByAccount(account);
+		List<Long> groupidlist = new ArrayList<Long>();
+		for(AccountGroup ac : grouplist) {
+			groupidlist.add(ac.getGroupId());
+			
+		}
+		
+		return AccountResponseDto.builder()
+				.id(account.getId())
+				.email(account.getEmail())
+				.gender(account.getGender())
+				.nickname(account.getNickname())
+				.profileImg(account.getProfileImg())
+				.username(account.getUsername())
+				.phone(account.getPhone())
+				.roles(account.getRoles())
+				.grouplist(groupidlist)
+				.build();
+		
 	}
 	
 }

@@ -13,7 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.moida.component.UploadS3;
 import com.ssafy.moida.domain.account.Account;
+import com.ssafy.moida.domain.account.AccountRepository;
 import com.ssafy.moida.domain.diary.Diary;
+import com.ssafy.moida.domain.diary.DiaryLikeRepository;
+import com.ssafy.moida.domain.diary.DiaryLikes;
 import com.ssafy.moida.domain.diary.DiaryRepository;
 import com.ssafy.moida.domain.group.GroupTB;
 import com.ssafy.moida.domain.group.GroupTBRepository;
@@ -21,6 +24,7 @@ import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.exception.EnumAccountException;
 import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.web.dto.diary.DiaryFindByGroupDayRequest;
+import com.ssafy.moida.web.dto.diary.DiaryLikeSaveRequestDTO;
 import com.ssafy.moida.web.dto.diary.DiaryResponseDTO;
 import com.ssafy.moida.web.dto.diary.DiarySaveRequest;
 import com.ssafy.moida.web.dto.diary.DiaryUpdateRequest;
@@ -34,7 +38,9 @@ public class DiaryServiceImpl implements DiaryService{
 	
 	private final DiaryRepository diaryRepository;
 	private final AccountService accountService;
+	private final AccountRepository accountRepository;
 	private final GroupTBRepository groupTBRepository;
+	private final DiaryLikeRepository diaryLikeRepository;
 	private final UploadS3 uploadS3;
 	
 	@Transactional(readOnly = true)
@@ -50,6 +56,7 @@ public class DiaryServiceImpl implements DiaryService{
 		if(dto.getGroupTB()!=null) {
 			dto.setGroupTB(dto.getGroupTB());
 		}
+		dto.setViewcount(0L);
 		return diaryRepository.save(dto.toEntity()).getId();
 	}
 
@@ -76,7 +83,6 @@ public class DiaryServiceImpl implements DiaryService{
 
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByDescriptionAndBydeleteDateIsNull(String description, Pageable pageable) {
-		// TODO Auto-generated method stub
 		return diaryRepository.findByDescriptionAndDeleteDateIsNull(description, pageable)
 				.map(DiaryResponseDTO::new);
 	}
@@ -108,11 +114,48 @@ public class DiaryServiceImpl implements DiaryService{
 		return diaryRepository.findByGroupTBAndCreateDateLessThanAndCreateDateGreaterThanAndDeleteDateIsNull(group,date.plusDays(1),date, pageable)
 				.map(DiaryResponseDTO::new);
 	}
-	
+
 	@Transactional
 	public String uploadImg2S3(MultipartFile uploadFile) throws NumberFormatException, IllegalArgumentException, IOException, BaseException {
 		String uploadImgUrl;
 		uploadImgUrl = uploadS3.uploadFile(uploadFile, "diary/" + accountService.getAccount().getEmail());
 		return uploadImgUrl;
 	}
+	@Transactional
+	public DiaryResponseDTO findById(Long diaryid) {
+		Diary diary = diaryRepository.findById(diaryid).get();
+		diary.updateViewCount();
+		
+		return DiaryResponseDTO.builder().diary(diary).build();
+	}
+
+	@Transactional(readOnly = true)
+	public Page<DiaryResponseDTO> findByNickname(String nickname, Pageable pageable) {
+		
+		Account account = accountRepository.findByNickname(nickname).get();
+		
+		return diaryRepository.findByAccount(account, pageable).map(DiaryResponseDTO::new);
+	}
+
+	@Transactional
+	public Long likeDiary(Long diaryid) throws NumberFormatException, BaseException {
+		Account account = accountService.getAccount();
+		DiaryLikeSaveRequestDTO requestDTO = new DiaryLikeSaveRequestDTO();
+		requestDTO.setAccount(account);
+		requestDTO.setDiary(diaryRepository.findById(diaryid).get());
+		return diaryLikeRepository.save(requestDTO.toEntity()).getId();
+	}
+
+	@Transactional
+	public Long delteDiary(Long diaryid) throws NumberFormatException, BaseException {
+		Account account = accountService.getAccount();
+		Diary diary = diaryRepository.findById(diaryid).get();
+		System.out.println("왜 안되냐고 시벌");
+		DiaryLikes deleteid = diaryLikeRepository.findByDiaryAndAccount(diary, account);
+		diaryLikeRepository.deleteById(deleteid.getId());
+		
+		return diaryid;
+	}
+
+
 }

@@ -11,7 +11,7 @@ import com.ssafy.moida.web.dto.habittracker.HabittrackerUpdateRequestDTO;
 
 public interface HabittrackerService {
 	
-	Long saveHabittracker(HabittrackerSaveRequestDTO requestDto);
+	Long saveHabittracker(HabittrackerSaveRequestDTO requestDto) throws NumberFormatException, BaseException;
 	Long updateinfo(HabittrackerUpdateRequestDTO requestDTO);
 	Long deleteHabittracker(Long habitid) throws NumberFormatException, BaseException;
 	

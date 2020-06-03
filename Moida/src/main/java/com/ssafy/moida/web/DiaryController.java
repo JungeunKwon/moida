@@ -58,6 +58,19 @@ public class DiaryController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
+	@ApiOperation(value = "다이어리 id 검색", httpMethod = "GET", notes = "다이어리 id로 검색.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@GetMapping(value = "/diary/{diaryid}")
+	public ResponseEntity<DiaryResponseDTO> findByid(@PathVariable Long diaryid
+			) throws IllegalArgumentException, IOException, BaseException{
+		
+		
+		return new ResponseEntity<DiaryResponseDTO>(diaryService.findById(diaryid), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
 	@ApiOperation(value = "다이어리그룹조회", httpMethod = "GET", notes = "다이어리그룹으로 검색하는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/diary/search/group/{groupid}")
@@ -94,13 +107,13 @@ public class DiaryController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
-	@ApiOperation(value = "다이어리 삭제", httpMethod = "GET", notes = "id 값으로 다이어리 삭제하는 부분입니다.")
+	@ApiOperation(value = "다이어리 삭제", httpMethod = "DELETE", notes = "id 값으로 다이어리 삭제하는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@DeleteMapping(value = "/diary/{groupid}")
-	public ResponseEntity<Long> deleteByid(@PathVariable Long groupid
+	@DeleteMapping(value = "/diary/{diaryid}")
+	public ResponseEntity<Long> deleteByid(@PathVariable Long diaryid
 			) throws IllegalArgumentException, IOException, BaseException{
 	
-		return new ResponseEntity<Long>(diaryService.deleteDiary(groupid), HttpStatus.OK);
+		return new ResponseEntity<Long>(diaryService.deleteDiary(diaryid), HttpStatus.OK);
 	}
 	
 	@ApiImplicitParams({
@@ -112,8 +125,6 @@ public class DiaryController {
 	public Page<DiaryResponseDTO> findByGroupDay(@PathVariable String datetime, @PathVariable Long groupid, Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
 	
-		System.out.println(datetime);
-		System.out.println(groupid);
 		return diaryService.findByDay(datetime,groupid,pageable);
 	}
 	
@@ -125,5 +136,37 @@ public class DiaryController {
 	@PostMapping(value = "/upload", consumes = "multipart/form-data")
 	public ResponseEntity<String> uploadImg2S3(@Valid @RequestParam("uploadFile") MultipartFile uploadFile) throws NumberFormatException, IllegalArgumentException, IOException, BaseException{
 		return new ResponseEntity<String>(diaryService.uploadImg2S3(uploadFile), HttpStatus.OK);
+	}
+    @ApiOperation(value = "다이어리 닉네임 검색", httpMethod = "GET", notes = "다이어리 닉네임으로 검색.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@GetMapping(value = "/diary/search/nickname/{nickname}")
+	public Page<DiaryResponseDTO> findByNickname(@PathVariable String nickname, Pageable pageable
+			) throws IllegalArgumentException, IOException, BaseException{
+	
+		return diaryService.findByNickname(nickname, pageable);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "다이어리 좋아요 추가", httpMethod = "POST", notes = "")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@PostMapping(value = "/diary/like/{diaryid}")
+	public ResponseEntity<Long> saveLikeDiary(@PathVariable Long diaryid, Pageable pageable
+			) throws IllegalArgumentException, IOException, BaseException{
+	
+		return new ResponseEntity<Long>(diaryService.likeDiary(diaryid), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "다이어리 좋아요 취소", httpMethod = "DELETE", notes = "")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@DeleteMapping(value = "/diary/like/{diaryid}")
+	public ResponseEntity<Long> delteLikeDiary(@PathVariable Long diaryid, Pageable pageable
+			) throws IllegalArgumentException, IOException, BaseException{
+		
+		return new ResponseEntity<Long>(diaryService.deleteDiary(diaryid), HttpStatus.OK);
 	}
 }

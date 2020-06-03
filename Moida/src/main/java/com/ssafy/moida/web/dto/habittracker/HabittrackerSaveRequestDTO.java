@@ -20,35 +20,42 @@ public class HabittrackerSaveRequestDTO {
 	
 	private String subject;
 	private String description;
-	private LocalDateTime startDate;
-	private LocalDateTime endDate;
+	private Long groupid;
+	
+	
+	private String startDate;
+	private String endDate;
 	private Account account;
 	private GroupTB groupTB;
 	
 	
-	public Habittracker toEntity() {
+	public Habittracker toEntity(LocalDateTime start, LocalDateTime end) {
 		
 		return Habittracker.builder()
 				.subject(subject)
 				.description(description)
-				.startDate(startDate)
-				.endDate(endDate)
+				.startDate(start)
+				.endDate(end)
 				.account(account)
 				.groupTB(groupTB)
 				.build();
 	}
-	
+
 	@Builder
-	public HabittrackerSaveRequestDTO(String subject, String description, LocalDateTime startDate,
-			LocalDateTime endDate, Account account, GroupTB groupTB) {
+	public HabittrackerSaveRequestDTO(String subject, String description, Long groupid, String startDate,
+			String endDate, Account account, GroupTB groupTB) {
 		super();
 		this.subject = subject;
 		this.description = description;
+		this.groupid = groupid;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.account = account;
 		this.groupTB = groupTB;
 	}
+	
+	
+	
 	
 	
 
