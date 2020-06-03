@@ -40,6 +40,8 @@ public class DiaryServiceImpl implements DiaryService{
 	private final AccountService accountService;
 	private final AccountRepository accountRepository;
 	private final GroupTBRepository groupTBRepository;
+	private final DiaryLikeRepository diaryLikeRepository;
+	private final UploadS3 uploadS3;
 	
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findAll(Pageable pageable) throws NumberFormatException, BaseException {
