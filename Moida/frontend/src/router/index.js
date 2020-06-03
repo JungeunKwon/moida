@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import SharedDiaryList from "../views/SharedDiaryList/index.vue";
+import SharedDiary from "../views/SharedDiary/index.vue";
 import Login from "../components/Login.vue";
 import SignUp from "../components/SignUp.vue";
 import WriteDiary from "../views/Diary/writediary.vue";
@@ -21,6 +22,11 @@ const routes = [{
 		path: "/shared",
 		name: "SharedDiaryList",
 		component: SharedDiaryList,
+	},
+	{
+		path: "/shared/:id",
+		name: "SharedDiary",
+		component: SharedDiary,
 	},
 	{
 		path: "/diary",

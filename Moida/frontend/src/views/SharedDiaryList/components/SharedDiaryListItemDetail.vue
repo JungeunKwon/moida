@@ -12,20 +12,23 @@
 			<div id="detailRight">
 				<div id="detailSubject">
 					{{ detail.subject }}
-					<span id="detailCnt">{{ detail.curUser }} / {{ detail.limitUser }}</span>
+					<span id="detailCnt"
+						>{{ detail.curUser }} / {{ detail.limitUser }}</span
+					>
 				</div>
 				<div id="detailHostDiv">
 					<div id="hostName">{{ detail.hostNickname }}</div>
 					<img id="hostIcon" :src="detail.hostProfileImg" />
 				</div>
 				<div id="detailDesc">{{ detail.description }}</div>
-				<div id="openDiary">참가하기</div>
+				<div id="openDiary" @click="openSharedDiary">참가하기</div>
 			</div>
 		</div>
 	</v-dialog>
 </template>
 
 <script>
+import { mapActions, mapMutations } from "vuex";
 export default {
 	name: "SharedDiaryListItemDetail",
 	props: { detail: {} },
@@ -35,7 +38,20 @@ export default {
 		};
 	},
 	mounted() {},
-	methods: {},
+	methods: {
+		...mapActions("sharedDiaryList", ["joinSharedDiary"]),
+		openSharedDiary() {
+			this.$router.push(`/shared/${this.detail.id}`);
+			// if (confirm("정말 참여하시겠어요?")) {
+			// 	this.joinSharedDiary({ groupId: this.detail.id })
+			// 		.then(response => {
+			// 		})
+			// 		.catch(error => {
+			// 			console.log(error);
+			// 		});
+			// }
+		},
+	},
 };
 </script>
 

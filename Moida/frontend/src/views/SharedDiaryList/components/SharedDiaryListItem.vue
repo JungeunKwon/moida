@@ -37,7 +37,7 @@ export default {
 	methods: {
 		...mapActions("sharedDiaryList", ["getSharedDiaryDetail"]),
 		openSharedDiaryDetail() {
-			this.getSharedDiaryDetail(this.item.hostId)
+			this.getSharedDiaryDetail(this.item.id)
 				.then(response => {
 					this.detail = response.data;
 				})
