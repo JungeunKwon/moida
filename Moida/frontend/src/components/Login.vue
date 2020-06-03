@@ -18,18 +18,10 @@
 				@focus="pwCheck = false"
 			/>
 			<span v-if="pwCheck" class="errorMsg">{{ pwMsg }}</span>
-			<button
-				id="login_btn"
-				@click="handlerLogin()"
-				@keyup.enter="handlerLogin()"
-			>
-				로그인
-			</button>
+			<button id="login_btn" @click="handlerLogin()" @keyup.enter="handlerLogin()">로그인</button>
 			<div id="login_bottom">
 				<hr id="div_line" />
-				<span class="login_bottom_text" @click="findPW"
-					>비밀번호 찾기</span
-				>
+				<span class="login_bottom_text" @click="findPW">비밀번호 찾기</span>
 				<!-- <img id="text_div" src="../assets/icons/text_div.png" />
 				<span class="login_bottom_text" @click="signUp">회원가입</span>-->
 			</div>
@@ -93,6 +85,9 @@ export default {
 			this.$router.push("/signUp");
 		},
 		findPW() {},
+	},
+	mounted() {
+		console.log("login mounted()");
 	},
 };
 </script>
@@ -172,9 +167,10 @@ export default {
 }
 
 .errorMsg {
-	color: rgb(250, 223, 153);
+	color: rgb(238, 187, 58);
 	font-size: 12px;
 	margin-left: 5px;
+	text-align: left;
 }
 
 @media screen and (max-width: 500px) {

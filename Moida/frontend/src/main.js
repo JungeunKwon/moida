@@ -12,6 +12,7 @@ import VueLazyload from "vue-lazyload";
 import ImgInputer from "vue-img-inputer";
 import "vue-img-inputer/dist/index.css";
 
+Vue.config.productionTip = false;
 Vue.use(VueMasonry);
 Vue.use(VueLazyload, {
 	preLoad: 1.3,

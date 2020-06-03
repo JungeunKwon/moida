@@ -1,12 +1,17 @@
 package com.ssafy.moida.service.diary;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.moida.component.UploadS3;
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.account.AccountRepository;
 import com.ssafy.moida.domain.diary.Diary;
@@ -16,12 +21,14 @@ import com.ssafy.moida.domain.diary.DiaryRepository;
 import com.ssafy.moida.domain.group.GroupTB;
 import com.ssafy.moida.domain.group.GroupTBRepository;
 import com.ssafy.moida.exception.BaseException;
+import com.ssafy.moida.exception.EnumAccountException;
 import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.web.dto.diary.DiaryFindByGroupDayRequest;
 import com.ssafy.moida.web.dto.diary.DiaryLikeSaveRequestDTO;
 import com.ssafy.moida.web.dto.diary.DiaryResponseDTO;
 import com.ssafy.moida.web.dto.diary.DiarySaveRequest;
 import com.ssafy.moida.web.dto.diary.DiaryUpdateRequest;
+import com.ssafy.moida.web.dto.diary.UploadFileDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +40,6 @@ public class DiaryServiceImpl implements DiaryService{
 	private final AccountService accountService;
 	private final AccountRepository accountRepository;
 	private final GroupTBRepository groupTBRepository;
-	private final DiaryLikeRepository diaryLikeRepository;
 	
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findAll(Pageable pageable) throws NumberFormatException, BaseException {
@@ -108,6 +114,12 @@ public class DiaryServiceImpl implements DiaryService{
 	}
 
 	@Transactional
+	public String uploadImg2S3(MultipartFile uploadFile) throws NumberFormatException, IllegalArgumentException, IOException, BaseException {
+		String uploadImgUrl;
+		uploadImgUrl = uploadS3.uploadFile(uploadFile, "diary/" + accountService.getAccount().getEmail());
+		return uploadImgUrl;
+	}
+	@Transactional
 	public DiaryResponseDTO findById(Long diaryid) {
 		Diary diary = diaryRepository.findById(diaryid).get();
 		diary.updateViewCount();
@@ -142,7 +154,6 @@ public class DiaryServiceImpl implements DiaryService{
 		
 		return diaryid;
 	}
-
 
 
 }

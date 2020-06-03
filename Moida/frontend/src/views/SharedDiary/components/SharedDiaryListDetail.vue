@@ -1,7 +1,9 @@
 <template>
 	<v-dialog v-model="dialog" width="700">
 		<template v-slot:activator="{ on }">
-			<div v-on="on"><slot /></div>
+			<span v-on="on">
+				<slot />
+			</span>
 		</template>
 		<div id="roomDetail">
 			<div id="detailLeft">
@@ -10,13 +12,14 @@
 			<div id="detailRight">
 				<div id="detailSubject">
 					{{ detail.subject }}
-					<span id="detailCnt">
-						{{ detail.count }} / {{ detail.limit }}
-					</span>
+					<span id="detailCnt">{{ detail.curUser }} / {{ detail.limitUser }}</span>
 				</div>
-
+				<div id="detailHostDiv">
+					<div id="hostName">{{ detail.hostNickname }}</div>
+					<img id="hostIcon" :src="detail.hostProfileImg" />
+				</div>
 				<div id="detailDesc">{{ detail.description }}</div>
-				<div id="openDiary">펼쳐보기</div>
+				<div id="openDiary">참가하기</div>
 			</div>
 		</div>
 	</v-dialog>
@@ -31,16 +34,21 @@ export default {
 		};
 	},
 	mounted() {},
+	methods: {},
 };
 </script>
 
 <style>
 #roomDetail {
-	/* font-family: "MapoFlowerIsland"; */
 	background-color: white;
 	width: 100%;
 	height: 500px;
 	position: relative;
+}
+
+#detailImg {
+	height: 100%;
+	object-fit: cover;
 }
 
 #detailLeft {
@@ -65,14 +73,29 @@ export default {
 }
 
 #detailCnt {
-	font-size: 15px;
+	font-weight: 300;
+	font-size: 14px;
 	margin-left: 2px;
 	color: gray;
 }
 
 #detailDesc {
-	margin-top: 10px;
+	margin-top: 5px;
 	font-size: 15px;
+	overflow: auto;
+	height: 72%;
+	padding: 5px;
+}
+
+#detailHostDiv {
+	display: inline-block;
+	width: 100%;
+	height: 20px;
+}
+
+#detailHostDiv #hostName {
+	font-size: 15px;
+	margin: 0 0 0 3px;
 }
 
 #openDiary {

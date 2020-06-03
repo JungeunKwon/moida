@@ -1,7 +1,12 @@
 package com.ssafy.moida.service.diary;
 
+import java.io.IOException;
+
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.diary.Diary;
@@ -11,6 +16,7 @@ import com.ssafy.moida.web.dto.diary.DiaryFindByGroupRequest;
 import com.ssafy.moida.web.dto.diary.DiaryResponseDTO;
 import com.ssafy.moida.web.dto.diary.DiarySaveRequest;
 import com.ssafy.moida.web.dto.diary.DiaryUpdateRequest;
+import com.ssafy.moida.web.dto.diary.UploadFileDto;
 
 public interface DiaryService {
 	
@@ -33,4 +39,5 @@ public interface DiaryService {
 	Page<DiaryResponseDTO> findByAccountAndBydeleteDateIsNull(Account account,Pageable pageable);
 	Page<DiaryResponseDTO> findByMoodAndBydeleteDateIsNull(String mood,Pageable pageable);
 	Page<DiaryResponseDTO> findByDay( String datetime, Long groupid ,Pageable pageable);
+	String uploadImg2S3(MultipartFile uploadFile) throws NumberFormatException, IllegalArgumentException, IOException, BaseException;
 }
