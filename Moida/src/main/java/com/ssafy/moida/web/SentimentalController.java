@@ -20,6 +20,7 @@ import com.google.gson.JsonObject;
 import com.ssafy.moida.component.SentimentalDataParser;
 import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.web.dto.sentimental.SentimentalRequestDto;
+import com.ssafy.moida.web.dto.sentimental.SentimentalResponseDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,17 +43,17 @@ public class SentimentalController {
 	@ApiOperation(value = "감정분석", httpMethod = "POST", notes = "감정분석을위해 description을 날려주세요")
 	//@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 	@PostMapping(value = "/sentimental")
-	public ResponseEntity<HttpStatus> sentimentalAnalyzer(@RequestBody SentimentalRequestDto requestDto) throws IOException{
+	public ResponseEntity<SentimentalResponseDto> sentimentalAnalyzer(@RequestBody SentimentalRequestDto requestDto) throws IOException{
 		
 		String[] sentences = requestDto.getDescription().split("\\n");
 		String url = "http://api.adams.ai/datamixiApi/omAnalysis?key=8013557318792994835&query=";
-		
-		int[][] array;
-		
+		String[] senti = {"기쁨", "신뢰", "공포", "기대", "놀라움", "슬픔", "혐오", "분노"};
+		int[][] result = new int[8][2];
 		for(int i=0; i<sentences.length; ++i) {
-			url = url+URLEncoder.encode(sentences[i], "UTF-8")+"&type=1";
-			System.out.println(url);
-			URL reqeustUrl = new URL(url);
+			String recentUrl = "";
+			recentUrl = url+URLEncoder.encode(sentences[i], "UTF-8")+"&type=1";
+			System.out.println(recentUrl);
+			URL reqeustUrl = new URL(recentUrl);
 			HttpURLConnection con = (HttpURLConnection) reqeustUrl.openConnection();
 			
 			con.setRequestMethod("GET");
@@ -72,10 +73,59 @@ public class SentimentalController {
 				while((line=br.readLine())!=null) {
 					sb.append(line);
 				}
-				System.out.println(sb.toString());
-				sentimentalDataParser.JasonParser(sb.toString());
+				SentimentalResponseDto responseDto = sentimentalDataParser.JasonParser(sb.toString());
+				
+				switch(responseDto.getSentimental()) {
+				case "기쁨":
+					result[0][0] += responseDto.getScore()*100;
+					result[0][1]++;
+					break;
+				case "신뢰":
+					result[1][0] += responseDto.getScore()*100;
+					result[1][1]++;
+					break;
+				case "공포":
+					result[2][0] += responseDto.getScore()*100;
+					result[2][1]++;
+					break;
+				case "기대":
+					result[3][0] += responseDto.getScore()*100;
+					result[3][1]++;
+					break;
+				case "놀라움":
+					result[4][0] += responseDto.getScore()*100;
+					result[4][1]++;
+					break;
+				case "슬픔":
+					result[5][0] += responseDto.getScore()*100;
+					result[5][1]++;
+					break;
+				case "혐오":
+					result[6][0] += responseDto.getScore()*100;
+					result[6][1]++;
+					break;
+				case "분노":
+					result[7][0] += responseDto.getScore()*100;
+					result[7][1]++;
+					break;
+				case "실패":
+					break;
+				}
 			}
 		}
-		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		int index = 0;
+		int max = Integer.MIN_VALUE;
+		for(int i=0; i<result.length; ++i) {
+			if(max<result[i][1]) {
+				max = result[i][1];
+				index = i;
+			}
+		}
+		int score2 = 0;
+		if(result[index][1]!=0) {
+			score2 = (int)(result[index][0]/result[index][1]);
+		}
+		SentimentalResponseDto responseDto = SentimentalResponseDto.builder().sentimental(senti[index]).score2(score2).build();
+		return new ResponseEntity<SentimentalResponseDto>(responseDto, HttpStatus.OK);
 	}
 }

@@ -5,30 +5,38 @@ import org.springframework.stereotype.Component;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.ssafy.moida.web.dto.sentimental.SentimentalResponseDto;
 
 
 @Component
 public class SentimentalDataParser {
 
-	public String JasonParser(String result) {
+	public SentimentalResponseDto JasonParser(String result) {
+		SentimentalResponseDto responseDto = null;
+		
 		
 		JsonParser jsonParser = new JsonParser();
 		
 		JsonObject object = (JsonObject) jsonParser.parse(result);
 		
 		JsonObject res = (JsonObject) object.get("return_object");
-		JsonArray abc = res.get("Result").getAsJsonArray();
+		JsonArray res2 = res.get("Result").getAsJsonArray();
 		
-		JsonArray res2 = (JsonArray) abc.get(0);
-		
-		for(int i=0; i<res2.size(); ++i) {
-			System.out.println(res2.get(i));
-		}
+		JsonArray realvalue = (JsonArray) res2.get(0);
 		
 		String res_code = object.get("result_code").getAsString();
-		System.out.println(res_code);
+		String score = realvalue.get(0).getAsString();
+		String sentimental = realvalue.get(1).getAsString();
 		
-		
-		return "1";
+		if(res_code.equals("success")) {
+			responseDto = SentimentalResponseDto.builder()
+			.sentimental(sentimental)
+			.score(Double.parseDouble(score))
+			.build();
+		}
+		else {
+			responseDto = SentimentalResponseDto.builder().sentimental("실패").score(0.0).build();
+		}
+		return responseDto;
 	}
 }
