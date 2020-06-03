@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
-@Api(tags = {"6. habittracker"})
+@Api(tags = {"8. habittracker"})
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1")
@@ -43,7 +43,7 @@ public class HabittrackerController {
 	@PostMapping(value = "/habit")
 	public ResponseEntity<Long> saveHabit(@RequestBody HabittrackerSaveRequestDTO requestDTO
 			) throws IllegalArgumentException, IOException, BaseException{
-	
+		
 		return new ResponseEntity<Long>(habittrackerService.saveHabittracker(requestDTO), HttpStatus.OK);
 	}
 	
@@ -55,7 +55,7 @@ public class HabittrackerController {
 	@PutMapping(value = "/habit")
 	public ResponseEntity<Long> updateHabit(@RequestBody HabittrackerUpdateRequestDTO requestDTO
 			) throws IllegalArgumentException, IOException, BaseException{
-	
+
 		return new ResponseEntity<Long>(habittrackerService.updateinfo(requestDTO), HttpStatus.OK);
 	}
 	

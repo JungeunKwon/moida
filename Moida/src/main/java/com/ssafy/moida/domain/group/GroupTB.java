@@ -18,6 +18,8 @@ import javax.persistence.OneToMany;
 
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.common.BaseEntity;
+import com.ssafy.moida.domain.habittracker.AccountHabittracker;
+import com.ssafy.moida.domain.habittracker.Habittracker;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -58,6 +60,9 @@ public class GroupTB extends BaseEntity {
 	
 	@OneToMany(mappedBy = "groupTB")
 	private List<AccountGroup> account = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "groupTB")
+	private List<Habittracker> habitList = new ArrayList<>();
 
 	public void updatedeleteDate(LocalDateTime deleteTime) {
 		this.deleteTime = deleteTime;

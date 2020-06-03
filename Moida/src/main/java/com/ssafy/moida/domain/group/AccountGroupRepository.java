@@ -14,4 +14,5 @@ public interface AccountGroupRepository extends JpaRepository<AccountGroup, Long
 	List<AccountGroup> findByGroupId(Long groupId);
 	List<AccountGroup> findByAccount(Account account);
 	int countByGroupId(Long groupId);
+	int countByGroupIdAndAccountId(Long groupId, Long accountId);
 }

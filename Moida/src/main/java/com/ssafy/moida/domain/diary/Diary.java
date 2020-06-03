@@ -3,19 +3,24 @@ package com.ssafy.moida.domain.diary;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.ssafy.moida.domain.account.Account;
+import com.ssafy.moida.domain.comment.Comment;
 import com.ssafy.moida.domain.common.BaseEntity;
+
 import com.ssafy.moida.domain.group.GroupTB;
 
 import lombok.Builder;
@@ -48,6 +53,9 @@ public class Diary extends BaseEntity{
 	@Column(nullable = false)
 	private int isPrivate;
 	
+	@Column(nullable = false)
+	private Long viewcount;
+	
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
@@ -56,7 +64,12 @@ public class Diary extends BaseEntity{
 	@JoinColumn(name="groupTB_id")
 	private GroupTB groupTB;
 	
+	@OneToMany(mappedBy = "diary")
+	private List<Comment> commentList = new ArrayList<>();
 	
+	public void updateViewCount() {
+		this.viewcount++;
+	}
 	
 	public void updateDiaryinfo(String description, String mood, String imgurl, int isPrivate) {
 		this.description = description;
@@ -71,7 +84,7 @@ public class Diary extends BaseEntity{
 	
 	@Builder
 	public Diary(Long id, String description, LocalDateTime deleteDate, String mood, String imgurl, int isPrivate,
-			Account account, GroupTB groupTB) {
+			Account account, GroupTB groupTB,Long viewcount) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -81,6 +94,7 @@ public class Diary extends BaseEntity{
 		this.isPrivate = isPrivate;
 		this.account = account;
 		this.groupTB = groupTB;
+		this.viewcount = viewcount;
 	}
 	
 	
