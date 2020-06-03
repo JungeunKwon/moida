@@ -56,7 +56,22 @@ public class GroupServiceImpl implements GroupService {
 			imgUrl = uploadS3.uploadFile(requestDto.getUploadFile(), "group/" + requestDto.getHost().getEmail());
 		}
 		requestDto.setImgUrl(imgUrl);
-		return groupTBRepository.save(requestDto.toEntity()).getId();
+		
+		Long groupid = groupTBRepository.save(requestDto.toEntity()).getId();
+		
+		SaveAccountGroupRequestDto accountgroup = new SaveAccountGroupRequestDto();
+		accountgroup.setAccount(accountService.getAccount());
+		accountgroup.setGroupTB(groupTBRepository.findById(groupid).get());
+		accountgroup.setGroupId(groupid);
+		accountGroupRepository.save(accountgroup.toEntity());
+		
+		if(accountGroupRepository.countByGroupIdAndAccountId(groupid,requestDto.getHost().getId()) <= 0) { 
+			accountGroupRepository.save(accountgroup.toEntity());
+			
+		}
+		 
+		
+		return groupid;
 	}
 	
 	@Transactional

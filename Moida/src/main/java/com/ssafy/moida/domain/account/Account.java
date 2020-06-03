@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.moida.domain.common.BaseEntity;
 import com.ssafy.moida.domain.etrash.Etrash;
 import com.ssafy.moida.domain.group.AccountGroup;
+import com.ssafy.moida.domain.habittracker.AccountHabittracker;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -66,6 +67,9 @@ implements UserDetails {
 	
 	@OneToMany(mappedBy = "account")
 	private List<AccountGroup> groupList = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "account")
+	private List<AccountHabittracker> habitList = new ArrayList<>();
 	
 	public void updateAccountInfo(String password, String phone,  String nickname, String profileImg) {
 		this.password = password;

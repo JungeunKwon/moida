@@ -27,6 +27,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>{
 			"	) ", nativeQuery = true)
 	Page<Diary> find(Long accountid,Pageable pageable);
 	
+	Page<Diary> findByAccount(Account account,Pageable pageable);
 	
 	Page<Diary> findByDescriptionAndDeleteDateIsNull(String description,Pageable pageable);
 	Page<Diary> findByAccountAndDeleteDateIsNull(Account account,Pageable pageable);
