@@ -95,26 +95,12 @@
 		</div>
 
 		<div class="bottomtrash">
-			<div class="bottombottomtrash">
-				<div style="display: inline-block; width: 80%; padding:10px">
-					<input v-model="trashcontent" class="trashlogin_input" @keyup.enter="trashinsert" required />
-				</div>
-				<div style="display: inline-block; width: 20%; ">
-					<TrashInsertDialog
-						:items="items"
-						:mood="mood"
-						:trash="trash"
-						@getEtrashMain="getEtrashMain"
-						@closemodal="closemodal"
-						moodsrc="https://cdn.vuetifyjs.com/images/john.png"
-						:content="trashcontent"
-						:open="isOpen"
-					>
-						<v-btn text id="bottomtrashbtn" @click="getmood">
-							<v-icon x-large>mdi-heart-box</v-icon>
-						</v-btn>
-					</TrashInsertDialog>
-				</div>
+			<div class="bottomtrashbtn">
+				<TrashInsertDialog :items="items" @getEtrashMain="getEtrashMain">
+					<v-btn>
+						<v-icon x-large>mdi-heart-box</v-icon>
+					</v-btn>
+				</TrashInsertDialog>
 			</div>
 		</div>
 	</div>
@@ -146,12 +132,11 @@ export default {
 			imagesCount: 0,
 			trashcontent: "",
 			sorted: "",
-			mood: "슬픔",
 			drawer: false,
 			group: null,
 			group2: null,
 			selection: 0,
-			isOpen: false,
+
 			sortlist: [
 				{ text: "좋아요순" },
 				{ text: "최신순" },
@@ -160,6 +145,7 @@ export default {
 			url: "",
 			items: [
 				{
+					//공포 보라 혐오 녹색
 					id: 0,
 					text: "기쁨",
 					src: "https://cdn.vuetifyjs.com/images/john.png",
@@ -248,9 +234,7 @@ export default {
 		getcolor(select) {
 			return this.items[select].colorcode;
 		},
-		trashinsert() {
-			this.isOpen = true;
-		},
+
 		removeEtrash(index) {
 			let vm = this;
 			console.log("지우기", index);
@@ -275,9 +259,6 @@ export default {
 					.catch(error => {});
 			}
 		},
-		closemodal() {
-			this.isOpen = false;
-		},
 		getEtrashMain() {
 			let vm = this;
 			this.trashcontent = "";
@@ -290,18 +271,6 @@ export default {
 					vm.resizeAllMasonryItems();
 				})
 				.catch(error => {});
-		},
-		getmood() {
-			if (this.content == "") {
-				alert("내용을 적어주세요!!!");
-				return;
-			}
-			sentimentanalysis({
-				description: this.content,
-			})
-				.then(response => {})
-				.catch(error => {});
-			this.mood = "행복";
 		},
 		changesort() {
 			if (this.sorted == "좋아요순") {
@@ -469,10 +438,13 @@ export default {
 }
 .bottomtrash {
 	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 80px;
+	bottom: 30px;
+	right: 10px;
+	width: 50px;
+	height: 60px;
 	margin: 0 auto;
+}
+.bottomtrashbtn {
 	background-color: #fce4ec;
 }
 .todack {
@@ -510,9 +482,6 @@ export default {
 		grid-auto-rows: 0;
 		margin-bottom: 100px;
 	}
-	.bottombottomtrash {
-		width: 100%;
-	}
 }
 @media screen and (max-width: 640px) {
 	.masonry {
@@ -533,9 +502,6 @@ export default {
 		grid-auto-rows: 0;
 
 		margin-bottom: 100px;
-	}
-	#bottomtrashbtn {
-		display: none;
 	}
 }
 @media screen and (max-width: 810px) {
@@ -560,11 +526,6 @@ export default {
 	width: 120px;
 	height: 50px;
 	cursor: pointer;
-}
-.bottombottomtrash {
-	width: 80%;
-	margin: 0 auto;
-	margin-bottom: 10px;
 }
 
 .filtertoggle {
