@@ -6,7 +6,7 @@ import {
     searchByNickname,
     searchByDesc,
     joinSharedDiary
-} from "@/api/sharedDiary";
+} from "@/api/sharedDiaryList";
 
 const state = {};
 

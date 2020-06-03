@@ -1,5 +1,5 @@
 <template>
-	<SharedDiaryListDetail :detail="detail">
+	<SharedDiaryListItemDetail :detail="detail">
 		<div @click="openSharedDiaryDetail()" id="sharedDiaryItem">
 			<div id="detailImgDiv">
 				<img id="detailImg" :src="item.imgUrl" />
@@ -17,15 +17,15 @@
 				<div id="desc">{{ item.description }}</div>
 			</div>
 		</div>
-	</SharedDiaryListDetail>
+	</SharedDiaryListItemDetail>
 </template>
 
 <script>
 import { mapActions } from "vuex";
-import SharedDiaryListDetail from "./SharedDiaryListDetail";
+import SharedDiaryListItemDetail from "./SharedDiaryListItemDetail";
 export default {
 	name: "SharedDiaryListItem",
-	components: { SharedDiaryListDetail },
+	components: { SharedDiaryListItemDetail },
 	props: { item: {} },
 	data() {
 		return {
@@ -35,7 +35,7 @@ export default {
 	mounted() {},
 	computed: {},
 	methods: {
-		...mapActions("sharedDiary", ["getSharedDiaryDetail"]),
+		...mapActions("sharedDiaryList", ["getSharedDiaryDetail"]),
 		openSharedDiaryDetail() {
 			this.getSharedDiaryDetail(this.item.hostId)
 				.then(response => {

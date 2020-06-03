@@ -27,6 +27,7 @@
 
 <script>
 export default {
+	name: "SharedDiaryListItemDetail",
 	props: { detail: {} },
 	data() {
 		return {
