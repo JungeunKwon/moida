@@ -22,55 +22,26 @@
 						}"
 					>
 						<p class="day-number">{{ day.monthDay }}</p>
-					</div>
-				</div>
-			</div>
-
-			<!-- absolute so we can make dynamic td -->
-			<!-- <div class="dates-events">
-				<div class="events-week" v-for="week in currentDates" :key="week">
-					<div
-						class="events-day"
-						v-for="day in week"
-						:key="day"
-						track-by="$index"
-						:class="{
-							today: day.isToday,
-							'not-cur-month': !day.isCurMonth,
-						}"
-						@click.stop="dayClick(day.date, $event)"
-					>
-						<p class="day-number">{{ day.monthDay }}</p>
 						<div class="event-box">
 							<event-card
 								:event="event"
 								:date="day.date"
-								:firstDay="firstDay"
-								v-for="event in day.events"
-								:key="event"
-								v-show="event.cellIndex <= eventLimit"
+								v-for="(event, idx) in day.events"
+								:key="idx"
+								v-show="idx < eventLimit"
 								@click="eventClick"
-							>
-								<template slot-scope="p">
-									<slot name="event-card" :event="p.event"></slot>
-								</template>
-							</event-card>
+							/>
 							<p
 								v-if="day.events.length > eventLimit"
 								class="more-link"
-								@click.stop="selectThisDay(day, $event)"
 							>
-								+
-								{{
-								day.events[day.events.length - 1]
-								.cellIndex - eventLimit
-								}}
-								more
+								{{ day.events.length - eventLimit }}
+								개 more...
 							</p>
 						</div>
 					</div>
 				</div>
-			</div>-->
+			</div>
 
 			<!-- full events when click show more -->
 			<!-- <div
@@ -104,11 +75,101 @@ import moment from "moment";
 import { mapGetters } from "vuex";
 import dateFunc from "../dateFunc";
 export default {
+	components: {
+		eventCard: () => import("./eventCard.vue"),
+	},
 	data() {
-		return {};
+		return {
+			eventLimit: 3,
+			events: [
+				{
+					content: "6월2일개인..",
+					day: "2020-06-02",
+					cssClass: "private",
+				},
+				{
+					content: "6월2일개인..",
+					day: "2020-06-02",
+					cssClass: "private",
+				},
+				{
+					content: "6월2일개인..",
+					day: "2020-06-02",
+					cssClass: "private",
+				},
+				{
+					content: "6월2일개인..",
+					day: "2020-06-02",
+					cssClass: "private",
+				},
+				{
+					content: "6월4일개인..",
+					day: "2020-06-04",
+					cssClass: "private",
+				},
+				{
+					content: "6월4일개인..",
+					day: "2020-06-04",
+					cssClass: "private",
+				},
+				{
+					content: "6월4일개인..",
+					day: "2020-06-04",
+					cssClass: "private",
+				},
+				{
+					content: "6월6일개인..",
+					day: "2020-06-06",
+					cssClass: "private",
+				},
+				{
+					content: "6월6일개인..",
+					day: "2020-06-06",
+					cssClass: "shared",
+				},
+				{
+					content: "6월6일개인..",
+					day: "2020-06-06",
+					cssClass: "shared",
+				},
+				{
+					content: "6월8일개인..",
+					day: "2020-06-08",
+					cssClass: "private",
+				},
+				{
+					content: "6월2일공유..",
+					day: "2020-06-02",
+					cssClass: "shared",
+				},
+				{
+					content: "6월2일공유..",
+					day: "2020-06-02",
+					cssClass: "shared",
+				},
+				{
+					content: "6월4일공유..",
+					day: "2020-06-04",
+					cssClass: "shared",
+				},
+				{
+					content: "6월29일공유..",
+					day: "2020-06-29",
+					cssClass: "shared",
+				},
+				{
+					content: "6월16일공유..",
+					day: "2020-06-16",
+					cssClass: "shared",
+				},
+			],
+		};
+	},
+	props: {
+		nickname: "",
 	},
 	mounted() {
-		this.getCalendar();
+		console.log(this.nickname);
 	},
 	computed: {
 		...mapGetters(["currentMonth", "firstDay", "locale"]),
@@ -117,6 +178,12 @@ export default {
 		},
 	},
 	methods: {
+		eventClick(event, jsEvent) {
+			if (!event.isShow) return;
+			jsEvent.stopPropagation();
+			let pos = this.computePos(jsEvent.target);
+			this.$emit("eventClick", event, jsEvent, pos);
+		},
 		getCalendar() {
 			let monthViewStartDate = dateFunc.getMonthViewStartDate(
 				this.currentMonth,
@@ -135,14 +202,21 @@ export default {
 						),
 						weekDay: perDay,
 						date: moment(monthViewStartDate),
-						//events: this.slotEvents(monthViewStartDate),
+						events: this.addEvents(monthViewStartDate),
 					});
 					monthViewStartDate.add(1, "day");
 				}
 				calendar.push(week);
 			}
-			console.log(calendar);
 			return calendar;
+		},
+		addEvents(date) {
+			// console.log(date.date());
+			let thisDayEvents = this.events.filter(event => {
+				let edate = moment(event.day);
+				return date.isSame(edate, "day");
+			});
+			return thisDayEvents;
 		},
 	},
 	filters: {
@@ -193,6 +267,36 @@ export default {
 				&.not-cur-month {
 					.day-number {
 						color: rgba(0, 0, 0, 0.24);
+					}
+				}
+				.event-box {
+					text-align: left;
+					.more-link {
+						cursor: pointer;
+						// text-align: right;
+						padding-left: 8px;
+						padding-right: 2px;
+						color: rgba(0, 0, 0, 0.38);
+						font-size: 14px;
+					}
+					.event-item {
+						cursor: pointer;
+						font-size: 12px;
+						margin-bottom: 2px;
+						color: rgba(0, 0, 0, 0.87);
+						padding: 0 0 0 4px;
+						height: 18px;
+						line-height: 18px;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+
+						&.private {
+							background-color: #ff0000;
+						}
+						&.shared {
+							background-color: #c7e6fd;
+						}
 					}
 				}
 			}

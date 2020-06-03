@@ -7,9 +7,7 @@
 			<span class="prev-month" @click.stop="goPrev">{{ leftArrow }}</span>
 			<span class="title">{{ title }}</span>
 			<span class="next-month" @click.stop="goNext">
-				{{
-				rightArrow
-				}}
+				{{ rightArrow }}
 			</span>
 		</div>
 		<div class="header-right">
@@ -32,9 +30,7 @@ export default {
 		...mapGetters(["currentMonth", "locale"]),
 		title() {
 			if (!this.currentMonth) return;
-			return this.currentMonth
-				.locale(this.locale)
-				.format("YYYY년 MM월 DD dd HH : mm : ss");
+			return this.currentMonth.locale(this.locale).format("YYYY년 MM월");
 		},
 	},
 	methods: {

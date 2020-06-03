@@ -7,3 +7,9 @@ export function login(data) {
 		data,
 	});
 }
+export function searchByNickname(nickname) {
+	return request({
+		url: `/v1/search/nickname/${nickname}`,
+		method: "get",
+	});
+}

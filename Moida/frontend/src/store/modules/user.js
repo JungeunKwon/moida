@@ -1,11 +1,11 @@
-import { login } from "@/api/user";
+import { login, searchByNickname } from "@/api/user";
 
 const state = {
 	token: "",
 	email: "",
 	username: "",
 	gender: "",
-	nickname: "Nickname",
+	nickname: "강철꼬부기",
 	phone: "",
 	profile_img:
 		"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
@@ -36,10 +36,15 @@ const mutations = {
 };
 
 const actions = {
-	//test
-	setTest({ commit }, text) {
-		commit("SET_USERNAME", text);
-		commit("SET_PHONE", text);
+	//searchByNickname
+	searchByNickname({ commit }, nickname) {
+		return new Promise((resolve, reject) => {
+			searchByNickname(nickname)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => reject(error));
+		});
 	},
 	// user login
 	login({ commit }, userInfo) {

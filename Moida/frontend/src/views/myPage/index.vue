@@ -18,23 +18,32 @@
 		</el-row>
 		<el-row type="flex" class="mp-second-row" justify="start">
 			<el-col :xs="24" :sm="24" :md="24" :lg="23" :xl="23">
-				<calendar />
+				<calendar :nickname="user.nickname" />
 			</el-col>
 		</el-row>
 	</div>
 </template>
 
 <script>
-import userCard from "./components/userCard";
-import calendar from "./components/calendar/index";
 export default {
 	name: "myPage",
 	components: {
-		userCard,
-		calendar,
+		userCard: () => import("./components/userCard"),
+		calendar: () => import("./components/calendar/index"),
 	},
 	data() {
-		return {};
+		return {
+			user: {},
+		};
+	},
+	async mounted() {
+		await this.$store
+			.dispatch("user/searchByNickname", this.$route.params.nickname)
+			.then(response => {
+				this.user = response.data;
+				console.log(response.data);
+			})
+			.catch(error => console.log(error));
 	},
 };
 </script>
