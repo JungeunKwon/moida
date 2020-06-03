@@ -32,7 +32,7 @@ dependencies {
 	compile('pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.0')
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	compile("org.mariadb.jdbc:mariadb-java-client")
-	implementation 'com.google.code.gson:gson:2.8.6'
+	implementation 'com.google.code.gson:gson:2.8.5'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
