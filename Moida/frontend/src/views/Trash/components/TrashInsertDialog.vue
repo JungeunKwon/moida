@@ -60,40 +60,34 @@
 		<v-card v-if="!innerdialog">
 			<img src="https://media.giphy.com/media/oupKcowRzsad2/giphy.gif" />
 		</v-card>
-		<v-card v-if="innerdialog && !isMusic">
-			<v-card-text id="trashinserttext">
-				<div style="padding:10px">
-					<v-textarea
-						v-model="trashcontent"
-						label="감정을 여기다 써주세요."
-						no-resize
-						counter
-						maxlength="500"
-						muilt-line
-					></v-textarea>
-				</div>
-				<v-btn @click="getmood">분석</v-btn>
-				<p class="font-weight-bold">해당 감정이 맞나요? 아니면 다시 선택해주세요.</p>
-				<v-chip>
-					<v-avatar left>
-						<v-img :src="moodsrc"></v-img>
-					</v-avatar>
-					{{ mood }}
-				</v-chip>
-				<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
-					<div style="margin: 0 auto; width:80%">
-						<v-row align="center" justify="start">
-							<v-col v-for="item in items" :key="item.text" class="shrink">
-								<v-chip>
-									<v-avatar left>
-										<v-img :src="item.src"></v-img>
-									</v-avatar>
-									{{ item.text }}
-								</v-chip>
-							</v-col>
-						</v-row>
+		<v-card v-if="innerdialog && !isMusic && !afteranaly">
+			<v-card-text>
+				<div v-if="!analyzing">
+					<div style="padding:10px">
+						<v-textarea
+							v-model="trashcontent"
+							label="감정을 여기다 써주세요."
+							no-resize
+							counter
+							maxlength="500"
+							muilt-line
+						></v-textarea>
 					</div>
-				</v-chip-group>
+					<v-btn @click="getmood">작성</v-btn>
+				</div>
+				<div v-if="analyzing">
+					<img width="500" src="../../../assets/icons/analyzing.gif" />
+				</div>
+			</v-card-text>
+		</v-card>
+		<v-card v-if="innerdialog && !isMusic && afteranaly">
+			<v-card-text v-if="!selectanswer">
+				<div class="anaylzedmood">'{{ mood }}'</div>
+				<p class="font-weight-bold">감정이 {{score}} % 들어가셨네요,, 아니면 다시 선택해주세요.</p>
+				<v-btn @click="afteranswer=true, selectanswer=true">예</v-btn>
+				<v-btn @click="afteranswer=false, selectanswer=true">아니요</v-btn>
+			</v-card-text>
+			<v-card-text v-if="selectanswer && afteranswer" id="trashinserttext">
 				<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
 				<v-col cols="12">
 					<v-subheader class="pl-0">Time</v-subheader>
@@ -102,6 +96,35 @@
 
 				<div style="margin: 0 auto; width:100%">
 					<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">노래선택</v-btn>
+				</div>
+			</v-card-text>
+			<v-card-text v-if="selectanswer && !afteranswer" id="trashinserttext">
+				<div>
+					<p class="font-weight-bold">감정을 다시 선택해주세요.</p>
+
+					<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
+						<div style="margin: 0 auto; width:80%">
+							<v-row align="center" justify="start">
+								<v-col v-for="item in items" :key="item.text" class="shrink">
+									<v-chip>
+										<v-avatar left>
+											<v-img :src="item.src"></v-img>
+										</v-avatar>
+										{{ item.text }}
+									</v-chip>
+								</v-col>
+							</v-row>
+						</div>
+					</v-chip-group>
+					<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
+					<v-col cols="12">
+						<v-subheader class="pl-0">Time</v-subheader>
+						<v-slider v-model="time" thumb-label="always" thumb-color="red" :max="24"></v-slider>
+					</v-col>
+
+					<div style="margin: 0 auto; width:100%">
+						<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">노래선택</v-btn>
+					</div>
 				</div>
 			</v-card-text>
 		</v-card>
@@ -152,6 +175,7 @@ import $ from "jquery";
 
 import { findByMood } from "../../../../src/api/music";
 import { postEtrash, sentimentanalysis } from "../../../../src/api/etrash";
+import { mapActions } from "vuex";
 
 export default {
 	name: "TrashDialog",
@@ -165,6 +189,7 @@ export default {
 			isMusic: false,
 			time: 0,
 			url: "",
+			score: null,
 			selection: 0,
 			musiclist: [],
 			model: null,
@@ -173,7 +198,11 @@ export default {
 			trash: [],
 			trashcontent: "",
 			mood: "",
+			afteranaly: false,
+			analyzing: false,
+			moodtrue: true,
 			moodsrc: "",
+			selectanswer: false,
 		};
 	},
 	watch: {
@@ -186,14 +215,19 @@ export default {
 				this.trashcontent = "";
 				this.mood = "";
 				this.moodsrc = "";
+				this.afteranaly = false;
+				this.analyzing = false;
+				this.score = null;
+				this.selectanswer = false;
+				this.afteranswer = false;
 				$("#trashinserttext").css({
-					"background-color": "white",
+					"background-color": "#ffffff",
 				});
 			}
 		},
 		selection: function(newVal, oldVal) {
 			var item = this.items[this.selection];
-
+			if (!this.trashdialog) return;
 			for (var i = 0; i < this.items.length; i++) {
 				if (this.items[i].text == item.text) {
 					$("#trashinserttext").css({
@@ -205,6 +239,8 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions("etrash", ["sentimentanalysis"]),
+
 		getcolor() {
 			console.log(this.items[this.selection].colorcode);
 			return this.items[this.selection].colorcode;
@@ -221,36 +257,36 @@ export default {
 				alert("내용을 적어주세요!!!");
 				return;
 			}
-			sentimentanalysis({
-				description: this.content,
-			})
-				.then(response => {
-					for (var i = 0; i < this.items.length; i++) {
-						if (this.items[i].text == this.response.data) {
-							this.mood = this.items[i].text;
-							this.moodsrc = this.items[i].src;
-							this.selection = this.items[i].id;
-							$("#trashinserttext").css({
-								"background-color": this.items[i].colorcode,
-							});
-							break;
-						}
-					}
-				})
-				.catch(error => {});
-			this.mood = "기쁨";
-			for (var i = 0; i < this.items.length; i++) {
-				if (this.items[i].text == "기쁨") {
-					this.mood = this.items[i].text;
-					this.moodsrc = this.items[i].src;
-					this.selection = i;
-
-					$("#trashinserttext").css({
-						"background-color": this.items[i].colorcode,
-					});
-					break;
-				}
-			}
+			this.analyzing = true;
+			setTimeout(() => {
+				this.afteranaly = true;
+				this.analyzing = false;
+			}, 2000);
+			// this.sentimentanalysis({
+			// 	description: this.trashcontent,
+			// })
+			// 	.then(response => {
+			// 		for (var i = 0; i < this.items.length; i++) {
+			// 			if (this.items[i].text == response.data.sentimental) {
+			// 				this.mood = this.items[i].text;
+			// 				this.moodsrc = this.items[i].src;
+			// 				this.selection = this.items[i].id;
+			// 				$("#trashinserttext").css({
+			// 					"background-color": this.items[i].colorcode,
+			// 				});
+			// 				break;
+			// 			}
+			// 			this.score = response.data.score2;
+			// 			setTimeout(() => {
+			// 				this.afteranaly = true;
+			// 				this.analyzing = false;
+			// 			}, 2000);
+			// 		}
+			// 	})
+			// 	.catch(error => {
+			// 		this.afteranaly = false;
+			// 		this.analyzing = false;
+			// 	});
 		},
 		getmusic() {
 			if (this.time == 0) {
@@ -282,9 +318,8 @@ export default {
 				},
 			})
 				.then(response => {
-					this.$emit("getEtrashMain");
-
 					setTimeout(() => {
+						this.$emit("getEtrashMain");
 						this.trashdialog = false;
 						this.innerdialog = true;
 						this.isMusic = false;
@@ -342,5 +377,13 @@ export default {
 
 #next_arrow {
 	right: 0;
+}
+.anaylzedmood {
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+	border: 1px solid black;
+	font-size: 15px;
+	margin: 0 auto;
 }
 </style>

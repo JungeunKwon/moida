@@ -20,11 +20,17 @@ export function putDiary(data) {
 		data,
 	});
 }
-export function deletetDiary(data) {
+export function deletetDiary(id) {
 	return request({
-		url: "/v1/diary",
+		url: "/v1/diary/" + id,
 		method: "delete",
 		data,
+	});
+}
+export function searchById(id) {
+	return request({
+		url: "/v1/diary/" + id,
+		method: "get",
 	});
 }
 export function searchByDay(datetime, groupid) {
@@ -37,5 +43,12 @@ export function searchByGroup(groupid) {
 	return request({
 		url: "/v1/diary/search/group/" + groupid,
 		method: "get",
+	});
+}
+export function uploadimg(data) {
+	return request({
+		url: "/v1/upload",
+		method: "post",
+		data,
 	});
 }

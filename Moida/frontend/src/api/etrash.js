@@ -15,7 +15,7 @@ export function postEtrash(data) {
 }
 export function sentimentanalysis(data) {
 	return request({
-		url: "/v1/etrash/sentimentanalysis",
+		url: "/v1/sentimental",
 		method: "post",
 		data,
 	});
