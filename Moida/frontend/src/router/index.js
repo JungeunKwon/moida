@@ -45,8 +45,9 @@ const routes = [{
 			import( /* webpackChunkName: "trash" */ "../views/Trash/index.vue"),
 	},
 	{
-		path: "/myPage",
-		name: "MyPage",
+		path: "/myPage/:nickname",
+		name: "myPage",
+		props: true,
 		component: () => import("../views/myPage/index.vue"),
 	},
 ];

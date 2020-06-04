@@ -16,6 +16,7 @@
 		"jquery": "^3.5.1",
 		"js-cookie": "^2.2.1",
 		"material-design-icons-iconfont": "^5.0.1",
+		"moment": "^2.26.0",
 		"node-sass": "^4.13.0",
 		"tinymce-emoji": "^0.1.4",
 		"vodal": "^2.4.0",
