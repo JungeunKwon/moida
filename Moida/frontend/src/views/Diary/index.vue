@@ -1,12 +1,17 @@
 <template>
 	<div class="diarycontainer">
 		<div class="diraydrawer">
-			<v-app-bar-nav-icon @click.stop="diarydrawer = !diarydrawer"></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon
+				@click.stop="diarydrawer = !diarydrawer"
+			></v-app-bar-nav-icon>
 		</div>
 		<v-navigation-drawer v-model="diarydrawer" absolute temporary>
 			<v-list nav dense>
 				<v-list-group value="true">
-					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+					<v-list-item-group
+						v-model="group"
+						active-class="deep-purple--text text--accent-4"
+					>
 						<v-list-item @click="getDiaryByfilter('전체보기')">
 							<v-list-item-title>전체보기</v-list-item-title>
 						</v-list-item>
@@ -22,33 +27,47 @@
 		</v-navigation-drawer>
 		<div class="sort">
 			<div class="sharedMenu sel">
-				<div class="sharedMenu min" @click="getDiaryByfilter('전체보기')">
+				<div
+					class="sharedMenu min"
+					@click="getDiaryByfilter('전체보기')"
+				>
 					<img class="tape" src="../../assets/images/tape.png" />
 					<div class="sharedPaper mini">전체보기</div>
 				</div>
-				<div class="sharedMenu min" @click="getDiaryByfilter('친구공개')">
+				<div
+					class="sharedMenu min"
+					@click="getDiaryByfilter('친구공개')"
+				>
 					<img class="tape" src="../../assets/images/tape.png" />
 					<div class="sharedPaper mini">친구공개</div>
 				</div>
-				<div class="sharedMenu min" @click="getDiaryByfilter('내가쓴글')">
+				<div
+					class="sharedMenu min"
+					@click="getDiaryByfilter('내가쓴글')"
+				>
 					<img class="tape" src="../../assets/images/tape.png" />
 					<div class="sharedPaper mini">내가쓴글</div>
 				</div>
 			</div>
 		</div>
 		<div class="middlediary">
-			<div class="diarymasonry" v-lazy-container="{ selector: 'diarycard' }">
-				<div v-for="(diary) in diaries" :key="diary.id" class="diarycard">
-					<DiaryCard :diary="diary" @load="rendered" class="diary-card-content" />
+			<div
+				class="diarymasonry"
+				v-lazy-container="{ selector: 'diarycard' }"
+			>
+				<div v-for="diary in diaries" :key="diary.id" class="diarycard">
+					<DiaryCard
+						:diary="diary"
+						@load="rendered"
+						class="diary-card-content"
+					/>
 				</div>
 			</div>
 		</div>
 		<div class="bottomdiary">
-			<div class="bottomdiray">
-				<v-btn @click="openwrite">
-					<v-icon x-large>mdi-pencil</v-icon>
-				</v-btn>
-			</div>
+			<v-btn @click="openwrite">
+				<v-icon x-large>mdi-pencil</v-icon>
+			</v-btn>
 		</div>
 	</div>
 </template>
@@ -193,7 +212,7 @@ export default {
 	},
 };
 </script>
-<style >
+<style>
 .diarycontainer {
 	height: 100%;
 	margin: 0 auto;
@@ -206,6 +225,7 @@ export default {
 	height: 100%;
 	padding: 20px;
 }
+
 .bottomdiary {
 	position: absolute;
 	bottom: 30px;
@@ -213,9 +233,6 @@ export default {
 	width: 50px;
 	height: 60px;
 	margin: 0 auto;
-}
-.bottomdiray {
-	background-color: #fce4ec;
 }
 
 .diraydrawer {

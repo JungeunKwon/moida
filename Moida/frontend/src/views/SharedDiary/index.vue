@@ -13,6 +13,11 @@
 			color="purple lighten-3"
 			@change="test()"
 		></v-date-picker>
+		<div id="writeDiary">
+			<v-btn @click="openWrite">
+				<v-icon x-large>mdi-pencil</v-icon>
+			</v-btn>
+		</div>
 	</div>
 </template>
 <script>
@@ -48,6 +53,7 @@ export default {
 			"getSharedDiaryDetail",
 			"getSharedDiary",
 		]),
+		openWrite() {},
 		getSD() {
 			this.getSharedDiary(this.detail.id)
 				.then(response => {
@@ -125,5 +131,17 @@ export default {
 
 #diarySubjectDiv img:hover {
 	opacity: 0.5;
+}
+
+#writeDiary {
+	position: absolute;
+	bottom: 30px;
+	right: 10px;
+	width: 50px;
+	margin: 0 auto;
+}
+
+#writeDiary > button {
+	padding: 10px;
 }
 </style>
