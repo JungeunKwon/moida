@@ -3,18 +3,20 @@
 		<!-- 방장, 달력, 해빗트래커, 리스트 -->
 		<div id="diarySubjectDiv">
 			<div>{{ detail.subject }}</div>
-			<SharedDiaryDetail :detail="detail">
+			<SharedDiaryInfo :detail="detail">
 				<img src="../../assets/icons/info.png" width="20px" />
-			</SharedDiaryDetail>
+			</SharedDiaryInfo>
 		</div>
+		<HabitTracker></HabitTracker>
 	</div>
 </template>
 <script>
 import { mapActions } from "vuex";
-import SharedDiaryDetail from "./components/SharedDiaryDetail";
+import SharedDiaryInfo from "./components/SharedDiaryInfo";
+import HabitTracker from "./components/HabitTracker";
 export default {
 	name: "SharedDiary",
-	components: { SharedDiaryDetail },
+	components: { SharedDiaryInfo, HabitTracker },
 	data() {
 		return {
 			detail: {},
