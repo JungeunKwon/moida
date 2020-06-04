@@ -24,6 +24,7 @@ import com.ssafy.moida.domain.group.AccountGroupRepository;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.exception.EnumAccountException;
 import com.ssafy.moida.security.JwtTokenProvider;
+import com.ssafy.moida.web.dto.account.AccountGroupListResponseDTO;
 import com.ssafy.moida.web.dto.account.AccountResponseDto;
 import com.ssafy.moida.web.dto.account.AccountUpdateRequestDto;
 import com.ssafy.moida.web.dto.account.RegisterRequestDto;
@@ -149,11 +150,16 @@ public class AccountServiceImpl implements AccountService {
 	public AccountResponseDto findByNickname(String nickname) throws NumberFormatException, BaseException {
 		Account account = accountRepository.findByNickname(nickname).get();
 		List<AccountGroup> grouplist = accountGroupRepository.findByAccount(account);
-		List<Long> groupidlist = new ArrayList<Long>();
+		List<AccountGroupListResponseDTO> groupidlist = new ArrayList<AccountGroupListResponseDTO>();
+		AccountGroupListResponseDTO dto = new AccountGroupListResponseDTO();
+		
 		for(AccountGroup ac : grouplist) {
-			groupidlist.add(ac.getGroupId());
-			
+			dto = new AccountGroupListResponseDTO();
+			dto.setId(ac.getGroupTB().getId());
+			dto.setSubject(ac.getGroupTB().getSubject());
+			groupidlist.add(dto);
 		}
+
 		
 		return AccountResponseDto.builder()
 				.id(account.getId())
@@ -164,7 +170,7 @@ public class AccountServiceImpl implements AccountService {
 				.username(account.getUsername())
 				.phone(account.getPhone())
 				.roles(account.getRoles())
-				.grouplist(groupidlist)
+				.groupList(groupidlist)
 				.build();
 		
 	}
