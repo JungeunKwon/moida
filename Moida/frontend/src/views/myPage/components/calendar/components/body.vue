@@ -29,14 +29,14 @@
 								v-for="(event, idx) in day.events"
 								:key="idx"
 								v-show="idx < eventLimit"
-								@click="eventClick"
 							/>
 							<p
 								v-if="day.events.length > eventLimit"
 								class="more-link"
+								@click.stop="selectThisDay(day, $event)"
 							>
 								{{ day.events.length - eventLimit }}
-								개 more...
+								개 더있떠염
 							</p>
 						</div>
 					</div>
@@ -44,8 +44,9 @@
 			</div>
 
 			<!-- full events when click show more -->
-			<!-- <div
+			<div
 				class="more-events"
+				id="more-events"
 				v-show="showMore"
 				:style="{ left: morePos.left + 'px', top: morePos.top + 'px' }"
 			>
@@ -54,18 +55,14 @@
 					<span class="close" @click.stop="showMore = false">x</span>
 				</div>
 				<div class="more-body">
-					<ul class="body-list">
-						<li
-							v-for="event in selectDay.events"
-							:key="event"
-							v-show="event.isShow"
-							class="body-item"
-							@click="eventClick(event, $event)"
-						>{{ event.title }}</li>
-					</ul>
+					<event-card
+						:event="event"
+						:date="selectDay.date"
+						v-for="(event, idx) in selectDay.events"
+						:key="idx"
+					/>
 				</div>
 			</div>
-			<slot name="body-card"></slot>-->
 		</div>
 	</div>
 </template>
@@ -81,96 +78,29 @@ export default {
 	data() {
 		return {
 			eventLimit: 3,
-			events: [
-				{
-					content: "6월2일개인..",
-					day: "2020-06-02",
-					cssClass: "private",
-				},
-				{
-					content: "6월2일개인..",
-					day: "2020-06-02",
-					cssClass: "private",
-				},
-				{
-					content: "6월2일개인..",
-					day: "2020-06-02",
-					cssClass: "private",
-				},
-				{
-					content: "6월2일개인..",
-					day: "2020-06-02",
-					cssClass: "private",
-				},
-				{
-					content: "6월4일개인..",
-					day: "2020-06-04",
-					cssClass: "private",
-				},
-				{
-					content: "6월4일개인..",
-					day: "2020-06-04",
-					cssClass: "private",
-				},
-				{
-					content: "6월4일개인..",
-					day: "2020-06-04",
-					cssClass: "private",
-				},
-				{
-					content: "6월6일개인..",
-					day: "2020-06-06",
-					cssClass: "private",
-				},
-				{
-					content: "6월6일개인..",
-					day: "2020-06-06",
-					cssClass: "shared",
-				},
-				{
-					content: "6월6일개인..",
-					day: "2020-06-06",
-					cssClass: "shared",
-				},
-				{
-					content: "6월8일개인..",
-					day: "2020-06-08",
-					cssClass: "private",
-				},
-				{
-					content: "6월2일공유..",
-					day: "2020-06-02",
-					cssClass: "shared",
-				},
-				{
-					content: "6월2일공유..",
-					day: "2020-06-02",
-					cssClass: "shared",
-				},
-				{
-					content: "6월4일공유..",
-					day: "2020-06-04",
-					cssClass: "shared",
-				},
-				{
-					content: "6월29일공유..",
-					day: "2020-06-29",
-					cssClass: "shared",
-				},
-				{
-					content: "6월16일공유..",
-					day: "2020-06-16",
-					cssClass: "shared",
-				},
-			],
+			events: [],
+			showMore: false,
+			morePos: {
+				top: 0,
+				left: 0,
+			},
+			selectDay: {},
 		};
 	},
 	props: {
 		nickname: "",
 	},
+	created() {
+		window.addEventListener("click", this.outOfMore);
+	},
+	beforeDestroy() {
+		window.removeEventListener("click", this.outOfMore);
+	},
 	mounted() {
 		this.getDiary(this.$route.params.nickname)
-			.then(response => {})
+			.then(response => {
+				this.events = response;
+			})
 			.catch(error => console.log(error.response));
 	},
 	computed: {
@@ -181,11 +111,31 @@ export default {
 	},
 	methods: {
 		...mapActions("calendar", ["getDiary"]),
-		eventClick(event, jsEvent) {
-			if (!event.isShow) return;
-			jsEvent.stopPropagation();
-			let pos = this.computePos(jsEvent.target);
-			this.$emit("eventClick", event, jsEvent, pos);
+		outOfMore(e) {
+			if (document.getElementById("more-events").contains(e.target)) {
+			} else {
+				this.showMore = false;
+			}
+		},
+		moreTitle(date) {
+			return moment(date).format("MM월 DD일");
+		},
+		selectThisDay(day, event) {
+			this.selectDay = day;
+			this.showMore = true;
+			this.morePos = this.computePos(event.target);
+			this.morePos.top -= 100;
+			let events = day.events.filter(item => {
+				return item.isShow == true;
+			});
+		},
+		computePos(target) {
+			let eventRect = target.getBoundingClientRect();
+			let pageRect = this.$refs.dates.getBoundingClientRect();
+			return {
+				left: eventRect.left - pageRect.left,
+				top: eventRect.top + eventRect.height - pageRect.top,
+			};
 		},
 		getCalendar() {
 			let monthViewStartDate = dateFunc.getMonthViewStartDate(
@@ -214,7 +164,6 @@ export default {
 			return calendar;
 		},
 		addEvents(date) {
-			// console.log(date.date());
 			let thisDayEvents = this.events.filter(event => {
 				let edate = moment(event.day);
 				return date.isSame(edate, "day");
@@ -276,7 +225,7 @@ export default {
 					text-align: left;
 					.more-link {
 						cursor: pointer;
-						// text-align: right;
+						text-align: center;
 						padding-left: 8px;
 						padding-right: 2px;
 						color: rgba(0, 0, 0, 0.38);
@@ -286,7 +235,7 @@ export default {
 						cursor: pointer;
 						font-size: 12px;
 						margin-bottom: 2px;
-						color: rgba(0, 0, 0, 0.87);
+						color: rgba(2, 2, 2, 0.87);
 						padding: 0 0 0 4px;
 						height: 18px;
 						line-height: 18px;
@@ -295,11 +244,68 @@ export default {
 						text-overflow: ellipsis;
 
 						&.private {
-							background-color: #ff0000;
+							background-color: #fbd6c6;
 						}
-						&.shared {
-							background-color: #c7e6fd;
+						&.group {
+							background-color: #f7ebc3;
 						}
+						&.public {
+							background-color: #c7ceea;
+						}
+						&.friend {
+							background-color: #cde4db;
+						}
+					}
+				}
+			}
+		}
+		.more-events {
+			position: absolute;
+			width: 150px;
+			z-index: 2;
+			border: 1px solid #eee;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+			.more-header {
+				background-color: rgb(250, 223, 153);
+				padding: 5px;
+				display: flex;
+				align-items: center;
+				font-size: 14px;
+				.title {
+					flex: 1;
+				}
+				.close {
+					margin-right: 2px;
+					cursor: pointer;
+					font-size: 20px;
+				}
+			}
+			.more-body {
+				min-height: 146px;
+				background-color: white;
+				.event-item {
+					cursor: pointer;
+					font-size: 18px;
+					margin-bottom: 2px;
+					color: rgba(2, 2, 2, 0.87);
+					padding: 0 0 0 4px;
+					height: 25px;
+					line-height: 25px;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+
+					&.private {
+						background-color: #fbd6c6;
+					}
+					&.group {
+						background-color: #f7ebc3;
+					}
+					&.public {
+						background-color: #c7ceea;
+					}
+					&.friend {
+						background-color: #cde4db;
 					}
 				}
 			}
