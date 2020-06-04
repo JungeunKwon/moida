@@ -2,6 +2,8 @@ package com.ssafy.moida.service.diary;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,10 +46,15 @@ public class DiaryServiceImpl implements DiaryService{
 	private final UploadS3 uploadS3;
 	
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findAll(Pageable pageable) throws NumberFormatException, BaseException {
+	public List<DiaryResponseDTO> findAll(Pageable pageable) throws NumberFormatException, BaseException {
 		
-		return diaryRepository.find(accountService.getAccount().getId(), pageable)
-				.map(DiaryResponseDTO::new);
+		List<DiaryResponseDTO> list = diaryRepository.find(accountService.getAccount().getId()).stream()
+				.map(DiaryResponseDTO::new)
+				.collect(Collectors.toList());
+		
+		
+		
+		return list;
 	}
 
 	@Transactional

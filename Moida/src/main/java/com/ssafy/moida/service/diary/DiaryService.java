@@ -1,6 +1,7 @@
 package com.ssafy.moida.service.diary;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -34,7 +35,7 @@ public interface DiaryService {
 	
 	Page<DiaryResponseDTO> findByNickname(String nickname,Pageable pageable);
 	
-	Page<DiaryResponseDTO> findAll(Pageable pageable) throws NumberFormatException, BaseException;
+	List<DiaryResponseDTO> findAll(Pageable pageable) throws NumberFormatException, BaseException;
 	Page<DiaryResponseDTO> findByDescriptionAndBydeleteDateIsNull(String description,Pageable pageable);
 	Page<DiaryResponseDTO> findByAccountAndBydeleteDateIsNull(Account account,Pageable pageable);
 	Page<DiaryResponseDTO> findByMoodAndBydeleteDateIsNull(String mood,Pageable pageable);
