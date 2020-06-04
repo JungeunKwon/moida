@@ -14,18 +14,31 @@ const mutations = {
 		state.firstDay = payload;
 	},
 };
+function getClass(isPrivate, groupid) {
+	if (groupid) return "group";
+	return isPrivate === 1 ? "public" : isPrivate === 2 ? "friend" : "private";
+}
 const actions = {
 	getDiary({ commit }, nickname) {
 		return new Promise((resolve, reject) => {
 			getDiary(nickname)
 				.then(response => {
-					console.log(response.data);
+					let result = [];
 					let content = response.data.content;
 					for (let idx = 0; idx < content.length; idx++) {
 						let t = moment(content[idx].createDate);
-						console.log(t.format("YYYY-MM-DD-HH-mm-ss"));
+						result.push({
+							id: content[idx].id,
+							day: moment(content[idx].createDate),
+							content: content[idx].description,
+							cssClass: getClass(
+								content[idx].isPrivate,
+								content[idx].groupid,
+							),
+						});
 					}
-					resolve(response);
+					console.log(result);
+					resolve(result);
 				})
 				.catch(error => {
 					reject(reject);
