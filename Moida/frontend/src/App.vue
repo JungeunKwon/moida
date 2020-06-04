@@ -35,22 +35,7 @@ export default {
 };
 </script>
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
-@font-face {
-	font-family: "KyoboHand";
-	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff")
-		format("woff");
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: "Recipekorea";
-	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/Recipekorea.woff")
-		format("woff");
-	font-weight: normal;
-	font-style: normal;
-}
+@import "./assets/font/font.css";
 #app {
 	/* background-image: url("./assets/images/background.png"); */
 	background-repeat: no-repeat;

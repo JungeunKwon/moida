@@ -7,19 +7,28 @@
 		<div>
 			<div class="editor-custom-btn-container-submit">
 				<div style="display:inline-block; height:30px">
+					<!-- <v-time-picker v-model="picker" scrollable color="#fadf99"></v-time-picker> -->
+
 					<v-radio-group v-model="isPrivate" row>
-						<v-radio label="전체공개" value="3"></v-radio>
-						<v-radio label="친구공개" value="2"></v-radio>
-						<v-radio label="비공개" value="1"></v-radio>
+						<v-radio color="grey" label="전체공개" value="3"></v-radio>
+						<v-radio color="grey" label="친구공개" value="2"></v-radio>
+						<v-radio color="grey" label="비공개" value="1"></v-radio>
 					</v-radio-group>
 				</div>
 				<el-button
-					style="{ background: '#1890ff', borderColor: '#1890ff' }"
+					v-if="!isEdit"
+					class="diaryWriteBtn"
 					icon="el-icon-check"
 					size="mini"
-					type="primary"
 					@click="processpost"
 				>submit</el-button>
+				<el-button
+					v-if="isEdit"
+					class="diaryWriteBtn"
+					icon="el-icon-check"
+					size="mini"
+					@click="processpost"
+				>edit</el-button>
 			</div>
 		</div>
 
@@ -28,10 +37,68 @@
 		</div>
 		<div>
 			<div class="editor-custom-btn-container-upload">
-				<editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
+				<editorImage color="#f7ebc3" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
 			</div>
 		</div>
 		<mainimgselect :imgselectdialog="imgselectdialog" :items="imglist" @setMainImg="setMainImg" />
+		<v-dialog v-model="dateselect" max-width="500px" background-color="white" background="white">
+			<v-card style="padding:20px">
+				<v-menu
+					v-model="datemenu"
+					:close-on-content-click="false"
+					:nudge-right="40"
+					transition="scale-transition"
+					offset-y
+					min-width="290px"
+				>
+					<template v-slot:activator="{ on }">
+						<v-text-field
+							v-model="inputdate"
+							label="작성날짜"
+							prepend-icon="mdi-calendar"
+							readonly
+							v-on="on"
+							color="#fadf99"
+						/>
+					</template>
+					<v-date-picker v-model="inputdate" @input="datemenu = false" color="#fadf99" />
+				</v-menu>
+				<v-menu
+					v-model="timemenu"
+					:close-on-content-click="false"
+					:nudge-right="40"
+					transition="scale-transition"
+					offset-y
+					min-width="290px"
+				>
+					<template v-slot:activator="{ on }">
+						<v-text-field
+							v-model="inputtime"
+							label="작성시간"
+							prepend-icon="mdi-calendar"
+							readonly
+							v-on="on"
+							color="#fadf99"
+						/>
+					</template>
+					<v-time-picker v-model="inputtime" @input="timemenu = false" scrollable color="#fadf99"></v-time-picker>
+				</v-menu>
+				<el-button
+					v-if="!isEdit"
+					class="diaryWriteBtn"
+					icon="el-icon-check"
+					size="mini"
+					@click="processpost2"
+				>submit</el-button>
+				<el-button
+					v-if="isEdit"
+					class="diaryWriteBtn"
+					icon="el-icon-check"
+					size="mini"
+					@click="processpost2"
+				>edit</el-button>
+			</v-card>
+		</v-dialog>
 	</div>
 </template>
 
@@ -44,7 +111,8 @@ import editorImage from "./components/EditorImage";
 import plugins from "./plugins";
 import toolbar from "./toolbar";
 import load from "./dynamicLoadScript";
-import { postDiary } from "../../../api/diary";
+import { mapActions } from "vuex";
+
 import mainimgselect from "./components/mainimgselector";
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
 const tinymceCDN =
@@ -89,15 +157,32 @@ export default {
 			required: false,
 			default: "auto",
 		},
+		diaryid: {
+			type: String,
+			default: "",
+		},
+		isEdit: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
 			mainimg: "",
+			dateselect: false,
 			hasChange: false,
 			hasInit: false,
 			tinymceId: this.id,
+			inputdate: null,
+			inputtime: null,
+			datemenu: null,
+			timemenu: null,
+
 			fullscreen: false,
 			imgselectdialog: false,
+			menu: null,
+			membernickname: "",
+			editcontext: "",
 			languageTypeList: {
 				en: "en",
 				zh: "zh_CN",
@@ -129,6 +214,9 @@ export default {
 	},
 	mounted() {
 		this.init();
+		if (this.diaryid != undefined && this.diaryid != "") {
+			this.getsearchById(this.diaryid);
+		}
 	},
 	activated() {
 		if (window.tinymce) {
@@ -142,6 +230,25 @@ export default {
 		this.destroyTinymce();
 	},
 	methods: {
+		...mapActions("diary", ["postDiary", "searchById", "putDiary"]),
+		getsearchById(id) {
+			var here = this;
+			this.searchById(id)
+				.then(response => {
+					here.context = response.data.description;
+					here.membernickname = response.data.nickname;
+					if (
+						this.$store.getters.nickname != response.data.nickname
+					) {
+						here.$router.push("/diary");
+					}
+					here.setContent(response.data.description);
+					here.isPrivate = response.data.isPrivate.toString();
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		},
 		init() {
 			// dynamic load tinymce from cdn
 			load(tinymceCDN, err => {
@@ -169,11 +276,37 @@ export default {
 				code_dialog_width: 1000,
 				advlist_bullet_styles: "square",
 				advlist_number_styles: "default",
-				imagetools_cors_hosts: ["www.tinymce.com", "codepen.io"],
 				default_link_target: "_blank",
 				link_title: false,
+
 				resize: false,
+				content_css:
+					"//www.tiny.cloud/css/codepen.min.css,/./font/font.css",
+				imagetools_toolbar:
+					"rotateleft rotateright | flipv fliph | editimage imageoptions",
+
 				min_heght: 500,
+				font_formats:
+					"Andale Mono=andale mono,times;" +
+					"Arial=arial,helvetica,sans-serif;" +
+					"Arial Black=arial black,avant garde;" +
+					"Book Antiqua=book antiqua,palatino;" +
+					"Comic Sans MS=comic sans ms,sans-serif;" +
+					"Courier New=courier new,courier;" +
+					"Georgia=georgia,palatino;" +
+					"Helvetica=helvetica;" +
+					"Impact=impact,chicago;" +
+					"Symbol=symbol;" +
+					"Tahoma=tahoma,arial,helvetica,sans-serif;" +
+					"Terminal=terminal,monaco;" +
+					"Times New Roman=times new roman,times;" +
+					"Trebuchet MS=trebuchet ms,geneva;" +
+					"Verdana=verdana,geneva;" +
+					"Webdings=webdings;" +
+					"Wingdings=wingdings,zapf dingbats;" +
+					"KyoboHand=KyoboHand;" +
+					"Recipekorea=Recipekorea;" +
+					"Noto Sans KR=Noto Sans KR",
 				nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
 				init_instance_callback: editor => {
 					if (_this.value) {
@@ -190,39 +323,6 @@ export default {
 						_this.fullscreen = e.state;
 					});
 				},
-				// 整合七牛上传
-				// images_dataimg_filter(img) {
-				//   setTimeout(() => {
-				//     const $image = $(img);
-				//     $image.removeAttr('width');
-				//     $image.removeAttr('height');
-				//     if ($image[0].height && $image[0].width) {
-				//       $image.attr('data-wscntype', 'image');
-				//       $image.attr('data-wscnh', $image[0].height);
-				//       $image.attr('data-wscnw', $image[0].width);
-				//       $image.addClass('wscnph');
-				//     }
-				//   }, 0);
-				//   return img
-				// },
-				// images_upload_handler(blobInfo, success, failure, progress) {
-				//   progress(0);
-				//   const token = _this.$store.getters.token;
-				//   getToken(token).then(response => {
-				//     const url = response.data.qiniu_url;
-				//     const formData = new FormData();
-				//     formData.append('token', response.data.qiniu_token);
-				//     formData.append('key', response.data.qiniu_key);
-				//     formData.append('file', blobInfo.blob(), url);
-				//     upload(formData).then(() => {
-				//       success(url);
-				//       progress(100);
-				//     })
-				//   }).catch(err => {
-				//     failure('出现未知问题，刷新页面，或者联系程序员')
-				//     console.log(err);
-				//   });
-				// },
 			});
 		},
 		destroyTinymce() {
@@ -236,6 +336,7 @@ export default {
 			}
 		},
 		setContent(value) {
+			console.log("text", value);
 			window.tinymce.get(this.tinymceId).setContent(value);
 		},
 		getContent() {
@@ -271,15 +372,25 @@ export default {
 		},
 		imageSuccessCBK(arr) {
 			const _this = this;
-			arr.forEach(v => {
-				window.tinymce
-					.get(_this.tinymceId)
-					.insertContent(`<img class="wscnph"  src="${v.url}" >`);
-			});
+
+			window.tinymce
+				.get(_this.tinymceId)
+				.insertContent(`<img src="${arr}" >`);
 		},
 		processpost() {
+			this.dateselect = true;
+		},
+		processpost2() {
+			if (this.inputdate == null) {
+				alert("날짜를 입력해주세요.");
+				return;
+			}
+			if (this.inputtime == null) {
+				alert("시간을 선택해주세요.");
+				return;
+			}
 			this.getImgesrc();
-			if (this.imglist != null) {
+			if (this.imglist != null && this.imglist.length > 0) {
 				this.imgselectdialog = true;
 			} else {
 				this.postcontent();
@@ -287,24 +398,54 @@ export default {
 		},
 		postcontent() {
 			var ed = this.getContent();
-
-			postDiary({
-				description: ed,
-				isPrivate: parseInt(this.isPrivate),
-				imgurl: this.mainimg,
-			})
-				.then(response => {
-					console.log(response);
+			if (ed == null || ed == "") {
+				alert("글 입력해주세요.");
+				return;
+			}
+			var date = this.inputdate + " " + this.inputtime;
+			console.log(date);
+			if (this.isEdit) {
+				this.putDiary({
+					id: this.diaryid,
+					description: ed,
+					isPrivate: parseInt(this.isPrivate),
+					imgurl: this.mainimg,
+					inputDate: date,
 				})
-				.catch(error => {
-					console.log(error);
-				});
+					.then(response => {
+						console.log(response);
+						this.$router.push("/detaildiary/" + response.data);
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			} else {
+				this.postDiary({
+					description: ed,
+					isPrivate: parseInt(this.isPrivate),
+					imgurl: this.mainimg,
+					inputDate: date,
+				})
+					.then(response => {
+						console.log(response);
+						this.$router.push("/detaildiary/" + response.data);
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			}
+			this.dateselect = false;
 		},
 	},
 };
 </script>
 
-<style scoped>
+<style>
+.diaryWriteBtn:hover {
+	color: black !important;
+	background-color: #f7ebc3 !important;
+	border-color: white !important;
+}
 .tinymce-container {
 	position: relative;
 	line-height: normal;
@@ -339,5 +480,12 @@ export default {
 }
 .editor-upload-btn {
 	display: inline-block;
+}
+#tinymce p {
+	margin: 5px !important;
+}
+
+.mce-content-body p {
+	margin: 15px 0 !important;
 }
 </style>
