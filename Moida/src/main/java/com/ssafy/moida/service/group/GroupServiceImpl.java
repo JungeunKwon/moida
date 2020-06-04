@@ -69,16 +69,20 @@ public class GroupServiceImpl implements GroupService {
 			accountGroupRepository.save(accountgroup.toEntity());
 			
 		}
-		 
-		
 		return groupid;
 	}
 	
 	@Transactional
 	public Long saveAccountGroup(SaveAccountGroupRequestDto requestDto) throws NumberFormatException, BaseException {
 		GroupTB group = groupTBRepository.findById(requestDto.getGroupId()).orElseThrow(() -> new BaseException(EnumGroupException.GROUP_NOT_FOUND));
-		System.out.println(group.getLimitUser());
-		System.out.println(group.getAccount());
+
+		List<AccountGroup> groupList = accountService.getAccount().getGroupList();
+		
+		for(AccountGroup obj : groupList) {
+			if(obj.getGroupId()==requestDto.getGroupId()) {
+				throw new BaseException(EnumGroupException.GROUP_DUPLICATE_JOIN);
+			}
+		}
 		
 		if(group.getLimitUser()<group.getAccount().size()+1){
 			throw new BaseException(EnumGroupException.GROUP_IS_FULL);
