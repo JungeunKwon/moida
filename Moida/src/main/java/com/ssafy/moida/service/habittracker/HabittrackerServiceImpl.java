@@ -2,6 +2,7 @@ package com.ssafy.moida.service.habittracker;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,13 +97,7 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 		Habittracker habit = habittrackerRepository.findById(id).get();
 			
 		return HabittrackerResponseDTO.builder()
-				.id(habit.getId())
-				.subject(habit.getSubject())
-				.description(habit.getDescription())
-				.startDate(habit.getStartDate())
-				.endDate(habit.getEndDate())
-				.account(habit.getAccount())
-				.groupTB(habit.getGroupTB())
+				.habit(habit)
 				.build();
 	}
 	
@@ -141,15 +136,16 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 		return null;
 	}
 
-	@Transactional
+	@Transactional(readOnly=true)
 	public List<HabittrackerResponseDTO> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return habittrackerRepository.findAll().stream()
+				.map(HabittrackerResponseDTO :: new)
+				.collect(Collectors.toList());
 	}
 
 	@Transactional
 	public List<HabittrackerResponseDTO> findByGroupTBAll(Long groupid) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

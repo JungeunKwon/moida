@@ -160,6 +160,8 @@ public class GroupServiceImpl implements GroupService {
 		return groupTBRepository.findByDescriptionContaining(description).stream()
 				.map(GroupResponseDto :: new)
 				.collect(Collectors.toList());
+		
+		
 	}
 	
 	@Transactional(readOnly = true)
