@@ -5,7 +5,7 @@
 				<slot />
 			</span>
 		</template>
-		<div>
+		<div id="mySharedDiaryList">
 			<div v-for="(diary, idx) in myDiaries" :key="idx">{{diary}}</div>
 		</div>
 	</v-dialog>
@@ -20,8 +20,13 @@ export default {
 			dialog: false,
 		};
 	},
+	mounted() {},
 };
 </script>
 
 <style>
+#mySharedDiaryList {
+	background-color: white;
+	padding: 20px;
+}
 </style>

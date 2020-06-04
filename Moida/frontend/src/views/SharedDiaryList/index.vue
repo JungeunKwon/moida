@@ -8,7 +8,7 @@
 				</div>
 			</createSharedDiary>
 			<MySharedDiaryList :myDiaries="myDiaries">
-				<div class="sharedMenu mini" @click="getMySharedDiary()">
+				<div class="sharedMenu mini" @click="mySharedDiaryList()">
 					<img class="tape" src="../../assets/images/tape.png" />
 					<div class="sharedPaper mini">내 공다 목록</div>
 				</div>
@@ -110,7 +110,9 @@ export default {
 		mySharedDiaryList() {
 			this.getMySharedDiary()
 				.then(response => {
+					console.log("엥");
 					this.myDiaries = response.data;
+					console.log(this.myDiaries);
 				})
 				.catch(error => {
 					console.log(error);

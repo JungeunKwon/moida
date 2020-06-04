@@ -8,11 +8,7 @@
 			</SharedDiaryInfo>
 		</div>
 		<HabitTracker></HabitTracker>
-		<v-date-picker
-			v-model="picker"
-			color="purple lighten-3"
-			@change="test()"
-		></v-date-picker>
+		<v-date-picker v-model="picker" color="purple lighten-3" @change="test()"></v-date-picker>
 		<div id="writeDiary">
 			<v-btn @click="openWrite">
 				<v-icon x-large>mdi-pencil</v-icon>
@@ -21,7 +17,7 @@
 	</div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import SharedDiaryInfo from "./components/SharedDiaryInfo";
 import HabitTracker from "./components/HabitTracker";
 export default {
@@ -53,10 +49,17 @@ export default {
 			"getSharedDiaryDetail",
 			"getSharedDiary",
 		]),
-		openWrite() {},
+		...mapMutations("sharedDiary", ["TOGGLE_WRITINGSD", "SET_DIARYID"]),
+		openWrite() {
+			this.TOGGLE_WRITINGSD(true);
+			this.SET_DIARYID(this.detail.id);
+			console.log("아듸 세팅 " + this.detail.id);
+			this.$router.push("/writediary");
+		},
 		getSD() {
 			this.getSharedDiary(this.detail.id)
 				.then(response => {
+					console.log("여기여기!!!!!공다여기!!!!!!!!!");
 					console.log(response.data);
 				})
 				.catch(error => {
