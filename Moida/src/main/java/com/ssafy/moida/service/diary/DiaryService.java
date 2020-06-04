@@ -24,12 +24,12 @@ public interface DiaryService {
 	DiaryResponseDTO findById(Long diaryid);
 	
 	Long likeDiary(Long diaryid) throws NumberFormatException, BaseException;
-	Long delteDiary(Long diaryid) throws NumberFormatException, BaseException;
+	Long deletelikeDiary(Long diaryid) throws NumberFormatException, BaseException;
 	
 	Long saveDiary(DiarySaveRequest dto) throws NumberFormatException, BaseException;
 	Page<DiaryResponseDTO> findByGroupTB(Long id , Pageable pagealbe);
 	DiaryResponseDTO updateinfo(DiaryUpdateRequest dto);
-	Long deleteDiary(Long id);
+	Long deleteDiary(Long id) throws NumberFormatException, BaseException;
 	
 	
 	Page<DiaryResponseDTO> findByNickname(String nickname,Pageable pageable);

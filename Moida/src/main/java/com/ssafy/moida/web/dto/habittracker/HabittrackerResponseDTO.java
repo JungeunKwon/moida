@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.group.GroupTB;
+import com.ssafy.moida.domain.habittracker.Habittracker;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -23,16 +24,15 @@ public class HabittrackerResponseDTO {
 	private GroupTB groupTB;
 	
 	@Builder
-	public HabittrackerResponseDTO(Long id, String subject, String description, LocalDateTime startDate,
-			LocalDateTime endDate, Account account, GroupTB groupTB) {
+	public HabittrackerResponseDTO(Habittracker habit) {
 		super();
-		this.id = id;
-		this.subject = subject;
-		this.description = description;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.account = account;
-		this.groupTB = groupTB;
+		this.id = habit.getId();
+		this.subject = habit.getSubject();
+		this.description = habit.getDescription();
+		this.startDate = habit.getStartDate();
+		this.endDate = habit.getEndDate();
+		this.account = habit.getAccount();
+		this.groupTB = habit.getGroupTB();
 	}
 	
 	
