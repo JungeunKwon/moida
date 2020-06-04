@@ -1,10 +1,11 @@
 <template>
-	<div>해빗해빗</div>
+	<div></div>
 </template>
 
 <script>
 export default {
 	name: "habitTracker",
+	components: {},
 	data() {
 		return {};
 	},
@@ -13,5 +14,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

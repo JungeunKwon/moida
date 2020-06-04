@@ -8,6 +8,11 @@
 			</SharedDiaryInfo>
 		</div>
 		<HabitTracker></HabitTracker>
+		<v-date-picker
+			v-model="picker"
+			color="purple lighten-3"
+			@change="test()"
+		></v-date-picker>
 	</div>
 </template>
 <script>
@@ -15,21 +20,27 @@ import { mapActions } from "vuex";
 import SharedDiaryInfo from "./components/SharedDiaryInfo";
 import HabitTracker from "./components/HabitTracker";
 export default {
-	name: "SharedDiary",
-	components: { SharedDiaryInfo, HabitTracker },
+	components: {
+		SharedDiaryInfo,
+		HabitTracker,
+	},
 	data() {
 		return {
 			detail: {},
+			picker: "",
+			timestamp: "",
 		};
 	},
 	mounted() {
 		this.getSharedDiaryDetail(this.$route.params.id)
 			.then(response => {
 				this.detail = response.data;
+				this.getSD();
 			})
 			.catch(error => {
 				console.log(error);
 			});
+		this.getNow();
 	},
 	computed: {},
 	methods: {
@@ -37,11 +48,58 @@ export default {
 			"getSharedDiaryDetail",
 			"getSharedDiary",
 		]),
+		getSD() {
+			this.getSharedDiary(this.detail.id)
+				.then(response => {
+					console.log(response.data);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		},
+		test() {
+			console.log(this.picker);
+		},
+		getNow() {
+			const today = new Date();
+			const date =
+				today.getFullYear() +
+				"-" +
+				(today.getMonth() + 1 < 10 ? "0" : "") +
+				(today.getMonth() + 1) +
+				"-" +
+				(today.getDate() < 10 ? "0" : "") +
+				today.getDate();
+			this.picker = date;
+			// const time =
+			// 	(today.getHours() < 10 ? "0" : "") +
+			// 	today.getHours() +
+			// 	":" +
+			// 	(today.getMinutes() < 10 ? "0" : "") +
+			// 	today.getMinutes() +
+			// 	":" +
+			// 	(today.getSeconds() < 10 ? "0" : "") +
+			// 	today.getSeconds();
+			// const dateTime = date + " " + time;
+			// this.timestamp = dateTime;
+			// console.log(this.timestamp);
+		},
 	},
 };
 </script>
 
 <style>
+/* 달력 색상 변경 */
+.v-picker__title {
+	color: black !important;
+}
+
+#SharedDiary
+	> div.v-picker.v-card.v-picker--date.theme--light
+	> div.v-picker__title {
+	background-color: white !important;
+}
+
 #diarySubjectDiv {
 	position: fixed;
 	font-family: KyoboHand;
