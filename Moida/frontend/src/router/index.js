@@ -5,6 +5,8 @@ import SharedDiary from "../views/SharedDiary/index.vue";
 import Login from "../components/Login.vue";
 import SignUp from "../components/SignUp.vue";
 import WriteDiary from "../views/Diary/writediary.vue";
+import DetailDiary from "../views/Diary/detail.vue";
+import EditDiary from "../views/Diary/edit.vue";
 import Diary from "../views/Diary/index.vue";
 Vue.use(VueRouter);
 
@@ -37,6 +39,16 @@ const routes = [{
 		path: "/writediary",
 		name: "WriteDiary",
 		component: WriteDiary,
+	},
+	{
+		path: "/editdiary/:id",
+		name: "EditDiary",
+		component: EditDiary,
+	},
+	{
+		path: "/detaildiary/:id",
+		name: "DetailDiary",
+		component: DetailDiary,
 	},
 	{
 		path: "/",
