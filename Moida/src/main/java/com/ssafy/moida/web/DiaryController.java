@@ -1,6 +1,7 @@
 package com.ssafy.moida.web;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -86,10 +87,10 @@ public class DiaryController {
 	@ApiOperation(value = "모든 다이어리 검색", httpMethod = "GET", notes = "다이어리 피드 전부(공개/친구/내) 검색 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/diary")
-	public Page<DiaryResponseDTO> findAll(Pageable pageable
+	public ResponseEntity<List<DiaryResponseDTO>> findAll(Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
 	
-		return diaryService.findAll(pageable);
+		return new ResponseEntity<List<DiaryResponseDTO>>(diaryService.findAll(pageable), HttpStatus.OK);
 	}
 	
 	@ApiImplicitParams({
@@ -142,9 +143,9 @@ public class DiaryController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
-    @ApiOperation(value = "다이어리 닉네임 검색", httpMethod = "GET", notes = "다이어리 닉네임으로 검색.")
+    @ApiOperation(value = "다이어리 닉네임 찾기", httpMethod = "GET", notes = "다이어리 닉네임으로 찾기.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@GetMapping(value = "/diary/search/nickname/{nickname}")
+	@GetMapping(value = "/diary/find/nickname/{nickname}")
 	public Page<DiaryResponseDTO> findByNickname(@PathVariable String nickname, Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
 	

@@ -25,6 +25,9 @@ public class DiaryResponseDTO {
 	private String imgurl;
 	private int isPrivate;
 	private Long viewconut;
+	private Long groupid;
+	
+	private Boolean isLike;
 	
 	private Long accountid;
 	private String nickname;
@@ -50,6 +53,8 @@ public class DiaryResponseDTO {
 		this.nickname = diary.getAccount().getNickname();
 		this.profileurl = diary.getAccount().getProfileImg();
 		
+		if(diary.getGroupTB() !=null)
+			this.groupid = diary.getGroupTB().getId();
 	}
 	
 	
