@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerResponseDTO;
 
 public interface HabittrackerRepository extends JpaRepository<Habittracker, Long>{
-	List<HabittrackerResponseDTO> findByGroupTB(Long groupid);
-	List<HabittrackerResponseDTO> findByGroupTBAndStartDateLessThanAndEndDateGreaterThan(Long groupid,LocalDateTime now,LocalDateTime now2);
+	List<Habittracker> findByGroupTB(Long groupid);
+	List<Habittracker> findByGroupTBAndStartDateLessThanAndEndDateGreaterThan(Long groupid,LocalDateTime now,LocalDateTime now2);
 	
 	
 

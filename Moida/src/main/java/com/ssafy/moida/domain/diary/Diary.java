@@ -44,6 +44,9 @@ public class Diary extends BaseEntity{
 	private LocalDateTime deleteDate;
 	
 	@Column(nullable = true)
+	private String inputDate;
+	
+	@Column(nullable = true)
 	private String mood;
 	
 	@Lob
@@ -67,6 +70,9 @@ public class Diary extends BaseEntity{
 	@OneToMany(mappedBy = "diary")
 	private List<Comment> commentList = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "diary")
+	private List<DiaryLikes> diarylikelist = new ArrayList<>();
+	
 	public void updateViewCount() {
 		this.viewcount++;
 	}
@@ -84,7 +90,7 @@ public class Diary extends BaseEntity{
 	
 	@Builder
 	public Diary(Long id, String description, LocalDateTime deleteDate, String mood, String imgurl, int isPrivate,
-			Account account, GroupTB groupTB,Long viewcount) {
+			Account account, GroupTB groupTB,Long viewcount,String inputDate) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -95,6 +101,7 @@ public class Diary extends BaseEntity{
 		this.account = account;
 		this.groupTB = groupTB;
 		this.viewcount = viewcount;
+		this.inputDate = inputDate;
 	}
 	
 	

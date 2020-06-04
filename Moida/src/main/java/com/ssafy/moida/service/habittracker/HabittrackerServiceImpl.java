@@ -123,10 +123,11 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 	}
 
 	@Transactional
-	public void leaveHabittracker(AccountHabittrackerSaveDTO requestDTO) throws NumberFormatException, BaseException {
+	public Long leaveHabittracker(AccountHabittrackerSaveDTO requestDTO) throws NumberFormatException, BaseException {
 		Habittracker habittracker = habittrackerRepository.findById(requestDTO.getHabitid()).get();
 		
 		accountHabittrackerRepository.delete(requestDTO.toEntity(accountService.getAccount(), habittracker));
+		return requestDTO.getHabitid();
 	
 	}
 
@@ -146,18 +147,21 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 
 	@Transactional
 	public List<HabittrackerResponseDTO> findByGroupTBAll(Long groupid) {
-		return null;
+		return habittrackerRepository.findAll().stream()
+				.map(HabittrackerResponseDTO :: new)
+				.collect(Collectors.toList());
 	}
 
 	@Transactional
 	public List<HabittrackerResponseDTO> findByGroupTB(Long groupid) {
-		// TODO Auto-generated method stub
-		return null;
+	
+		return habittrackerRepository.findByGroupTBAndStartDateLessThanAndEndDateGreaterThan(groupid, LocalDateTime.now(), LocalDateTime.now())
+				.stream().map(HabittrackerResponseDTO :: new)
+				.collect(Collectors.toList());
 	}
 
 	@Transactional
 	public List<HabittrackerResponseDTO> findByGroupTBAndAccount(AccountHabittrackerSaveDTO requestDTO) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
