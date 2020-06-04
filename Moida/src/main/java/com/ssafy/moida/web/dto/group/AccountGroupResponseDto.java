@@ -9,11 +9,11 @@ import lombok.Setter;
 public class AccountGroupResponseDto {
 	private Long accountId;
 	private String accountNickname;
-	private String accountrofileImg;
+	private String accountProfileImg;
 	
 	public AccountGroupResponseDto(AccountGroup entity) {
 		this.accountId = entity.getAccount().getId();
 		this.accountNickname = entity.getAccount().getNickname();
-		this.accountrofileImg = entity.getAccount().getProfileImg();
+		this.accountProfileImg = entity.getAccount().getProfileImg();
 	}
 }
