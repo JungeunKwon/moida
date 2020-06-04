@@ -16,7 +16,7 @@ public interface HabittrackerService {
 	Long deleteHabittracker(Long habitid) throws NumberFormatException, BaseException;
 	
 	Long joinHabittracker(AccountHabittrackerSaveDTO requestDTO) throws NumberFormatException, BaseException;
-	void leaveHabittracker(AccountHabittrackerSaveDTO requestDTO) throws NumberFormatException, BaseException;
+	Long leaveHabittracker(AccountHabittrackerSaveDTO requestDTO) throws NumberFormatException, BaseException;
 	Long clearHabittracker(AccountHabittrackerSaveDTO requestDTO);
 	
 	HabittrackerResponseDTO findById(Long id);
