@@ -5,10 +5,9 @@ const state = {
 	email: "",
 	username: "",
 	gender: "",
-	nickname: "강철꼬부기",
+	nickname: "",
 	phone: "",
-	profile_img:
-		"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+	profile_img: "",
 };
 
 const mutations = {
@@ -43,7 +42,9 @@ const actions = {
 				.then(response => {
 					resolve(response);
 				})
-				.catch(error => reject(error));
+				.catch(error => {
+					reject(error);
+				});
 		});
 	},
 	// user login

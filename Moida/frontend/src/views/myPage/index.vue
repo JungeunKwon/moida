@@ -41,9 +41,8 @@ export default {
 			.dispatch("user/searchByNickname", this.$route.params.nickname)
 			.then(response => {
 				this.user = response.data;
-				console.log(response.data);
 			})
-			.catch(error => console.log(error));
+			.catch(error => console.log(error.response));
 	},
 };
 </script>

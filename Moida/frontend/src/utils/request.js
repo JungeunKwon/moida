@@ -2,14 +2,14 @@ import axios from "axios";
 import store from "@/store";
 
 const service = axios.create({
-	baseURL: "http://k02d1061.p.ssafy.io/", // url = base url + request url
+	baseURL: "http://k02d1061.p.ssafy.io:8080/", // url = base url + request url
 	timeout: 5000,
 });
 
 service.interceptors.request.use(
 	config => {
 		if (store.getters.token) {
-			config.headers["X-AUTH-TOKEN"] = getToken();
+			config.headers["X-AUTH-TOKEN"] = store.getters.token;
 			config.headers["Access-Control-Allow-Origin"] = "*";
 		}
 		return config;

@@ -28,16 +28,12 @@ export default {
 	},
 	mounted() {
 		this.SET_CURRENT_MONTH(moment().startOf("month"));
-		this.getDiary(this.nickname)
-			.then(response => console.log(response))
-			.catch(error => console.log(error.response));
 	},
 	computed: {
 		...mapGetters(["currentMonth", "firstDay"]),
 	},
 	methods: {
 		...mapMutations("calendar", ["SET_CURRENT_MONTH", "SET_FIRST_DAY"]),
-		...mapActions("calendar", ["getDiary"]),
 	},
 };
 </script>

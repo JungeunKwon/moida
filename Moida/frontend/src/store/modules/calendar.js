@@ -1,5 +1,5 @@
 import { getDiary } from "../../api/calendar";
-
+import moment from "moment";
 const state = {
 	locale: "ko",
 	currentMonth: 0,
@@ -19,6 +19,12 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			getDiary(nickname)
 				.then(response => {
+					console.log(response.data);
+					let content = response.data.content;
+					for (let idx = 0; idx < content.length; idx++) {
+						let t = moment(content[idx].createDate);
+						console.log(t.format("YYYY-MM-DD-HH-mm-ss"));
+					}
 					resolve(response);
 				})
 				.catch(error => {

@@ -72,7 +72,7 @@
 
 <script>
 import moment from "moment";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import dateFunc from "../dateFunc";
 export default {
 	components: {
@@ -169,7 +169,9 @@ export default {
 		nickname: "",
 	},
 	mounted() {
-		console.log(this.nickname);
+		this.getDiary(this.$route.params.nickname)
+			.then(response => {})
+			.catch(error => console.log(error.response));
 	},
 	computed: {
 		...mapGetters(["currentMonth", "firstDay", "locale"]),
@@ -178,6 +180,7 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions("calendar", ["getDiary"]),
 		eventClick(event, jsEvent) {
 			if (!event.isShow) return;
 			jsEvent.stopPropagation();
