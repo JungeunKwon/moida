@@ -175,7 +175,15 @@ public class DiaryServiceImpl implements DiaryService{
 		DiaryLikeSaveRequestDTO requestDTO = new DiaryLikeSaveRequestDTO();
 		requestDTO.setAccount(account);
 		requestDTO.setDiary(diaryRepository.findById(diaryid).get());
-		return diaryLikeRepository.save(requestDTO.toEntity()).getId();
+		Long id = 0L;
+		if(diaryLikeRepository.countByDiaryAndAccount(requestDTO.getDiary(), account) == 0 ) {
+			id = diaryLikeRepository.save(requestDTO.toEntity()).getId();
+		}
+		
+	
+
+		
+		return diaryLikeRepository.countByDiary(requestDTO.getDiary());
 	}
 
 	@Transactional
@@ -186,7 +194,8 @@ public class DiaryServiceImpl implements DiaryService{
 		DiaryLikes deleteid = diaryLikeRepository.findByDiaryAndAccount(diary, account);
 		diaryLikeRepository.deleteById(deleteid.getId());
 		
-		return diaryid;
+		
+		return diaryLikeRepository.countByDiary(diary);
 	}
 
 
