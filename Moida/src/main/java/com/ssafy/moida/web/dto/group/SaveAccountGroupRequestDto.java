@@ -4,6 +4,7 @@ import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.group.AccountGroup;
 import com.ssafy.moida.domain.group.GroupTB;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,4 +24,13 @@ public class SaveAccountGroupRequestDto {
 				.groupId(groupId)
 				.build();
 	}
+
+	@Builder
+	public SaveAccountGroupRequestDto(Account account, Long groupId, GroupTB groupTB) {
+		this.account = account;
+		this.groupId = groupId;
+		this.groupTB = groupTB;
+	}
+	
+	
 }

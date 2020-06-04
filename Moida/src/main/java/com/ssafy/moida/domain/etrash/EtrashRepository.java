@@ -1,5 +1,6 @@
 package com.ssafy.moida.domain.etrash;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import com.ssafy.moida.domain.etrash.Etrash;
 public interface EtrashRepository extends JpaRepository<Etrash, Long>{
 	
 	
-	Page<Etrash> findByMood(String mood,Pageable pageable);
+	Page<Etrash> findByMoodAndDeleteDateGreaterThan(String mood,LocalDateTime now, Pageable pageable);
+	Page<Etrash> findAllByDeleteDateGreaterThan(LocalDateTime deleteDate, Pageable pageable);
 	
 }

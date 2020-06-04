@@ -12,5 +12,7 @@ public interface MusicRepository extends JpaRepository<Music, Long>{
 	
 	Page<Music> findByMoodOrderByLikecountDesc(String mood,Pageable pageable);
 	Optional<Music> findByVideoid(String videoid);
+	
+	short countByVideoid(String videoid);
 
 }

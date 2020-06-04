@@ -24,6 +24,8 @@ import com.ssafy.moida.domain.group.GroupTBRepository;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.exception.EnumAccountException;
 import com.ssafy.moida.exception.EnumGroupException;
+import com.ssafy.moida.service.account.AccountService;
+import com.ssafy.moida.web.dto.group.AccountGroupGroupResponseDto;
 import com.ssafy.moida.web.dto.group.AccountGroupResponseDto;
 import com.ssafy.moida.web.dto.group.GroupResponseDto;
 import com.ssafy.moida.web.dto.group.GroupUpdateRequestDto;
@@ -41,12 +43,12 @@ public class GroupServiceImpl implements GroupService {
 	private final AccountRepository accountRepository;
 	private final UploadS3 uploadS3;
 	private final DeleteS3 deleteS3;
-	
+	private final AccountService accountService;
 	private final String DEFAULT_URL = "default.png";
 	
 	@Transactional
 	public Long saveGroup(SaveGroupRequestDto requestDto) throws BaseException, IllegalArgumentException, IOException {
-		requestDto.setHost(getAccount());
+		requestDto.setHost(accountService.getAccount());
 		String imgUrl;
 		if(requestDto.getUploadFile()==null) {
 			imgUrl = DEFAULT_URL;
@@ -54,30 +56,52 @@ public class GroupServiceImpl implements GroupService {
 			imgUrl = uploadS3.uploadFile(requestDto.getUploadFile(), "group/" + requestDto.getHost().getEmail());
 		}
 		requestDto.setImgUrl(imgUrl);
-		return groupTBRepository.save(requestDto.toEntity()).getId();
+		
+		Long groupid = groupTBRepository.save(requestDto.toEntity()).getId();
+		
+		SaveAccountGroupRequestDto accountgroup = new SaveAccountGroupRequestDto();
+		accountgroup.setAccount(accountService.getAccount());
+		accountgroup.setGroupTB(groupTBRepository.findById(groupid).get());
+		accountgroup.setGroupId(groupid);
+		accountGroupRepository.save(accountgroup.toEntity());
+		
+		if(accountGroupRepository.countByGroupIdAndAccountId(groupid,requestDto.getHost().getId()) <= 0) { 
+			accountGroupRepository.save(accountgroup.toEntity());
+			
+		}
+		return groupid;
 	}
 	
 	@Transactional
 	public Long saveAccountGroup(SaveAccountGroupRequestDto requestDto) throws NumberFormatException, BaseException {
 		GroupTB group = groupTBRepository.findById(requestDto.getGroupId()).orElseThrow(() -> new BaseException(EnumGroupException.GROUP_NOT_FOUND));
-		if(group.getLimitUser()<group.getAccount().size()+1){
-			throw new BaseException(EnumGroupException.GROUP_NOT_FOUND);
+
+		List<AccountGroup> groupList = accountService.getAccount().getGroupList();
+		
+		for(AccountGroup obj : groupList) {
+			if(obj.getGroupId()==requestDto.getGroupId()) {
+				throw new BaseException(EnumGroupException.GROUP_DUPLICATE_JOIN);
+			}
 		}
-		requestDto.setAccount(getAccount());
+		
+		if(group.getLimitUser()<group.getAccount().size()+1){
+			throw new BaseException(EnumGroupException.GROUP_IS_FULL);
+		}
+		requestDto.setAccount(accountService.getAccount());
 		requestDto.setGroupTB(group);
 		return accountGroupRepository.save(requestDto.toEntity()).getId();
 	}
 	
 	@Transactional
 	public void deleteAccountGroup(Long groupId) throws NumberFormatException, BaseException {
-		AccountGroup accountGroup = accountGroupRepository.findByAccountAndGroupTB(getAccount().getId(), groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		AccountGroup accountGroup = accountGroupRepository.findByAccountAndGroupTB(accountService.getAccount().getId(), groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
 		accountGroupRepository.delete(accountGroup);
 	}
 	
 	@Transactional
 	public void deleteGroup(Long groupId) throws BaseException {
 		GroupTB group = groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
-		group.updateDeleteDate(LocalDateTime.now());
+		group.updatedeleteDate(LocalDateTime.now());
 	}
 	
 	@Transactional(readOnly = true)
@@ -89,14 +113,16 @@ public class GroupServiceImpl implements GroupService {
 	
 	@Transactional(readOnly = true)
 	public List<GroupResponseDto> findAllGroupExcludeDeleted(){
-		return groupTBRepository.findAllGroupExcludeDeleted().stream()
+		return groupTBRepository.findByDeleteTimeIsNull().stream()
 				.map(GroupResponseDto :: new)
 				.collect(Collectors.toList());
 	}
 	
 	@Transactional(readOnly = true)
 	public List<AccountGroupResponseDto> findByGroupTBId(Long groupId) throws BaseException{
-		return accountGroupRepository.findByGroupId(groupId).stream()
+		GroupTB group =  groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		List<AccountGroup> list = group.getAccount();
+		return list.stream()
 				.map(AccountGroupResponseDto :: new)
 				.collect(Collectors.toList());
 	}
@@ -114,11 +140,52 @@ public class GroupServiceImpl implements GroupService {
 		}
 		group.updateGroup(requestDto.getSubject(), requestDto.getLimitUser(), requestDto.isPrivate(), requestDto.getDescription(), imgUrl);
 	}
-
-	public Account getAccount() throws NumberFormatException, BaseException {
-	      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	      Account tmp = (Account) authentication.getPrincipal();
-	      Account account = accountRepository.findByEmail(tmp.getEmail()).orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
-	      return account;
+	
+	@Transactional(readOnly = true)
+	public List<GroupResponseDto> findBySubjectLike(String subject) {
+		return groupTBRepository.findBySubjectContaining(subject).stream()
+				.map(GroupResponseDto :: new)
+				.collect(Collectors.toList());
 	}
+	
+	@Transactional(readOnly = true)
+	public List<GroupResponseDto> findByNicknameLike(String nickname){
+		return groupTBRepository.findByNicknameLikeQuery(nickname).stream()
+				.map(GroupResponseDto :: new)
+				.collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<GroupResponseDto> findByDescriptionLike(String description){
+		return groupTBRepository.findByDescriptionContaining(description).stream()
+				.map(GroupResponseDto :: new)
+				.collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<AccountGroupGroupResponseDto> findGroupbyAccount() throws NumberFormatException, BaseException{
+		return accountGroupRepository.findByAccount(accountService.getAccount()).stream()
+				.map(AccountGroupGroupResponseDto :: new)
+				.collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public GroupResponseDto findByGroupId(Long groupId) throws BaseException {
+		GroupTB group = groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		return GroupResponseDto.builder()
+				.id(group.getId())
+				.subject(group.getSubject())
+				.limitUser(group.getLimitUser())
+				.deleteTime(group.getDeleteTime())
+				.isPrivate(group.isPrivate())
+				.imgUrl(group.getImgUrl())
+				.description(group.getDescription())
+				.hostId(group.getHost().getId())
+				.hostNickname(group.getHost().getNickname())
+				.hostProfileImg(group.getHost().getProfileImg())
+				.curUser(accountGroupRepository.countByGroupId(groupId))
+				.build();
+				
+	}
+	
 }

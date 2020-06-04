@@ -32,12 +32,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 			.httpBasic().disable()//rest api 이므로 기본설정 X
 			.csrf().disable() //csrf 해제
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-				.authorizeRequests() //다음 리퀘스트에 대한 사용권한체크
-					.antMatchers("/*/signin", "/*/signup", "/*/check/**").permitAll() //앤트매처 로그인시
-					.antMatchers(HttpMethod.GET, "api/**").permitAll() //get요청 열기
-					.antMatchers(HttpMethod.OPTIONS, "api/**").permitAll() //get요청 열기
-					.anyRequest().authenticated().and().cors() //그외 유저롤만 접근
+//			.and()
+//				.authorizeRequests() //다음 리퀘스트에 대한 사용권한체크
+//					.antMatchers("/favicon.ico", "/css/**","/js/**", "/","/login", "/*/signin", "/*/signup", "/*/check/**").permitAll() //앤트매처 로그인시
+//					.antMatchers(HttpMethod.GET, "v1/**").permitAll() //get요청 열기
+//					.antMatchers(HttpMethod.OPTIONS, "v1/**").permitAll() //get요청 열기
+//					.anyRequest().authenticated().and().cors() //그외 유저롤만 접근
 					
 			.and()
 				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

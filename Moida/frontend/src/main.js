@@ -9,7 +9,10 @@ import "element-ui/lib/theme-chalk/index.css";
 import "element-ui/lib/theme-chalk/display.css";
 import VueMasonry from "vue-masonry-css";
 import VueLazyload from "vue-lazyload";
+import ImgInputer from "vue-img-inputer";
+import "vue-img-inputer/dist/index.css";
 
+Vue.config.productionTip = false;
 Vue.use(VueMasonry);
 Vue.use(VueLazyload, {
 	preLoad: 1.3,
@@ -18,6 +21,7 @@ Vue.use(VueLazyload, {
 	attempt: 1,
 });
 Vue.config.productionTip = false;
+Vue.component("ImgInputer", ImgInputer);
 Vue.use(Element);
 new Vue({
 	vuetify,

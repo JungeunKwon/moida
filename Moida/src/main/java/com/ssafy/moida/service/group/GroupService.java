@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.ssafy.moida.exception.BaseException;
+import com.ssafy.moida.web.dto.group.AccountGroupGroupResponseDto;
 import com.ssafy.moida.web.dto.group.AccountGroupResponseDto;
 import com.ssafy.moida.web.dto.group.GroupResponseDto;
 import com.ssafy.moida.web.dto.group.GroupUpdateRequestDto;
@@ -19,4 +20,9 @@ public interface GroupService {
 	List<GroupResponseDto> findAllGroupExcludeDeleted();
 	List<AccountGroupResponseDto> findByGroupTBId(Long groupId) throws BaseException;
 	void updateGroup(GroupUpdateRequestDto requestDto) throws BaseException, IllegalArgumentException, IOException;
+	List<GroupResponseDto> findBySubjectLike(String subject);
+	List<GroupResponseDto> findByNicknameLike(String nickname);
+	List<GroupResponseDto> findByDescriptionLike(String description);
+	List<AccountGroupGroupResponseDto> findGroupbyAccount() throws NumberFormatException, BaseException;
+	GroupResponseDto findByGroupId(Long groupId) throws BaseException;
 }

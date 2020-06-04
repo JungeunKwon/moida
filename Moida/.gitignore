@@ -2,6 +2,7 @@ HELP.md
 .gradle
 build/
 bin/
+static/
 Servers/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
@@ -35,5 +36,3 @@ out/
 
 
 ### properties ####
-aws.properties
-db.properties

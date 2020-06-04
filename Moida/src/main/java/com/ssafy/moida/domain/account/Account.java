@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.moida.domain.common.BaseEntity;
 import com.ssafy.moida.domain.etrash.Etrash;
 import com.ssafy.moida.domain.group.AccountGroup;
+import com.ssafy.moida.domain.habittracker.AccountHabittracker;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -50,6 +52,7 @@ implements UserDetails {
 	@Column(nullable = false, length = 30)
 	private int gender;
 	
+	@Lob
 	@Column(nullable = true, name="profile_Img")
 	private String profileImg;
 	
@@ -65,8 +68,8 @@ implements UserDetails {
 	@OneToMany(mappedBy = "account")
 	private List<AccountGroup> groupList = new ArrayList<>();
 	
-	
-
+	@OneToMany(mappedBy = "account")
+	private List<AccountHabittracker> habitList = new ArrayList<>();
 	
 	public void updateAccountInfo(String password, String phone,  String nickname, String profileImg) {
 		this.password = password;

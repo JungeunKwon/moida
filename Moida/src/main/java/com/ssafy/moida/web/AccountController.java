@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.web.dto.account.AccountResponseDto;
@@ -115,5 +116,11 @@ public class AccountController {
 	@GetMapping("/check/nickname/{nickname}")
 	public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname){
 		return new ResponseEntity<Boolean>(accountService.checkNickname(nickname), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "닉네임 으로 회원 정보 검색", httpMethod = "GET", notes = "Account 리턴")
+	@GetMapping("/search/nickname/{nickname}")
+	public ResponseEntity<AccountResponseDto> findByNickname(@PathVariable String nickname) throws NumberFormatException, BaseException{
+		return new ResponseEntity<AccountResponseDto>(accountService.findByNickname(nickname), HttpStatus.OK);
 	}
 }

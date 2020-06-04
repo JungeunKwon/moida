@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.group.GroupService;
+import com.ssafy.moida.web.dto.group.AccountGroupGroupResponseDto;
 import com.ssafy.moida.web.dto.group.AccountGroupResponseDto;
 import com.ssafy.moida.web.dto.group.GroupResponseDto;
 import com.ssafy.moida.web.dto.group.GroupUpdateRequestDto;
@@ -35,7 +36,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
-@Api(tags = {"3. Group"})
+@Api(tags = {"3. group"})
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1")
@@ -63,7 +64,8 @@ public class GroupController {
 										.uploadFile(uploadFile)
 										.description(description)
 										.build();
-		return new ResponseEntity<Long>(groupService.saveGroup(requestDto), HttpStatus.OK);
+		Long groupId = groupService.saveGroup(requestDto);
+		return new ResponseEntity<Long>(groupId, HttpStatus.OK);
 	}
 	
 	@ApiImplicitParams({
@@ -102,7 +104,7 @@ public class GroupController {
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "모든 그룹가져오기-삭제된것 제외", httpMethod = "GET", notes = "모든 그룹 가져오기-삭제된것제외")
-	@GetMapping(value = "/group")
+	@GetMapping(value = "/group/All")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<GroupResponseDto>> findAllGroupExcludeDeleted() throws BaseException{
 		return new ResponseEntity<List<GroupResponseDto>>(groupService.findAllGroupExcludeDeleted(), HttpStatus.OK);
@@ -112,7 +114,7 @@ public class GroupController {
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "해당그룸모든멤버 조회", httpMethod = "GET", notes = "그룹아이디에 포함된 모든 멤버조회")
-	@GetMapping(value = "/group/{groupId}")
+	@GetMapping(value = "/group/user/{groupId}")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<AccountGroupResponseDto>> findByGroupTBId(@PathVariable Long groupId) throws BaseException{
 		return new ResponseEntity<List<AccountGroupResponseDto>>(groupService.findByGroupTBId(groupId), HttpStatus.OK);
@@ -140,5 +142,55 @@ public class GroupController {
 											.build();
 		groupService.updateGroup(requestDto);
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "그룹 제목으로 찾기", httpMethod = "GET", notes = "그룹 제목을 통해 검색")
+	@GetMapping(value = "/group/search/subject/{subject}")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<List<GroupResponseDto>> findBySubjectLike(@PathVariable String subject){
+		return new ResponseEntity<List<GroupResponseDto>>(groupService.findBySubjectLike(subject), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "그룹 닉네임으로 찾기", httpMethod = "GET", notes = "호스트 닉네임을 통해 그룹 검색")
+	@GetMapping(value = "/group/search/nickname/{nickname}")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<List<GroupResponseDto>> findByNicknameLike(@PathVariable String nickname){
+		return new ResponseEntity<List<GroupResponseDto>>(groupService.findByNicknameLike(nickname), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "그룹 내용으로 찾기", httpMethod = "GET", notes = "그룹 내용을 통해 그룹 검색")
+	@GetMapping(value = "/group/search/description/{description}")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<List<GroupResponseDto>> findByDesciptionLike(@PathVariable String description){
+		return new ResponseEntity<List<GroupResponseDto>>(groupService.findByDescriptionLike(description), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "내가 가입된 그룹만 가져오기", httpMethod = "GET", notes = "내가 가입된 그룹만 가져오기 ")
+	@GetMapping(value = "/group")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<List<AccountGroupGroupResponseDto>> findGoupByAccount() throws NumberFormatException, BaseException{
+		return new ResponseEntity<List<AccountGroupGroupResponseDto>>(groupService.findGroupbyAccount(), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "그룹 조회", httpMethod = "GET", notes = "그룹 아이디를 통한 그룹 조회 ")
+	@GetMapping(value = "/group/{groupId}")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<GroupResponseDto> findGroupByGroupId(@PathVariable Long groupId) throws BaseException{
+		return new ResponseEntity<GroupResponseDto>(groupService.findByGroupId(groupId), HttpStatus.OK);
 	}
 }

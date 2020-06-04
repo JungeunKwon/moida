@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.moida.domain.etrash.Etrash;
+import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.etrash.EtrashService;
 import com.ssafy.moida.web.dto.etrash.EtrashSaveRequestDto;
 import com.ssafy.moida.web.dto.etrash.EtrashAllRequestDTO;
@@ -48,10 +49,11 @@ public class EtrashController {
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@PostMapping(value = "/etrash")
 	public ResponseEntity<Long> createEtrash(@RequestBody EtrashSaveRequestDto requestDto
-			) throws IllegalArgumentException, IOException{
-		
+			) throws IllegalArgumentException, IOException, BaseException{
+	
 		return new ResponseEntity<Long>(etrashService.saveEtrash(requestDto), HttpStatus.OK);
 	}
+	
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
@@ -63,6 +65,7 @@ public class EtrashController {
 		
 		return new ResponseEntity<String>(etrashService.sentimentanalysis(requestDto.getDescription()), HttpStatus.OK);
 	}
+	
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
@@ -71,10 +74,9 @@ public class EtrashController {
 	@GetMapping(value = "/etrash")
 	public Page<EtrashResponseDto> findAll(Pageable pageable
 			) throws IllegalArgumentException, IOException{
-		EtrashAllRequestDTO requestDto = new EtrashAllRequestDTO();
-		requestDto.setPageable(pageable);
-		return etrashService.findAll(requestDto);
+		return etrashService.findAll(new EtrashAllRequestDTO(pageable, null));
 	}
+	
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
@@ -83,10 +85,20 @@ public class EtrashController {
 	@GetMapping(value = "/etrash/{mood}")
 	public Page<EtrashResponseDto> findByMood(@PathVariable String mood, Pageable pageable
 			) throws IllegalArgumentException, IOException{
-		EtrashAllRequestDTO requestDto = new EtrashAllRequestDTO();
-		requestDto.setPageable(pageable);
-		requestDto.setMood(mood);
-		return etrashService.findByMood(requestDto);
+	
+		return etrashService.findByMood(new EtrashAllRequestDTO(pageable,mood));
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "감쓰 좋아요 증가", httpMethod = "GET", notes = "감쓰의 좋아요 수를 증가 시킨다.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@GetMapping(value = "/etrash/like/{id}")
+	public ResponseEntity<Long> likecount(@PathVariable Long id
+			) throws IllegalArgumentException, IOException{
+	
+		return new ResponseEntity<Long>(etrashService.likecount(id),HttpStatus.OK);
 	}
 	
 	

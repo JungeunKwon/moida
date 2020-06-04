@@ -2,7 +2,8 @@ import axios from "axios";
 import store from "@/store";
 
 const service = axios.create({
-	baseURL: "http://k02d1061.p.ssafy.io:8080/", // url = base url + request url
+	//baseURL: "http://192.168.77.10:8080", // url = base url + request url
+	baseURL: "http://k02d1061.p.ssafy.io:8080", // url = base url + request url
 	timeout: 5000,
 });
 
@@ -11,6 +12,7 @@ service.interceptors.request.use(
 		if (store.getters.token) {
 			config.headers["X-AUTH-TOKEN"] = store.getters.token;
 			config.headers["Access-Control-Allow-Origin"] = "*";
+			config.headers["Content-Type"] = "application/json; charset=utf-8";
 		}
 		return config;
 	},
@@ -22,6 +24,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
 	response => {
 		const res = response.data;
+		console.log("response");
+		console.log(res);
 		if (response.status !== 200) {
 			return Promise.reject(new Error(res.message || "Error"));
 		} else {
@@ -29,7 +33,6 @@ service.interceptors.response.use(
 		}
 	},
 	error => {
-		// console.log('err' + error)
 		return Promise.reject(error);
 	},
 );

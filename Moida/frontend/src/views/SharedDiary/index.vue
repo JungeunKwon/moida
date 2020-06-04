@@ -1,181 +1,69 @@
 <template>
 	<div id="SharedDiary">
-		<SharedDiaryItem
-			v-for="(item, idx) in diaries"
-			:key="idx"
-			:item="item"
-		/>
+		<!-- 방장, 달력, 해빗트래커, 리스트 -->
+		<div id="diarySubjectDiv">
+			<div>{{ detail.subject }}</div>
+			<SharedDiaryDetail :detail="detail">
+				<img src="../../assets/icons/info.png" width="20px" />
+			</SharedDiaryDetail>
+		</div>
 	</div>
 </template>
 <script>
-import SharedDiaryItem from "./components/item";
+import { mapActions } from "vuex";
+import SharedDiaryDetail from "./components/SharedDiaryDetail";
 export default {
 	name: "SharedDiary",
-	components: {
-		SharedDiaryItem,
-	},
+	components: { SharedDiaryDetail },
 	data() {
 		return {
-			diaries: [
-				{
-					id: 0,
-					name:
-						"3학년 1반 모여라 ~ 긴글 테스트 용임 %^^% 불만 있으신지?",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "3학년 1반 모여라 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-				{
-					id: 0,
-					name: "~ 영대 컴공 14학번 모임 ~",
-					host_id: 0,
-					host_nickname: "방장",
-				},
-			],
+			detail: {},
 		};
 	},
-	mounted() {},
+	mounted() {
+		this.getSharedDiaryDetail(this.$route.params.id)
+			.then(response => {
+				this.detail = response.data;
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	},
 	computed: {},
-	methods: {},
+	methods: {
+		...mapActions("sharedDiary", [
+			"getSharedDiaryDetail",
+			"getSharedDiary",
+		]),
+	},
 };
 </script>
 
 <style>
-#SharedDiary {
-	/* height: 100%;
-	overflow-y: auto;
-	overflow-x: hidden; */
-	margin: 1px;
+#diarySubjectDiv {
+	position: fixed;
+	font-family: KyoboHand;
+	font-size: 20px;
+	background-color: white;
+	padding: 10px 15px 10px 15px;
+	top: 35px;
+	left: 10px;
+	border-radius: 5px;
+	box-shadow: 1px 1px 5px rgba(128, 128, 128, 0.61);
+}
+
+#diarySubjectDiv div {
+	float: left;
+}
+
+#diarySubjectDiv img {
+	margin-left: 5px;
+	float: left;
+	cursor: pointer;
+	margin-top: 3.5px;
+}
+
+#diarySubjectDiv img:hover {
+	opacity: 0.5;
 }
 </style>

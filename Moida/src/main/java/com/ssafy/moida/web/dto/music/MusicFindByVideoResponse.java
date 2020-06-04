@@ -19,33 +19,21 @@ public class MusicFindByVideoResponse {
 	private Long likecount;
 	private String videoid;
 	private Account account;
-	
+	private String thumbnail;
 	
 	
 	@Builder
-	public MusicFindByVideoResponse(Long id, String mood, String musicname, Long likecount, String videoid, Account account) {
+	public MusicFindByVideoResponse(Long id, String mood, String musicname, Long likecount, String videoid, Account account,String thumbnail) {
 		this.id = id;
 		this.musicname = musicname;
 		this.likecount = likecount;
 		this.videoid = videoid;
 		this.account = account;
 		this.mood = mood;
+		this.thumbnail = thumbnail;
 	}
 	
-	
-	
-//	public MusicFindByVideoResponse(Music entity) {
-//		this.id = entity.getId();
-//		this.musicname = entity.getMusicname();
-//		this.likecount = entity.getLikecount();
-//		this.videoid = entity.getVideoid();
-//		this.account = entity.getAccount();
-//		this.mood = entity.getMood();
-//	}
-	
-	
-	
-	
+
 	
 	
 }

@@ -10,5 +10,7 @@ const getters = {
 	locale: state => state.calendar.locale,
 	currentMonth: state => state.calendar.currentMonth,
 	firstDay: state => state.calendar.firstDay,
+	isFirst: state => state.user.isFirst,
 };
+
 export default getters;
