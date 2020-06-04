@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<editor :height="450"></editor>
+		<editor :height="450" :isEdit="false"></editor>
 	</div>
 </template>
 <script>
