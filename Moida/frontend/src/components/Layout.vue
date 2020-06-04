@@ -9,8 +9,17 @@
 		<router-link to="/" class="myTag t1">감쓰</router-link>
 		<router-link to="/diary" class="myTag t2">일기</router-link>
 		<router-link to="/shared" class="myTag t3">공다</router-link>
-		<router-link to="/myPage" class="myTag t4">my</router-link>
-		<router-link to="/login" @click.native="logout" class="myTag t5">logout</router-link>
+		<router-link
+			:to="{
+				name: 'myPage',
+				params: { nickname: $store.getters.nickname },
+			}"
+			class="myTag t4"
+			>my</router-link
+		>
+		<router-link to="/login" @click.native="logout" class="myTag t5"
+			>logout</router-link
+		>
 	</div>
 </template>
 

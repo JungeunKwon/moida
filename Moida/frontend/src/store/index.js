@@ -18,7 +18,7 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
 const store = new Vuex.Store({
 	plugins: [
 		createPersistedState({
-			paths: ["user"],
+			paths: ["user", "calendar"],
 			getState: key => Cookies.getJSON(key),
 			setState: (key, state) =>
 				Cookies.set(key, state, {

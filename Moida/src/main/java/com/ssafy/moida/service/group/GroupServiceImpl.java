@@ -56,14 +56,33 @@ public class GroupServiceImpl implements GroupService {
 			imgUrl = uploadS3.uploadFile(requestDto.getUploadFile(), "group/" + requestDto.getHost().getEmail());
 		}
 		requestDto.setImgUrl(imgUrl);
-		return groupTBRepository.save(requestDto.toEntity()).getId();
+		
+		Long groupid = groupTBRepository.save(requestDto.toEntity()).getId();
+		
+		SaveAccountGroupRequestDto accountgroup = new SaveAccountGroupRequestDto();
+		accountgroup.setAccount(accountService.getAccount());
+		accountgroup.setGroupTB(groupTBRepository.findById(groupid).get());
+		accountgroup.setGroupId(groupid);
+		accountGroupRepository.save(accountgroup.toEntity());
+		
+		if(accountGroupRepository.countByGroupIdAndAccountId(groupid,requestDto.getHost().getId()) <= 0) { 
+			accountGroupRepository.save(accountgroup.toEntity());
+			
+		}
+		return groupid;
 	}
 	
 	@Transactional
 	public Long saveAccountGroup(SaveAccountGroupRequestDto requestDto) throws NumberFormatException, BaseException {
 		GroupTB group = groupTBRepository.findById(requestDto.getGroupId()).orElseThrow(() -> new BaseException(EnumGroupException.GROUP_NOT_FOUND));
-		System.out.println(group.getLimitUser());
-		System.out.println(group.getAccount());
+
+		List<AccountGroup> groupList = accountService.getAccount().getGroupList();
+		
+		for(AccountGroup obj : groupList) {
+			if(obj.getGroupId()==requestDto.getGroupId()) {
+				throw new BaseException(EnumGroupException.GROUP_DUPLICATE_JOIN);
+			}
+		}
 		
 		if(group.getLimitUser()<group.getAccount().size()+1){
 			throw new BaseException(EnumGroupException.GROUP_IS_FULL);
@@ -141,6 +160,8 @@ public class GroupServiceImpl implements GroupService {
 		return groupTBRepository.findByDescriptionContaining(description).stream()
 				.map(GroupResponseDto :: new)
 				.collect(Collectors.toList());
+		
+		
 	}
 	
 	@Transactional(readOnly = true)

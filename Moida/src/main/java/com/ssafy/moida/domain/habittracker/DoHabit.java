@@ -32,7 +32,7 @@ public class DoHabit {
 	private Account account;
 	
 	@ManyToOne
-	@JoinColumn(name="habittracker")
+	@JoinColumn(name="habittracker_id")
 	private Habittracker habittracker;
 	
 	@Builder

@@ -10,6 +10,8 @@ import com.ssafy.moida.web.dto.account.RegisterRequestDto;
 import com.ssafy.moida.web.dto.account.SignInRequestDto;
 
 public interface AccountService {
+	
+	
 	public Long register(RegisterRequestDto requestDto) throws IllegalArgumentException, IOException;
 	public Account findByEmail(SignInRequestDto requestDto) throws BaseException;
 	public Account findById(String id) throws NumberFormatException, BaseException;
@@ -20,4 +22,5 @@ public interface AccountService {
 	public Boolean checkEmail(String email);
 	public Boolean checkNickname(String nickname);
 	public Account getAccount() throws NumberFormatException, BaseException;
+	public AccountResponseDto findByNickname(String nickname) throws NumberFormatException, BaseException;
 }
