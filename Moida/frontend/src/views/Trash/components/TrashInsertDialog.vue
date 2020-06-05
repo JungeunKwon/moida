@@ -249,7 +249,7 @@ export default {
 			time: 0,
 			url: "",
 			score: null,
-			selection: 0,
+			selection: null,
 			musiclist: [],
 			model: null,
 			width: null,
@@ -285,6 +285,12 @@ export default {
 			}
 		},
 		selection: function(newVal, oldVal) {
+			if (this.selection == undefined) {
+				$("#trashinserttext").css({
+					"background-color": "#ffffff",
+				});
+				return;
+			}
 			var item = this.items[this.selection];
 			if (!this.trashdialog) return;
 			for (var i = 0; i < this.items.length; i++) {
@@ -350,6 +356,10 @@ export default {
 		getmusic() {
 			if (this.time == 0) {
 				alert("시간을 선택해주세요.");
+				return;
+			}
+			if (this.selection == undefined || this.selection == null) {
+				alert("감정을 선택해주세요.");
 				return;
 			}
 			var item = this.items[this.selection];

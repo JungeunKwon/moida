@@ -121,6 +121,12 @@ export default {
 			}
 		},
 		selection: function(newVal, oldVal) {
+			if (this.selection == undefined) {
+				$("#trashmusicinserttext").css({
+					"background-color": "#ffffff",
+				});
+				return;
+			}
 			var item = this.items[this.selection];
 			if (!this.trashdialog) return;
 			for (var i = 0; i < this.items.length; i++) {
