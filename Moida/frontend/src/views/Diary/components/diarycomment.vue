@@ -5,13 +5,9 @@
 		</div>
 
 		<div class="commentcontent">
-			<div>
-				{{ comment.nickname }}
-			</div>
-			<div v-if="!isEdit">
-				{{ comment.description }}
-			</div>
-			<div v-else>
+			<div>{{ comment.nickname }}</div>
+			<div v-if="!isEdit">{{ inputcomment }}</div>
+			<div v-else id="editComment">
 				<input
 					type="text"
 					ref="inputcommenttext"
@@ -23,21 +19,15 @@
 				/>
 			</div>
 		</div>
-		<div
-			class="commenticon"
-			v-if="$store.getters.nickname == comment.nickname && !isEdit"
-		>
-			<div class="diaryicons" @click="setFocus">
-				<v-icon>mdi-pencil</v-icon>
-			</div>
+		<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && !isEdit">
 			<div class="diaryicons" @click="setdeletecomment">
 				<v-icon>mdi-delete</v-icon>
 			</div>
+			<div class="diaryicons" @click="setFocus">
+				<v-icon>mdi-pencil</v-icon>
+			</div>
 		</div>
-		<div
-			class="commenticon"
-			v-if="$store.getters.nickname == comment.nickname && isEdit"
-		>
+		<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && isEdit">
 			<div class="diaryicons" @click="editcomment">
 				<v-icon>mdi-check</v-icon>
 			</div>
@@ -107,34 +97,58 @@ export default {
 </script>
 <style scoped>
 .commentavatar img {
-	width: 40px;
-	border-radius: 50%;
+	width: 45px;
 }
 
 .commentcontainer {
 	display: inline-block;
 	width: 100%;
 	text-align: left;
-	border-bottom: 1px solid silver;
-	padding: 10px;
+	border-bottom: 1px solid rgba(192, 192, 192, 0.23);
+	padding: 10px 10px 20px 10px;
 }
 
 .commentavatar {
 	width: 45px;
+	height: 45px;
 	cursor: pointer;
 	float: left;
+	border-radius: 50%;
+	overflow: hidden;
 }
 
 .commentcontent {
 	width: calc(100% - 125px);
 	float: left;
+	margin-left: 10px;
 }
+
+.commentcontent div:first-child {
+	font-weight: 500;
+	font-size: 17px;
+}
+
 .commenticon {
 	width: 70px;
 	float: right;
 }
 
+.diaryicons {
+	float: right;
+	cursor: pointer;
+}
+
 .diaryicons:hover {
 	opacity: 0.7;
+}
+
+#editComment {
+	width: 100%;
+	border: 2px solid rgb(250, 223, 153);
+	padding: 5px;
+}
+
+#editComment input {
+	outline: none;
 }
 </style>

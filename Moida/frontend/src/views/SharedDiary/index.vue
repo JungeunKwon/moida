@@ -1,5 +1,5 @@
 <template>
-	<div id="SharedDiary">
+	<div id="sharedDiary">
 		<!-- 방장, 달력, 해빗트래커, 리스트 -->
 		<div id="diarySubjectDiv">
 			<div>{{ detail.subject }}</div>
@@ -8,8 +8,9 @@
 			</SharedDiaryInfo>
 		</div>
 		<HabitTracker></HabitTracker>
-		<v-date-picker v-model="picker" color="purple lighten-3" @change="test()"></v-date-picker>
-		<div id="writeDiary">
+		<v-date-picker id="sharedCal" v-model="picker" color="purple lighten-3" @change="test()"></v-date-picker>
+
+		<div id="writeDiaryDiv">
 			<v-btn @click="openWrite">
 				<v-icon x-large>mdi-pencil</v-icon>
 			</v-btn>
@@ -54,6 +55,7 @@ export default {
 			this.TOGGLE_WRITINGSD(true);
 			this.SET_DIARYID(this.detail.id);
 			console.log("아듸 세팅 " + this.detail.id);
+			console.log(this.$store.getters.sharedDiaryId);
 			this.$router.push("/writediary");
 		},
 		getSD() {
@@ -103,9 +105,13 @@ export default {
 	color: black !important;
 }
 
-#SharedDiary
-	> div.v-picker.v-card.v-picker--date.theme--light
-	> div.v-picker__title {
+#sharedCal {
+	position: absolute;
+	left: 10px;
+	top: 50px;
+}
+
+#sharedCal > div.v-picker__title.purple.lighten-3 {
 	background-color: white !important;
 }
 
@@ -136,15 +142,14 @@ export default {
 	opacity: 0.5;
 }
 
-#writeDiary {
+#writeDiaryDiv {
 	position: absolute;
 	bottom: 30px;
 	right: 10px;
 	width: 50px;
-	margin: 0 auto;
 }
 
-#writeDiary > button {
+#writeDiaryDiv > button {
 	padding: 10px;
 }
 </style>

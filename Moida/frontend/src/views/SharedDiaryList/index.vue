@@ -7,12 +7,10 @@
 					<div class="sharedPaper mini">공다 만들기</div>
 				</div>
 			</createSharedDiary>
-			<MySharedDiaryList :myDiaries="myDiaries">
-				<div class="sharedMenu mini" @click="mySharedDiaryList()">
-					<img class="tape" src="../../assets/images/tape.png" />
-					<div class="sharedPaper mini">내 공다 목록</div>
-				</div>
-			</MySharedDiaryList>
+			<div class="sharedMenu mini" @click="toggleDiaryList()">
+				<img class="tape" src="../../assets/images/tape.png" />
+				<div class="sharedPaper mini">{{ myDiaryText }}</div>
+			</div>
 			<div class="sharedMenu mini">
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper mini">
@@ -30,21 +28,24 @@
 			</div>
 		</div>
 		<div id="sharedListBottom">
-			<SharedDiaryListItem v-for="(item, idx) in diaries" :key="idx" :item="item" />
+			<SharedDiaryListItem
+				v-for="(item, idx) in diaries"
+				:key="idx"
+				:isMyDiaryList="isMyDiaryList"
+				:item="item"
+			/>
 		</div>
 	</div>
 </template>
 <script>
 import { mapActions } from "vuex";
 import createSharedDiary from "./components/CreateSharedDiary";
-import MySharedDiaryList from "./components/MySharedDiaryList";
 import SharedDiaryListItem from "./components/SharedDiaryListItem";
 export default {
 	name: "SharedDiaryList",
 	components: {
 		SharedDiaryListItem,
 		createSharedDiary,
-		MySharedDiaryList,
 	},
 	data() {
 		return {
@@ -57,6 +58,8 @@ export default {
 				{ text: "내용", value: 2 },
 			],
 			searchSel: "",
+			isMyDiaryList: false,
+			myDiaryText: "내 공다 목록",
 		};
 	},
 	mounted() {
@@ -107,16 +110,29 @@ export default {
 					});
 			}
 		},
-		mySharedDiaryList() {
-			this.getMySharedDiary()
-				.then(response => {
-					console.log("엥");
-					this.myDiaries = response.data;
-					console.log(this.myDiaries);
-				})
-				.catch(error => {
-					console.log(error);
-				});
+		toggleDiaryList() {
+			if (!this.isMyDiaryList) {
+				this.getMySharedDiary()
+					.then(response => {
+						this.isMyDiaryList = true;
+						this.myDiaryText = "내 공다 목록";
+						this.diaries = response.data;
+						console.log(this.myDiaries);
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			} else {
+				this.getSharedDiary()
+					.then(response => {
+						this.isMyDiaryList = false;
+						this.myDiaryText = "전체보기";
+						this.diaries = response.data;
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			}
 		},
 	},
 };
