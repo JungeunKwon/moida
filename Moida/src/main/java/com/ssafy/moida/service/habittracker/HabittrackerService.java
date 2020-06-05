@@ -27,6 +27,8 @@ public interface HabittrackerService {
 	List<HabittrackerResponseDTO> findByGroupTBAndAccount(AccountHabittrackerSaveDTO requestDTO);
 	List<HabittrackerResponseDTO> findByAccount(Long accountid);
 
+	
+	
 //	해빗 CRUD
 	
 //	해빗 가입하기(내정보 , 해빗정보)

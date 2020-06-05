@@ -180,8 +180,8 @@ public class GroupController {
 	@ApiOperation(value = "내가 가입된 그룹만 가져오기", httpMethod = "GET", notes = "내가 가입된 그룹만 가져오기 ")
 	@GetMapping(value = "/group")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<List<AccountGroupGroupResponseDto>> findGoupByAccount() throws NumberFormatException, BaseException{
-		return new ResponseEntity<List<AccountGroupGroupResponseDto>>(groupService.findGroupbyAccount(), HttpStatus.OK);
+	public ResponseEntity<List<GroupResponseDto>> findGoupByAccount() throws NumberFormatException, BaseException{
+		return new ResponseEntity<List<GroupResponseDto>>(groupService.findGroupbyAccount(), HttpStatus.OK);
 	}
 	
 	@ApiImplicitParams({
