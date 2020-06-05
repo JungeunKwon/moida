@@ -73,15 +73,17 @@ public class Diary extends BaseEntity{
 	@OneToMany(mappedBy = "diary")
 	private List<DiaryLikes> diarylikelist = new ArrayList<>();
 	
+	
 	public void updateViewCount() {
 		this.viewcount++;
 	}
 	
-	public void updateDiaryinfo(String description, String mood, String imgurl, int isPrivate) {
+	public void updateDiaryinfo(String description, String mood, String imgurl, int isPrivate, String inputDate) {
 		this.description = description;
 		this.mood = mood;
 		this.imgurl = imgurl;
 		this.isPrivate = isPrivate;
+		this.inputDate = inputDate;
 	}
 	
 	public void deleteDiary(LocalDateTime deleteDate) {

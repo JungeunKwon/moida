@@ -32,9 +32,6 @@ public class Comment extends BaseEntity{
 	@Column(nullable = false)
 	private String description;
 	
-	@Column(nullable = false)
-	private Long likecount;
-	
 	@Column(nullable = true)
 	private LocalDateTime deleteDate;
 	
@@ -45,14 +42,22 @@ public class Comment extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="diary")
 	private Diary diary;
-
+	
+	public void delete() {
+		this.deleteDate = LocalDateTime.now();
+	}
+	
+	public void updateinfo(String description) {
+		this.description = description;
+	}
+	
+	
 	@Builder
-	public Comment(Long id, String description, Long likecount, LocalDateTime deleteDate, Account account,
+	public Comment(Long id, String description, LocalDateTime deleteDate, Account account,
 			Diary diary) {
 		super();
 		this.id = id;
 		this.description = description;
-		this.likecount = likecount;
 		this.deleteDate = deleteDate;
 		this.account = account;
 		this.diary = diary;
