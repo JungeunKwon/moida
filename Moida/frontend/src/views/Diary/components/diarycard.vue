@@ -23,16 +23,12 @@
 			<v-divider></v-divider>
 			<v-item-group>
 				<v-item v-slot:default="{ active, toggle }">
-					<v-col @click="like(toggle, active, diary)">
+					<v-col @click="like(toggle, active, isLike)">
 						<v-btn text>
 							<v-icon color="pink lighten-4">
-								{{
-									diary.isLike
-										? "mdi-heart"
-										: "mdi-heart-outline"
-								}}
+								{{ isLike ? "mdi-heart" : "mdi-heart-outline" }}
 							</v-icon>
-							{{ diary.likecount }}
+							{{ likecout }}
 						</v-btn>
 						<v-btn text>
 							<v-icon color="pink lighten-4">mdi-eye</v-icon>
@@ -62,14 +58,17 @@ export default {
 		},
 	},
 	data() {
-		return { diaryid: "" };
+		return { diaryid: "", likecout: 0, isLike: false };
 	},
 	created() {
 		if (this.diary.imgurl == null || this.diary.imgurl == "") {
 			this.diary.imgurl = "./diarydefault.jpg";
 		}
 	},
-	mounted() {},
+	mounted() {
+		this.likecout = this.diary.likecount;
+		this.isLike = this.diary.isLike;
+	},
 	methods: {
 		...mapActions("diary", ["diaryLike", "diaryDisLike"]),
 		getrealContent(content) {
@@ -82,23 +81,24 @@ export default {
 		gotouser(nickname) {
 			this.$router.push("/myPage/" + nickname);
 		},
-		like(toggle, active, diary) {
+		like(toggle, active, isLike) {
 			//true 면 빈값
-			diary.isLike = !diary.isLike;
-			console.log("LIKE", diary.id);
+			console.log("LIKE", this.diary.id);
+
+			this.isLike = !isLike;
 			toggle();
-			if (diary.isLike == false) {
-				this.diaryDisLike(diary.id)
+			if (this.isLike == false) {
+				this.diaryDisLike(this.diary.id)
 					.then(response => {
-						diary.likecount = response.data;
+						this.likecout = response.data;
 					})
 					.catch(error => {
 						console.log(error);
 					});
 			} else {
-				this.diaryLike(diary.id)
+				this.diaryLike(this.diary.id)
 					.then(response => {
-						diary.likecount = response.data;
+						this.likecout = response.data;
 					})
 					.catch(error => {
 						console.log(error);
