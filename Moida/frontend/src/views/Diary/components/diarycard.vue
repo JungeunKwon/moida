@@ -7,9 +7,7 @@
 				</v-list-item-avatar>
 				<v-list-item-content>
 					<v-list-item-subtitle style="text-align:left">
-						{{
-						diary.nickname
-						}}
+						{{ diary.nickname }}
 					</v-list-item-subtitle>
 				</v-list-item-content>
 			</v-list-item>
@@ -19,9 +17,7 @@
 				<v-divider></v-divider>
 
 				<v-card-text>
-					{{
-					getrealContent(diary.description)
-					}}
+					{{ getrealContent(diary.description) }}
 				</v-card-text>
 			</div>
 			<v-divider></v-divider>
@@ -31,9 +27,9 @@
 						<v-btn text>
 							<v-icon color="pink lighten-4">
 								{{
-								diary.isLike
-								? "mdi-heart"
-								: "mdi-heart-outline"
+									diary.isLike
+										? "mdi-heart"
+										: "mdi-heart-outline"
 								}}
 							</v-icon>
 							{{ diary.likecount }}
@@ -41,6 +37,12 @@
 						<v-btn text>
 							<v-icon color="pink lighten-4">mdi-eye</v-icon>
 							{{ diary.viewcount }}
+						</v-btn>
+						<v-btn text>
+							<v-icon color="pink lighten-4"
+								>mdi-message-reply-text</v-icon
+							>
+							{{ diary.commentcount }}
 						</v-btn>
 					</v-col>
 				</v-item>

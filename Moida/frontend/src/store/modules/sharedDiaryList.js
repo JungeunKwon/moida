@@ -5,7 +5,8 @@ import {
 	searchBySubject,
 	searchByNickname,
 	searchByDesc,
-	joinSharedDiary
+	joinSharedDiary,
+	getMySharedDiary
 } from "@/api/sharedDiaryList";
 
 const state = {};
@@ -105,6 +106,19 @@ const actions = {
 	}, text) {
 		return new Promise((resolve, reject) => {
 			searchByDesc(text)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				})
+		})
+	},
+	getMySharedDiary({
+		commit
+	}) {
+		return new Promise((resolve, reject) => {
+			getMySharedDiary()
 				.then(response => {
 					resolve(response);
 				})

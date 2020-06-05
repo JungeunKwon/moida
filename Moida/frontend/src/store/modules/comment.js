@@ -1,27 +1,17 @@
 import {
-	getSharedDiaryDetail,
-	getSharedDiaryUser,
-	getSharedDiary,
-} from "@/api/sharedDiary";
+	getCommentById,
+	postComment,
+	putComment,
+	deletetComment,
+} from "@/api/comment";
 
-const state = {
-	writingSD: false,
-	diaryId: 0,
-};
-
-const mutations = {
-	TOGGLE_WRITINGSD: (state, flag) => {
-		state.writingSD = flag;
-	},
-	SET_DIARYID: (state, id) => {
-		state.diaryId = id;
-	},
-};
+const state = {};
+const mutations = {};
 
 const actions = {
-	getSharedDiaryDetail({ commit }, diaryId) {
+	getCommentById({ commit }, diaryid) {
 		return new Promise((resolve, reject) => {
-			getSharedDiaryDetail(diaryId)
+			getCommentById(diaryid)
 				.then(response => {
 					resolve(response);
 				})
@@ -30,9 +20,9 @@ const actions = {
 				});
 		});
 	},
-	getSharedDiary({ commit }, diaryId) {
+	postComment({ commit }, commentinfo) {
 		return new Promise((resolve, reject) => {
-			getSharedDiary(diaryId)
+			postComment(commentinfo)
 				.then(response => {
 					resolve(response);
 				})
@@ -41,9 +31,20 @@ const actions = {
 				});
 		});
 	},
-	getSharedDiaryUser({ commit }, diaryId) {
+	putComment({ commit }, commentinfo) {
 		return new Promise((resolve, reject) => {
-			getSharedDiaryUser(diaryId)
+			putComment(commentinfo)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
+	},
+	deletetComment({ commit }, diaryid) {
+		return new Promise((resolve, reject) => {
+			deletetComment(diaryid)
 				.then(response => {
 					resolve(response);
 				})
