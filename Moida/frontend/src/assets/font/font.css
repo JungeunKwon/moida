@@ -14,3 +14,87 @@
 	font-weight: normal;
 	font-style: normal;
 }
+@font-face {
+	font-family: "MapoPeacefull";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoPeacefullA.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "MapoFlowerIsland";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "UhBeeSeulvely";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSeulvely.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "UhBeeMiMi";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeMiMi.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "ChosunGs";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGs.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "Chosunilbo_myungjo";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Chosunilbo_myungjo.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "GmarketSansBold";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "GmarketSansMedium";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "NeoDunggeunmo";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.3/NeoDunggeunmo.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "KCC-eunyoung";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/KCC-eunyoung-Regular.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "TDTDTadakTadak";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/TDTDTadakTadak.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "777Balsamtint";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_nine_@1.1/777Balsamtint.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}

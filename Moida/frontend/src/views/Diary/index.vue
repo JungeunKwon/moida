@@ -6,39 +6,62 @@
 		<v-navigation-drawer v-model="diarydrawer" absolute temporary>
 			<v-list nav dense>
 				<v-list-group value="true">
+					<template v-slot:activator>
+						<v-list-item-title>정렬</v-list-item-title>
+					</template>
 					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
-						<v-list-item @click="getDiaryByfilter('전체보기')">
-							<v-list-item-title>전체보기</v-list-item-title>
-						</v-list-item>
-						<v-list-item @click="getDiaryByfilter('친구공개')">
-							<v-list-item-title>친구공개</v-list-item-title>
-						</v-list-item>
-						<v-list-item @click="getDiaryByfilter('내가쓴글')">
-							<v-list-item-title>내가쓴글</v-list-item-title>
+						<v-list-item v-for="item in sortlist" :key="item.id" @click="changesortSmall(item.text)">
+							<v-list-item-title>
+								{{
+								item.text
+								}}
+							</v-list-item-title>
 						</v-list-item>
 					</v-list-item-group>
 				</v-list-group>
+				<v-list-item-group v-model="group2" active-class="deep-purple--text text--accent-4">
+					<v-list-item @click="getDiaryByfilter('전체보기')">
+						<v-list-item-title>전체보기</v-list-item-title>
+					</v-list-item>
+					<v-list-item @click="getDiaryByfilter('친구공개')">
+						<v-list-item-title>친구공개</v-list-item-title>
+					</v-list-item>
+					<v-list-item @click="getDiaryByfilter('내가쓴글')">
+						<v-list-item-title>내가쓴글</v-list-item-title>
+					</v-list-item>
+				</v-list-item-group>
 			</v-list>
 		</v-navigation-drawer>
-		<div class="sort">
+		<div class="diarysort">
 			<div class="sharedMenu sel">
-				<div class="sharedMenu min" @click="getDiaryByfilter('전체보기')">
-					<img class="tape" src="../../assets/images/tape.png" />
-					<div class="sharedPaper mini">전체보기</div>
+				<img class="tape" src="../../assets/images/tape.png" />
+				<div class="sharedPaper mini" style="width:100px">
+					<v-select
+						:items="sortlist"
+						@change="changesort"
+						color="gray"
+						label="정렬"
+						v-model="sorted"
+						outline
+					></v-select>
 				</div>
-				<div class="sharedMenu min" @click="getDiaryByfilter('친구공개')">
-					<img class="tape" src="../../assets/images/tape.png" />
-					<div class="sharedPaper mini">친구공개</div>
-				</div>
-				<div class="sharedMenu min" @click="getDiaryByfilter('내가쓴글')">
-					<img class="tape" src="../../assets/images/tape.png" />
-					<div class="sharedPaper mini">내가쓴글</div>
-				</div>
+			</div>
+			<div class="sharedMenu min" @click="getDiaryByfilter('전체보기')">
+				<img class="tape" src="../../assets/images/tape.png" />
+				<div class="sharedPaper mini">전체보기</div>
+			</div>
+			<div class="sharedMenu min" @click="getDiaryByfilter('친구공개')">
+				<img class="tape" src="../../assets/images/tape.png" />
+				<div class="sharedPaper mini">친구공개</div>
+			</div>
+			<div class="sharedMenu min" @click="getDiaryByfilter('내가쓴글')">
+				<img class="tape" src="../../assets/images/tape.png" />
+				<div class="sharedPaper mini">내가쓴글</div>
 			</div>
 		</div>
 		<div class="middlediary">
 			<div class="diarymasonry" v-lazy-container="{ selector: 'diarycard' }">
-				<div v-for="(diary) in diaries" :key="diary.id" class="diarycard">
+				<div v-for="diary in diaries" :key="diary.id" class="diarycard">
 					<DiaryCard :diary="diary" @load="rendered" class="diary-card-content" />
 				</div>
 			</div>
@@ -62,12 +85,30 @@ export default {
 		return {
 			diarydrawer: false,
 			group: null,
+			group2: null,
 			diaries: [],
 			imagesCount: 0,
 			originaldiary: [],
+			imageCounter: 0,
+			sortlist: [
+				{ text: "좋아요순" },
+				{ text: "최신순" },
+				{ text: "조회수" },
+			],
+			sorted: "",
 		};
 	},
-	created() {},
+	updated() {
+		this.resizeAllMasonryItems();
+	},
+	created() {
+		let masonryEvents = ["load", "resize"];
+		let vm = this;
+		masonryEvents.forEach(function(event) {
+			window.addEventListener(event, vm.resizeAllMasonryItems);
+		});
+		vm.resizeAllMasonryItems();
+	},
 	mounted() {
 		let masonryEvents = ["load", "resize"];
 		let vm = this;
@@ -84,6 +125,11 @@ export default {
 		},
 		group() {
 			this.diarydrawer = false;
+			this.group2 = null;
+		},
+		group2() {
+			this.diarydrawer = false;
+			this.group = null;
 		},
 	},
 	methods: {
@@ -105,6 +151,7 @@ export default {
 			await this.resizeAllMasonryItems();
 		},
 		getDiaryByfilter(filter) {
+			this.sorted = "";
 			if (filter == "전체보기") {
 				this.diaries = this.originaldiary;
 			} else if (filter == "친구공개") {
@@ -122,6 +169,7 @@ export default {
 					templist.push(this.originaldiary[i]);
 				}
 			}
+			this.imagesCount = templist.length;
 			this.diaries = templist;
 		},
 		sortedArrayByMine() {
@@ -133,6 +181,7 @@ export default {
 					templist.push(this.originaldiary[i]);
 				}
 			}
+			this.imagesCount = templist.length;
 			this.diaries = templist;
 		},
 		openwrite() {
@@ -173,7 +222,43 @@ export default {
 			/* Set the spanning as calculated above (S) */
 			item.style.gridRowEnd = "span " + rowSpan;
 		},
+		changesort() {
+			if (this.sorted == "좋아요순") {
+				this.sortedArrayByLike();
+			} else if (this.sorted == "최신순") {
+				this.sortedArrayByDate();
+			} else if (this.sorted == "조회수") {
+				this.sortedArrayByViews();
+			}
+			this.resizeAllMasonryItems();
+		},
+		changesortSmall(sort) {
+			if (sort == "좋아요순") {
+				this.sortedArrayByLike();
+			} else if (sort == "최신순") {
+				this.sortedArrayByDate();
+			} else if (sort == "조회수") {
+				this.sortedArrayByViews();
+			}
 
+			this.resizeAllMasonryItems();
+		},
+		sortedArrayByLike() {
+			return this.diaries.sort((a, b) => b.likecount - a.likecount);
+		},
+		sortedArrayByDate() {
+			return this.diaries.sort(
+				(a, b) => new Date(b.inputDate) - new Date(a.inputDate),
+			);
+		},
+		sortedArrayByViews() {
+			return this.diaries.sort(
+				(a, b) => new Date(b.viewcount) - new Date(a.viewcount),
+			);
+		},
+		calculateImageCount() {
+			this.imagesCount = this.diaries.length;
+		},
 		rendered() {
 			this.imagesCount++;
 		},
@@ -193,7 +278,7 @@ export default {
 	},
 };
 </script>
-<style >
+<style>
 .diarycontainer {
 	height: 100%;
 	margin: 0 auto;
@@ -236,9 +321,9 @@ export default {
 	opacity: 0.8;
 }
 
-.sort {
-	height: 80px;
+.diarysort {
 	display: block;
+	height: 80px;
 	width: 100%;
 	padding-left: 20px;
 	position: absolute;
@@ -246,7 +331,7 @@ export default {
 	z-index: 2;
 	/* box-shadow: 1px 1px 5px gray; */
 }
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 504px) {
 	.diraydrawer {
 		display: inline-block;
 		position: absolute;
@@ -254,7 +339,23 @@ export default {
 		padding: 5px;
 	}
 
-	.sort {
+	.middlediary {
+		margin-top: 80px;
+		z-index: 1;
+		height: 100%;
+		padding: 2px;
+	}
+
+	.diarymasonry {
+		display: grid;
+		grid-gap: 15px;
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+		grid-auto-rows: 0;
+
+		border: none;
+		margin-bottom: 100px;
+	}
+	.diarysort {
 		display: none;
 	}
 }
