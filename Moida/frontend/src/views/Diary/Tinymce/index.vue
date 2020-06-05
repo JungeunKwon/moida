@@ -114,7 +114,6 @@ import plugins from "./plugins";
 import toolbar from "./toolbar";
 import load from "./dynamicLoadScript";
 import { mapActions, mapMutations } from "vuex";
-import { mapActions } from "vuex";
 import mainimgselect from "./components/mainimgselector";
 import moment from "moment";
 
