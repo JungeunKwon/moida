@@ -2,6 +2,7 @@ package com.ssafy.moida.service.habittracker;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -9,9 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.moida.domain.account.Account;
+import com.ssafy.moida.domain.account.AccountRepository;
+import com.ssafy.moida.domain.group.GroupTB;
 import com.ssafy.moida.domain.group.GroupTBRepository;
 import com.ssafy.moida.domain.habittracker.AccountHabittracker;
 import com.ssafy.moida.domain.habittracker.AccountHabittrackerRepository;
+import com.ssafy.moida.domain.habittracker.DoHabitRepository;
 import com.ssafy.moida.domain.habittracker.Habittracker;
 import com.ssafy.moida.domain.habittracker.HabittrackerRepository;
 import com.ssafy.moida.exception.BaseException;
@@ -19,6 +23,7 @@ import com.ssafy.moida.exception.EnumHabittrackerException;
 import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.web.dto.group.GroupResponseDto;
 import com.ssafy.moida.web.dto.habittracker.AccountHabittrackerSaveDTO;
+import com.ssafy.moida.web.dto.habittracker.DohabitSaveRequestDTO;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerResponseDTO;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerSaveRequestDTO;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerUpdateRequestDTO;
@@ -33,6 +38,7 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 	private final AccountHabittrackerRepository accountHabittrackerRepository;
 	private final AccountService accountService;
 	private final GroupTBRepository groupTBRepository;
+	private final DoHabitRepository doHabitRepository;
 
 	@Transactional
 	public Long saveHabittracker(HabittrackerSaveRequestDTO requestDto) throws NumberFormatException, BaseException {
@@ -54,14 +60,13 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 		endDate = startDate.withYear(year).withMonth(month).withDayOfMonth(day);
 		
 
-		Long habitid = habittrackerRepository.save(requestDto.toEntity(startDate,endDate)).getId();
+		Habittracker habit = habittrackerRepository.save(requestDto.toEntity(startDate,endDate));
 		AccountHabittrackerSaveDTO accounthabit = new AccountHabittrackerSaveDTO();
-		accounthabit.setHabitid(habitid);
+		accounthabit.setHabit(habit);
+		accounthabit.setAccount(account);
+		accountHabittrackerRepository.save(accounthabit.toEntity());
 		
-		Habittracker habit = habittrackerRepository.findById(habitid).get();
-		accountHabittrackerRepository.save(accounthabit.toEntity(account, habit));
-		
-		return habitid;
+		return habit.getId();
 	}
 
 	@Transactional
@@ -117,24 +122,39 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 	@Transactional
 	public Long joinHabittracker(AccountHabittrackerSaveDTO requestDTO) throws NumberFormatException, BaseException {
 		Habittracker habittracker = habittrackerRepository.findById(requestDTO.getHabitid()).get();
-
+		Account account = accountService.getAccount();
+		Habittracker habit = habittrackerRepository.findById(requestDTO.getHabitid()).get();
 		
-		return accountHabittrackerRepository.save(requestDTO.toEntity(accountService.getAccount(), habittracker)).getId();
+		requestDTO.setAccount(account);
+		requestDTO.setHabit(habittrackerRepository.findById(requestDTO.getHabitid()).get());
+		
+		if(accountHabittrackerRepository.countByAccountAndHabittracker(account, habit) > 0) {
+			return 0L;
+		}
+		
+		return accountHabittrackerRepository.save(requestDTO.toEntity()).getId();
 	}
 
 	@Transactional
 	public Long leaveHabittracker(AccountHabittrackerSaveDTO requestDTO) throws NumberFormatException, BaseException {
-		Habittracker habittracker = habittrackerRepository.findById(requestDTO.getHabitid()).get();
+
+		Account account = accountService.getAccount();
+		requestDTO.setAccount(account);
+		requestDTO.setHabit(habittrackerRepository.findById(requestDTO.getHabitid()).get());
 		
-		accountHabittrackerRepository.delete(requestDTO.toEntity(accountService.getAccount(), habittracker));
+		accountHabittrackerRepository.delete(requestDTO.toEntity());
 		return requestDTO.getHabitid();
 	
 	}
 
 	@Transactional
-	public Long clearHabittracker(AccountHabittrackerSaveDTO requestDTO) {
-
-		return null;
+	public Long clearHabittracker(DohabitSaveRequestDTO requestDTO) throws NumberFormatException, BaseException {
+		requestDTO.setAccount(accountService.getAccount());
+		requestDTO.setHabittracker(habittrackerRepository.findById(requestDTO.getHabitid()).get());
+		
+		
+		
+		return doHabitRepository.save(requestDTO.toEntity()).getId();
 	}
 
 	@Transactional(readOnly=true)
@@ -154,22 +174,29 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 
 	@Transactional
 	public List<HabittrackerResponseDTO> findByGroupTB(Long groupid) {
-	
-		return habittrackerRepository.findByGroupTBAndStartDateLessThanAndEndDateGreaterThan(groupid, LocalDateTime.now(), LocalDateTime.now())
+		GroupTB group = groupTBRepository.findById(groupid).get();
+		return habittrackerRepository.findByGroupTBAndStartDateLessThanAndEndDateGreaterThan(group, LocalDateTime.now(), LocalDateTime.now())
 				.stream().map(HabittrackerResponseDTO :: new)
 				.collect(Collectors.toList());
 	}
 
 	@Transactional
-	public List<HabittrackerResponseDTO> findByGroupTBAndAccount(AccountHabittrackerSaveDTO requestDTO) {
-		return null;
+	public List<HabittrackerResponseDTO> findByGroupTBAndAccount(Long groupid) throws NumberFormatException, BaseException {
+		GroupTB group = groupTBRepository.findById(groupid).get();
+		Account account = accountService.getAccount();
+		System.out.println(group.getId() +"            "+account.getId());
+		return habittrackerRepository.findByGroupTBAndAccountAndStartDateLessThanAndEndDateGreaterThan(group.getId(), account.getId(), LocalDateTime.now(),LocalDateTime.now())
+				.stream().map(HabittrackerResponseDTO :: new).collect(Collectors.toList());
 	}
 
 	@Transactional
-	public List<HabittrackerResponseDTO> findByAccount(Long accountid) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<HabittrackerResponseDTO> findByAccount(Long accountid) throws NumberFormatException, BaseException {
+		Account account = accountService.getAccount();
+		return habittrackerRepository.findByAccount(account)
+				.stream().map(HabittrackerResponseDTO :: new).collect(Collectors.toList());
 	}
+
+	
 	
 
 }
