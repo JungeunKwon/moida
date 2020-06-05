@@ -14,7 +14,7 @@ import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.service.etrash.EtrashService;
 import com.ssafy.moida.web.dto.music.MusicFindByMoodRequestDTO;
 import com.ssafy.moida.web.dto.music.MusicResponseDTO;
-import com.ssafy.moida.web.dto.music.MusicFindByVideoResponse;
+
 import com.ssafy.moida.web.dto.music.MusicFindByVideoidRequestDTO;
 import com.ssafy.moida.web.dto.music.MusicSaveRequestDTO;
 import com.ssafy.moida.web.dto.music.MusicSelcetMusicRequest;

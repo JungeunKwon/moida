@@ -9,7 +9,7 @@ import com.ssafy.moida.web.dto.music.MusicSaveRequestDTO;
 import com.ssafy.moida.web.dto.music.MusicSelcetMusicRequest;
 import com.ssafy.moida.web.dto.music.MusicFindByMoodRequestDTO;
 import com.ssafy.moida.web.dto.music.MusicResponseDTO;
-import com.ssafy.moida.web.dto.music.MusicFindByVideoResponse;
+
 
 public interface MusicService {
 	
