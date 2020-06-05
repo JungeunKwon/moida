@@ -26,7 +26,10 @@ public class EtrashResponseDto {
 	private Long likecount;
 	LocalDateTime deleteDate;
 	LocalDateTime createDate;
-
+	AccountResponseDto musicAccount;
+	
+	
+	
 	private MusicResponseDTO music;
 	
 	@Builder
@@ -36,9 +39,10 @@ public class EtrashResponseDto {
 		this.mood = entity.getMood();
 		this.likecount = entity.getLikecount();
 		this.deleteDate = entity.getDeleteDate();
-
 		this.music = MusicResponseDTO.builder().music(entity.getMusic()).build();
 		this.createDate = entity.getCreateDate();
+		
+		this.musicAccount = AccountResponseDto.builder().nickname(this.music.getNickname()).build();
 	}
 	
 	
