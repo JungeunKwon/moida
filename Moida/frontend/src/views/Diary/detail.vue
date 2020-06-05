@@ -1,11 +1,11 @@
 <template>
 	<div class="diraydeatilcontainer">
 		<div class="diarycontext">
-			<div class="diarywriter">
+			<div class="diarywriter" @click="gotouser(membernickname)">
 				<div id="diarydetailMemberDiv">
 					<div class="diarydetailMember">
 						<img :src="memberimg" />
-						<div>{{membernickname}}</div>
+						<div>{{ membernickname }}</div>
 					</div>
 				</div>
 			</div>
@@ -14,9 +14,18 @@
 					<div
 						v-if="$store.getters.nickname == membernickname"
 						style="display:inline-block; cursor:pointer"
+						class="diaryicons"
 						@click="editdiary"
 					>
 						<v-icon>mdi-pencil</v-icon>수정하기
+					</div>
+					<div
+						v-if="$store.getters.nickname == membernickname"
+						style="display:inline-block; cursor:pointer"
+						class="diaryicons"
+						@click="setdeletediary"
+					>
+						<v-icon>mdi-delete</v-icon>삭제하기
 					</div>
 				</div>
 			</div>
@@ -26,32 +35,27 @@
 			<div class="diaryinfobottom">
 				<div class="diaryicons">
 					<v-icon>mdi-calendar</v-icon>
-					{{createdate}}
+					{{ createdate }}
 				</div>
-				<v-item-group v-slot:default="{ active, toggle }" class="diaryicons">
-					<v-item>
-						<v-btn text @click="like(toggle, active, isLike)">
-							<v-icon color="pink lighten-4">
-								{{
-								isLike
-								? "mdi-heart"
-								: "mdi-heart-outline"
-								}}
-							</v-icon>
-							{{likecount }}
-						</v-btn>
-					</v-item>
-				</v-item-group>
+
+				<v-item v-slot:default="{ active, toggle }" class="diaryicons">
+					<v-btn text @click="like(toggle, active, isLike)">
+						<v-icon color="pink lighten-4">{{ isLike ? "mdi-heart" : "mdi-heart-outline" }}</v-icon>
+						{{ likecount }}
+					</v-btn>
+				</v-item>
+
 				<div class="diaryicons">
 					<v-icon>mdi-eye</v-icon>
-					{{viewcount}}
+					<b>{{ viewcount }}</b>
 				</div>
+				<v-divider></v-divider>
 			</div>
 		</div>
 		<div class="diarycomment">
 			<div class="diarycommentdetail">
 				다이어리 디테일
-				{{diaryid}}
+				{{ diaryid }}
 			</div>
 			<div class="diarycommentinput">
 				<div class="diarycomment_input">
@@ -85,56 +89,67 @@ export default {
 			memberimg: "",
 			membernickname: "",
 			createdate: "",
-			viewcount: "",
+			viewcount: 0,
 			comment: "",
-			likecount: "",
+			likecount: 0,
+			isLike: false,
 		};
 	},
+	// computed: {
+	// 	dd() {
+	// 		return this.viewcount;
+	// 	},
+	// },
 	mounted() {
 		this.diaryid = this.$route.params.id;
 		this.getsearchById(this.diaryid);
 	},
 	methods: {
-		...mapActions("diary", ["searchById"]),
+		...mapActions("diary", [
+			"searchById",
+			"deletetDiary",
+			"diaryLike",
+			"diaryDisLike",
+		]),
 
 		like(toggle, active, isLike) {
 			//true 면 빈값
-			isLike = !isLike;
+			this.isLike = !isLike;
 
 			toggle();
-			// 	http.post("store/review/like/", {
-			// 		id: review.id,
-			// 		email: this.nowuseremail,
-			// 	})
-			// 		.then(response => {
-			// 			console.log(
-			// 				"response : ",
-			// 				JSON.stringify(response, null, 2),
-			// 			);
-			// 		})
-			// 		.catch(error => {
-			// 			console.log("failed", error);
-			// 		});
-
-			// 	if (review.likeCheck == false) {
-			// 		review.likes = review.likes - 1;
-			// 	} else {
-			// 		review.likes = review.likes + 1;
-			// 	}
-			// },
+			if (isLike == false) {
+				this.diaryDisLike(this.diaryid)
+					.then(response => {
+						this.likecount = response.data;
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			} else {
+				this.diaryLike(this.diaryid)
+					.then(response => {
+						this.likecount = response.data;
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			}
+		},
+		gotouser(nickname) {
+			this.$router.push("/myPage/" + nickname);
 		},
 		getsearchById(id) {
 			var here = this;
-			console.log(id);
 			this.searchById(id)
 				.then(response => {
 					console.log(response);
 					here.context = response.data.description;
 					here.memberimg = response.data.profileurl;
 					here.membernickname = response.data.nickname;
-					here.createdate = response.data.createDate.substring(0, 10);
-					here.viewcount = response.data.viewconut;
+					here.createdate = response.data.inputDate.substring(0, 10);
+					here.viewcount = response.data.viewcount;
 					here.likecount = response.data.likecount;
+					here.isLike = response.data.isLike;
 				})
 				.catch(error => {
 					console.log(error);
@@ -142,6 +157,17 @@ export default {
 		},
 		editdiary() {
 			this.$router.push("/editDiary/" + this.diaryid);
+		},
+		setdeletediary() {
+			this.deletetDiary(this.diaryid)
+				.then(response => {
+					console.log();
+					alert("삭제 완료!!!");
+					this.$router.push("/diary");
+				})
+				.catch(error => {
+					console.log(error);
+				});
 		},
 	},
 };
@@ -203,6 +229,7 @@ export default {
 	text-align: right;
 	padding-right: 10px;
 	background-color: white;
+	margin-top: 3px;
 }
 
 .diaryinfobottom {
@@ -244,11 +271,12 @@ export default {
 		border: none;
 		background-image: url("../../assets/images/note.png");
 		background-size: cover;
+		background-color: rgba(255, 255, 255, 0.9);
 	}
 	.diarycomment {
 		width: 100%;
 		display: block;
-		height: 300px;
+		height: 400px;
 	}
 
 	.diarycommentinput {
@@ -272,6 +300,8 @@ export default {
 }
 .diaryicons {
 	display: inline-block;
+	margin-left: 5px;
+	margin-right: 5px;
 }
 .diarydetailMember img {
 	float: left;

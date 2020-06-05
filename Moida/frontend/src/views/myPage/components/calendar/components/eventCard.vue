@@ -1,6 +1,6 @@
 <template>
 	<p class="event-item" :class="event.cssClass" @click="card_click">
-		{{ event.content }}
+		{{ event.id }}
 	</p>
 </template>
 
@@ -10,7 +10,7 @@ export default {
 	computed: {},
 	methods: {
 		card_click() {
-			alert(this.event.id + "가 눌렸다!!");
+			this.$router.push(`/detaildiary/${this.event.id}`);
 		},
 	},
 };
