@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MusicFindByMoodResponseDTO {
+public class MusicResponseDTO {
 	private Long id;
 	private String musicname;
 	private Long likecount;
@@ -21,7 +21,7 @@ public class MusicFindByMoodResponseDTO {
 	private String thumbnail;
 	
 	@Builder
-	public MusicFindByMoodResponseDTO(Music music) {
+	public MusicResponseDTO(Music music) {
 		this.id = music.getId();
 		this.musicname = music.getMusicname();
 		this.likecount = music.getLikecount();

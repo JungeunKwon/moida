@@ -27,7 +27,7 @@ import com.ssafy.moida.service.etrash.EtrashService;
 import com.ssafy.moida.service.music.MusicService;
 import com.ssafy.moida.web.dto.etrash.EtrashSaveRequestDto;
 import com.ssafy.moida.web.dto.music.MusicFindByMoodRequestDTO;
-import com.ssafy.moida.web.dto.music.MusicFindByMoodResponseDTO;
+import com.ssafy.moida.web.dto.music.MusicResponseDTO;
 import com.ssafy.moida.web.dto.music.MusicSaveRequestDTO;
 import com.ssafy.moida.web.dto.music.MusicSelcetMusicRequest;
 import com.ssafy.moida.web.dto.etrash.EtrashAllRequestDTO;
@@ -68,7 +68,7 @@ public class MusicController {
 	@ApiOperation(value = "음악검색", httpMethod = "GET", notes = "무드로 음악 검색.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/music/findByMood/{mood}")
-	public Page<MusicFindByMoodResponseDTO> findByMood(@PathVariable String mood,Pageable pageable
+	public Page<MusicResponseDTO> findByMood(@PathVariable String mood,Pageable pageable
 			) throws IllegalArgumentException, IOException{
 		MusicFindByMoodRequestDTO requestDto = new MusicFindByMoodRequestDTO(mood, pageable);
 
@@ -93,11 +93,11 @@ public class MusicController {
 	@ApiOperation(value = "전체음악", httpMethod = "GET", notes = "음악 전체 목록.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/music")
-	public Page<MusicFindByMoodResponseDTO> searchByAll(Pageable pageable
+	public Page<MusicResponseDTO> searchByAll(Pageable pageable
 			) throws IllegalArgumentException, IOException{
 		
 
-		return musicRepository.findAll(pageable).map(MusicFindByMoodResponseDTO::new);
+		return musicRepository.findAll(pageable).map(MusicResponseDTO::new);
 	}
 	
 }
