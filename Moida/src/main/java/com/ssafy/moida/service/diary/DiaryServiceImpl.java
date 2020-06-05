@@ -155,11 +155,21 @@ public class DiaryServiceImpl implements DiaryService{
 		return uploadImgUrl;
 	}
 	@Transactional
-	public DiaryResponseDTO findById(Long diaryid) {
+	public DiaryResponseDTO findById(Long diaryid) throws NumberFormatException, BaseException {
+		Account account = accountService.getAccount();
 		Diary diary = diaryRepository.findById(diaryid).get();
 		diary.updateViewCount();
 		
-		return DiaryResponseDTO.builder().diary(diary).build();
+		DiaryResponseDTO responseDTO = DiaryResponseDTO.builder().diary(diary).build();
+		Boolean isLike = false;
+		
+		if(0<diaryLikeRepository.countByDiaryAndAccount(diary, account)) {
+			isLike = true;
+		}
+		
+		responseDTO.setIsLike(isLike);
+		
+		return responseDTO;
 	}
 
 	@Transactional(readOnly = true)

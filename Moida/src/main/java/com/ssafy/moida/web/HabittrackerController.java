@@ -155,14 +155,14 @@ public class HabittrackerController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
-	@ApiOperation(value = "그룹내 내가 가입한 해빗", httpMethod = "GET", notes = "해빗트래커 do 해버리는 부분입니다.")
+	@ApiOperation(value = "그룹내 내가 가입한 해빗", httpMethod = "GET", notes = "그룹내 내가 가입한 해빗.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/habit/in/{groupid}")
 	public ResponseEntity<List<HabittrackerResponseDTO>> findByGroupTBAndAccount(@PathVariable Long groupid
 			) throws IllegalArgumentException, IOException, BaseException{
 		
 
-		return new ResponseEntity<List<HabittrackerResponseDTO>>(habittrackerService.findByGroupTB(groupid), HttpStatus.OK);
+		return new ResponseEntity<List<HabittrackerResponseDTO>>(habittrackerService.findByGroupTBAndAccount(groupid), HttpStatus.OK);
 	}
 	
 }
