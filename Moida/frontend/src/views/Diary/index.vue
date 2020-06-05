@@ -1,7 +1,9 @@
 <template>
 	<div class="diarycontainer">
 		<div class="diraydrawer">
-			<v-app-bar-nav-icon @click.stop="diarydrawer = !diarydrawer"></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon
+				@click.stop="diarydrawer = !diarydrawer"
+			></v-app-bar-nav-icon>
 		</div>
 		<v-navigation-drawer v-model="diarydrawer" absolute temporary>
 			<v-list nav dense>
@@ -9,17 +11,25 @@
 					<template v-slot:activator>
 						<v-list-item-title>정렬</v-list-item-title>
 					</template>
-					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
-						<v-list-item v-for="item in sortlist" :key="item.id" @click="changesortSmall(item.text)">
+					<v-list-item-group
+						v-model="group"
+						active-class="deep-purple--text text--accent-4"
+					>
+						<v-list-item
+							v-for="item in sortlist"
+							:key="item.id"
+							@click="changesortSmall(item.text)"
+						>
 							<v-list-item-title>
-								{{
-								item.text
-								}}
+								{{ item.text }}
 							</v-list-item-title>
 						</v-list-item>
 					</v-list-item-group>
 				</v-list-group>
-				<v-list-item-group v-model="group2" active-class="deep-purple--text text--accent-4">
+				<v-list-item-group
+					v-model="group2"
+					active-class="deep-purple--text text--accent-4"
+				>
 					<v-list-item @click="getDiaryByfilter('전체보기')">
 						<v-list-item-title>전체보기</v-list-item-title>
 					</v-list-item>
@@ -60,9 +70,16 @@
 			</div>
 		</div>
 		<div class="middlediary">
-			<div class="diarymasonry" v-lazy-container="{ selector: 'diarycard' }">
+			<div
+				class="diarymasonry"
+				v-lazy-container="{ selector: 'diarycard' }"
+			>
 				<div v-for="diary in diaries" :key="diary.id" class="diarycard">
-					<DiaryCard :diary="diary" @load="rendered" class="diary-card-content" />
+					<DiaryCard
+						:diary="diary"
+						@load="rendered"
+						class="diary-card-content"
+					/>
 				</div>
 			</div>
 		</div>
@@ -94,6 +111,7 @@ export default {
 				{ text: "좋아요순" },
 				{ text: "최신순" },
 				{ text: "조회수" },
+				{ text: "댓글순" },
 			],
 			sorted: "",
 		};
@@ -133,6 +151,12 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions("diary", [
+			"getDiary",
+			"postDiary",
+			"searchById",
+			"putDiary",
+		]),
 		...mapActions("diary", [
 			"getDiary",
 			"postDiary",
@@ -229,6 +253,8 @@ export default {
 				this.sortedArrayByDate();
 			} else if (this.sorted == "조회수") {
 				this.sortedArrayByViews();
+			} else if (this.sorted == "댓글순") {
+				this.sortedArrayByComment();
 			}
 			this.resizeAllMasonryItems();
 		},
@@ -245,6 +271,9 @@ export default {
 		},
 		sortedArrayByLike() {
 			return this.diaries.sort((a, b) => b.likecount - a.likecount);
+		},
+		sortedArrayByComment() {
+			return this.diaries.sort((a, b) => b.commentcount - a.commentcount);
 		},
 		sortedArrayByDate() {
 			return this.diaries.sort(
@@ -363,7 +392,22 @@ export default {
 .sharedMenu.min {
 	cursor: pointer;
 }
-
+.v-text-field.v-input--is-focused > .v-input__control > .v-input__slot:after {
+	display: inline-block;
+	border: 0;
+	align-items: center;
+	text-align: center;
+}
+.theme--light.v-text-field > .v-input__control > .v-input__slot:before {
+	display: inline-block;
+	border: 0;
+	align-items: center;
+	text-align: center;
+}
+.v-text-field > .v-input__control > .v-input__slot {
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
 .sharedMenu.min:hover {
 	transform: rotate(4deg);
 }

@@ -40,7 +40,9 @@
 
 				<v-item v-slot:default="{ active, toggle }" class="diaryicons">
 					<v-btn text @click="like(toggle, active, isLike)">
-						<v-icon color="pink lighten-4">{{ isLike ? "mdi-heart" : "mdi-heart-outline" }}</v-icon>
+						<v-icon color="pink lighten-4">{{
+							isLike ? "mdi-heart" : "mdi-heart-outline"
+						}}</v-icon>
 						{{ likecount }}
 					</v-btn>
 				</v-item>
@@ -54,21 +56,29 @@
 		</div>
 		<div class="diarycomment">
 			<div class="diarycommentdetail">
-				다이어리 디테일
-				{{ diaryid }}
+				<div
+					style="width: 100%;"
+					v-for="(comment, index) in comments"
+					:key="comment.id"
+				>
+					<diarycomment :comment="comment" :index="index" @ />
+				</div>
 			</div>
 			<div class="diarycommentinput">
 				<div class="diarycomment_input">
 					<v-text-field
-						v-model="comment"
+						v-model="inputcomment"
 						name="input-10-2"
 						label="댓글"
 						color="#00000"
+						@keyup.enter="addcomment"
 						class="input-group--focused"
 						outlined
 						style="float: left; width: calc(100% - 50px);"
 					/>
-					<button class="diarycomment_btn">작성</button>
+					<button class="diarycomment_btn" @click="addcomment">
+						작성
+					</button>
 				</div>
 			</div>
 		</div>
@@ -77,10 +87,12 @@
 <script>
 import { mapActions } from "vuex";
 import $ from "jquery";
+import moment from "moment";
 
+import diarycomment from "./components/diarycomment";
 export default {
 	name: "detailDiary",
-	components: {},
+	components: { diarycomment },
 
 	data() {
 		return {
@@ -90,9 +102,10 @@ export default {
 			membernickname: "",
 			createdate: "",
 			viewcount: 0,
-			comment: "",
+			inputcomment: "",
 			likecount: 0,
 			isLike: false,
+			comments: [],
 		};
 	},
 	// computed: {
@@ -103,6 +116,7 @@ export default {
 	mounted() {
 		this.diaryid = this.$route.params.id;
 		this.getsearchById(this.diaryid);
+		this.getsearchcommentById(this.diaryid);
 	},
 	methods: {
 		...mapActions("diary", [
@@ -111,6 +125,7 @@ export default {
 			"diaryLike",
 			"diaryDisLike",
 		]),
+		...mapActions("comment", ["getCommentById", "postComment"]),
 
 		like(toggle, active, isLike) {
 			//true 면 빈값
@@ -142,7 +157,6 @@ export default {
 			var here = this;
 			this.searchById(id)
 				.then(response => {
-					console.log(response);
 					here.context = response.data.description;
 					here.memberimg = response.data.profileurl;
 					here.membernickname = response.data.nickname;
@@ -150,6 +164,17 @@ export default {
 					here.viewcount = response.data.viewcount;
 					here.likecount = response.data.likecount;
 					here.isLike = response.data.isLike;
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		},
+		getsearchcommentById(id) {
+			var here = this;
+			this.getCommentById(id)
+				.then(response => {
+					console.log("댓글", response);
+					here.comments = response.data;
 				})
 				.catch(error => {
 					console.log(error);
@@ -168,6 +193,38 @@ export default {
 				.catch(error => {
 					console.log(error);
 				});
+		},
+		addcomment() {
+			if (this.inputcomment == null || this.inputcomment == "") {
+				alert("댓글을 입력해주세요.");
+				return;
+			}
+			var date =
+				new Date().toISOString().substring(0, 10) +
+				" " +
+				moment()
+					.local("ko")
+					.format("HH:mm");
+			var data = {
+				diaryid: this.diaryid,
+				description: this.inputcomment,
+				profileimg: this.$store.getters.profileImg,
+				nickname: this.$store.getters.nickname,
+				modifiedDate: date,
+				likecount: 0,
+			};
+			console.log("DATE", data);
+			this.postComment(data)
+				.then(response => {
+					console.log();
+					this.comments.push(data);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		},
+		deletecomment(index) {
+			this.comments.splice(index, 1);
 		},
 	},
 };
