@@ -10,9 +10,21 @@
 					<!-- <v-time-picker v-model="picker" scrollable color="#fadf99"></v-time-picker> -->
 
 					<v-radio-group v-model="isPrivate" row>
-						<v-radio color="grey" label="전체공개" value="1"></v-radio>
-						<v-radio color="grey" label="친구공개" value="2"></v-radio>
-						<v-radio color="grey" label="비공개" value="3"></v-radio>
+						<v-radio
+							color="grey"
+							label="전체공개"
+							value="1"
+						></v-radio>
+						<v-radio
+							color="grey"
+							label="친구공개"
+							value="2"
+						></v-radio>
+						<v-radio
+							color="grey"
+							label="비공개"
+							value="3"
+						></v-radio>
 					</v-radio-group>
 				</div>
 				<el-button
@@ -21,14 +33,16 @@
 					icon="el-icon-check"
 					size="mini"
 					@click="processpost"
-				>submit</el-button>
+					>submit</el-button
+				>
 				<el-button
 					v-if="isEdit"
 					class="diaryWriteBtn"
 					icon="el-icon-check"
 					size="mini"
 					@click="processpost"
-				>edit</el-button>
+					>edit</el-button
+				>
 			</div>
 		</div>
 
@@ -37,11 +51,24 @@
 		</div>
 		<div>
 			<div class="editor-custom-btn-container-upload">
-				<editorImage color="#f7ebc3" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
+				<editorImage
+					color="#f7ebc3"
+					class="editor-upload-btn"
+					@successCBK="imageSuccessCBK"
+				/>
 			</div>
 		</div>
-		<mainimgselect :imgselectdialog="imgselectdialog" :items="imglist" @setMainImg="setMainImg" />
-		<v-dialog v-model="dateselect" max-width="500px" background-color="white" background="white">
+		<mainimgselect
+			:imgselectdialog="imgselectdialog"
+			:items="imglist"
+			@setMainImg="setMainImg"
+		/>
+		<v-dialog
+			v-model="dateselect"
+			max-width="500px"
+			background-color="white"
+			background="white"
+		>
 			<v-card style="padding:20px">
 				<v-menu
 					v-model="datemenu"
@@ -61,7 +88,11 @@
 							color="#fadf99"
 						/>
 					</template>
-					<v-date-picker v-model="inputdate" @input="datemenu = false" color="#fadf99" />
+					<v-date-picker
+						v-model="inputdate"
+						@input="datemenu = false"
+						color="#fadf99"
+					/>
 				</v-menu>
 				<v-menu
 					v-model="timemenu"
@@ -81,7 +112,12 @@
 							color="#fadf99"
 						/>
 					</template>
-					<v-time-picker v-model="inputtime" @input="timemenu = false" scrollable color="#fadf99"></v-time-picker>
+					<v-time-picker
+						v-model="inputtime"
+						@input="timemenu = false"
+						scrollable
+						color="#fadf99"
+					></v-time-picker>
 				</v-menu>
 				<el-button
 					v-if="!isEdit"
@@ -89,19 +125,20 @@
 					icon="el-icon-check"
 					size="mini"
 					@click="processpost2"
-				>submit</el-button>
+					>submit</el-button
+				>
 				<el-button
 					v-if="isEdit"
 					class="diaryWriteBtn"
 					icon="el-icon-check"
 					size="mini"
 					@click="processpost2"
-				>edit</el-button>
+					>edit</el-button
+				>
 			</v-card>
 		</v-dialog>
 	</div>
 </template>
-
 
 <script>
 /**
@@ -313,7 +350,7 @@ export default {
 					"Neo둥근모=NeoDunggeunmo;" +
 					"KCC은영체=KCC-eunyoung;" +
 					"타닥타닥체=TDTDTadakTadak;" +
-					"봉숭아틴트=777Balsamtint",
+					"봉숭아틴트=777Balsamtint;",
 				nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
 				init_instance_callback: editor => {
 					if (_this.value) {
@@ -409,24 +446,32 @@ export default {
 				alert("글 입력해주세요.");
 				return;
 			}
+			let inputData = {};
 			var date = this.inputdate + " " + this.inputtime;
 			let sharedDiaryId = this.$store.getters.sharedDiaryId;
 			if (this.isEdit) {
+				inputData = {
+					description: ed,
+					isPrivate: parseInt(this.isPrivate),
+					imgurl: this.mainimg,
+					inputDate: date,
+					id: this.diaryid,
+				};
 				this.putDiary(inputData)
 					.then(response => {
 						console.log(response);
 						if (this.isSD) {
 							this.$router.push("/shared/" + sharedDiaryId);
 						} else {
-							this.$router.push("/detaildiary/" + response.data);
+							this.$router.push(
+								"/detaildiary/" + response.data.id,
+							);
 						}
 					})
 					.catch(error => {
 						console.log(error);
 					});
 			} else {
-				let inputData = {};
-
 				if (this.isSD) {
 					inputData = {
 						groupid: sharedDiaryId,
