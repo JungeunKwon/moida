@@ -50,3 +50,10 @@ export function searchByDesc(data) {
 		method: "get",
 	});
 }
+
+export function getMySharedDiary() {
+	return request({
+		url: '/v1/group',
+		method: "get",
+	});
+}

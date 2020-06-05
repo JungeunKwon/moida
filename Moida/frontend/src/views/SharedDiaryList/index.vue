@@ -7,10 +7,12 @@
 					<div class="sharedPaper mini">공다 만들기</div>
 				</div>
 			</createSharedDiary>
-			<div class="sharedMenu mini">
-				<img class="tape" src="../../assets/images/tape.png" />
-				<div class="sharedPaper mini">내 공다 목록</div>
-			</div>
+			<MySharedDiaryList :myDiaries="myDiaries">
+				<div class="sharedMenu mini" @click="mySharedDiaryList()">
+					<img class="tape" src="../../assets/images/tape.png" />
+					<div class="sharedPaper mini">내 공다 목록</div>
+				</div>
+			</MySharedDiaryList>
 			<div class="sharedMenu mini">
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper mini">
@@ -35,17 +37,20 @@
 <script>
 import { mapActions } from "vuex";
 import createSharedDiary from "./components/CreateSharedDiary";
+import MySharedDiaryList from "./components/MySharedDiaryList";
 import SharedDiaryListItem from "./components/SharedDiaryListItem";
 export default {
 	name: "SharedDiaryList",
 	components: {
 		SharedDiaryListItem,
 		createSharedDiary,
+		MySharedDiaryList,
 	},
 	data() {
 		return {
 			searchText: "",
 			diaries: [],
+			myDiaries: [],
 			sels: [
 				{ text: "제목", value: 0 },
 				{ text: "닉네임", value: 1 },
@@ -70,6 +75,7 @@ export default {
 			"searchBySubject",
 			"searchByDesc",
 			"searchByNickname",
+			"getMySharedDiary",
 		]),
 		searchSharedDiary() {
 			console.log(this.searchSel);
@@ -101,12 +107,23 @@ export default {
 					});
 			}
 		},
+		mySharedDiaryList() {
+			this.getMySharedDiary()
+				.then(response => {
+					console.log("엥");
+					this.myDiaries = response.data;
+					console.log(this.myDiaries);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		},
 	},
 };
 </script>
 
 <style>
-#sharedListTop > div:nth-child(4) > div > div > div > div.v-input__slot {
+#sharedListTop > div.sharedMenu.mini > div > div > div > div.v-input__slot {
 	box-shadow: none;
 }
 

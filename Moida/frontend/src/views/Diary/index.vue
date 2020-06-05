@@ -1,7 +1,9 @@
 <template>
 	<div class="diarycontainer">
 		<div class="diraydrawer">
-			<v-app-bar-nav-icon @click.stop="diarydrawer = !diarydrawer"></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon
+				@click.stop="diarydrawer = !diarydrawer"
+			></v-app-bar-nav-icon>
 		</div>
 		<v-navigation-drawer v-model="diarydrawer" absolute temporary>
 			<v-list nav dense>
@@ -67,11 +69,9 @@
 			</div>
 		</div>
 		<div class="bottomdiary">
-			<div class="bottomdiray">
-				<v-btn @click="openwrite">
-					<v-icon x-large>mdi-pencil</v-icon>
-				</v-btn>
-			</div>
+			<v-btn @click="openwrite">
+				<v-icon x-large>mdi-pencil</v-icon>
+			</v-btn>
 		</div>
 	</div>
 </template>
@@ -291,6 +291,7 @@ export default {
 	height: 100%;
 	padding: 20px;
 }
+
 .bottomdiary {
 	position: absolute;
 	bottom: 30px;
@@ -298,9 +299,6 @@ export default {
 	width: 50px;
 	height: 60px;
 	margin: 0 auto;
-}
-.bottomdiray {
-	background-color: #fce4ec;
 }
 
 .diraydrawer {

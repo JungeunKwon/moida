@@ -1,17 +1,25 @@
 import {
 	getSharedDiaryDetail,
 	getSharedDiaryUser,
-	getSharedDiary
+	getSharedDiary,
 } from "@/api/sharedDiary";
 
-const state = {};
+const state = {
+	writingSD: false,
+	diaryId: 0,
+};
 
-const mutations = {};
+const mutations = {
+	TOGGLE_WRITINGSD: (state, flag) => {
+		state.writingSD = flag;
+	},
+	SET_DIARYID: (state, id) => {
+		state.diaryId = id;
+	},
+};
 
 const actions = {
-	getSharedDiaryDetail({
-		commit
-	}, diaryId) {
+	getSharedDiaryDetail({ commit }, diaryId) {
 		return new Promise((resolve, reject) => {
 			getSharedDiaryDetail(diaryId)
 				.then(response => {
@@ -22,9 +30,7 @@ const actions = {
 				});
 		});
 	},
-	getSharedDiary({
-		commit
-	}, diaryId) {
+	getSharedDiary({ commit }, diaryId) {
 		return new Promise((resolve, reject) => {
 			getSharedDiary(diaryId)
 				.then(response => {
@@ -35,9 +41,7 @@ const actions = {
 				});
 		});
 	},
-	getSharedDiaryUser({
-		commit
-	}, diaryId) {
+	getSharedDiaryUser({ commit }, diaryId) {
 		return new Promise((resolve, reject) => {
 			getSharedDiaryUser(diaryId)
 				.then(response => {
