@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.web.dto.habittracker.AccountHabittrackerSaveDTO;
+import com.ssafy.moida.web.dto.habittracker.DohabitSaveRequestDTO;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerResponseDTO;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerSaveRequestDTO;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerUpdateRequestDTO;
@@ -17,15 +18,15 @@ public interface HabittrackerService {
 	
 	Long joinHabittracker(AccountHabittrackerSaveDTO requestDTO) throws NumberFormatException, BaseException;
 	Long leaveHabittracker(AccountHabittrackerSaveDTO requestDTO) throws NumberFormatException, BaseException;
-	Long clearHabittracker(AccountHabittrackerSaveDTO requestDTO);
+	Long clearHabittracker(DohabitSaveRequestDTO requestDTO) throws NumberFormatException, BaseException;
 	
 	HabittrackerResponseDTO findById(Long id);
 	
 	List<HabittrackerResponseDTO> findAll();
 	List<HabittrackerResponseDTO> findByGroupTBAll(Long groupid);
 	List<HabittrackerResponseDTO> findByGroupTB(Long groupid);
-	List<HabittrackerResponseDTO> findByGroupTBAndAccount(AccountHabittrackerSaveDTO requestDTO);
-	List<HabittrackerResponseDTO> findByAccount(Long accountid);
+	List<HabittrackerResponseDTO> findByGroupTBAndAccount(Long groupid) throws NumberFormatException, BaseException;
+	List<HabittrackerResponseDTO> findByAccount(Long accountid) throws NumberFormatException, BaseException;
 
 	
 	

@@ -28,6 +28,7 @@ public class AccountGroup {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
