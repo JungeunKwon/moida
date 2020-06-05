@@ -16,7 +16,7 @@ public class MusicFindByMoodResponseDTO {
 	private String musicname;
 	private Long likecount;
 	private String videoid;
-	private Account account;
+	private String nickname;
 	private String mood;
 	private String thumbnail;
 	
@@ -26,7 +26,7 @@ public class MusicFindByMoodResponseDTO {
 		this.musicname = music.getMusicname();
 		this.likecount = music.getLikecount();
 		this.videoid = music.getVideoid();
-		this.account = music.getAccount();
+		this.nickname = music.getAccount().getNickname();
 		this.mood = music.getMood();
 		this.thumbnail = music.getThumbnail();
 	}
