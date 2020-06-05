@@ -26,10 +26,10 @@ const actions = {
 					let result = [];
 					let content = response.data.content;
 					for (let idx = 0; idx < content.length; idx++) {
-						let t = moment(content[idx].createDate);
+						let t = moment(content[idx].inputDate);
 						result.push({
 							id: content[idx].id,
-							day: moment(content[idx].createDate),
+							day: moment(content[idx].inputDate),
 							content: content[idx].description,
 							cssClass: getClass(
 								content[idx].isPrivate,
@@ -37,7 +37,6 @@ const actions = {
 							),
 						});
 					}
-					console.log(result);
 					resolve(result);
 				})
 				.catch(error => {
