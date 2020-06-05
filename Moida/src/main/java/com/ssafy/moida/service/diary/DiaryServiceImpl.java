@@ -102,7 +102,7 @@ public class DiaryServiceImpl implements DiaryService{
 	@Transactional
 	public DiaryResponseDTO updateinfo(DiaryUpdateRequest dto) {
 		Diary diary = diaryRepository.findById(dto.getId()).get();
-		diary.updateDiaryinfo(dto.getDescription(), dto.getMood(), dto.getImgurl(),dto.getIsPrivate());
+		diary.updateDiaryinfo(dto.getDescription(), dto.getMood(), dto.getImgurl(),dto.getIsPrivate(),dto.getInputDate());
 		return DiaryResponseDTO.builder().diary(diary).build();
 	}
 
