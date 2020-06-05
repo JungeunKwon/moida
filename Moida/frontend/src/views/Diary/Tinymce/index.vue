@@ -414,7 +414,7 @@ export default {
 
 				if (this.isSD) {
 					inputData = {
-						group: { id: sharedDiaryId },
+						groupId: sharedDiaryId,
 						id: this.diaryid,
 						description: ed,
 						isPrivate: parseInt(this.isPrivate),
