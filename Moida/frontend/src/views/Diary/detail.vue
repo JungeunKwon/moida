@@ -123,9 +123,8 @@ export default {
 		like(toggle, active, isLike) {
 			//true 면 빈값
 			this.isLike = !isLike;
-
 			toggle();
-			if (isLike == false) {
+			if (this.isLike == false) {
 				this.diaryDisLike(this.diaryid)
 					.then(response => {
 						this.likecount = response.data;

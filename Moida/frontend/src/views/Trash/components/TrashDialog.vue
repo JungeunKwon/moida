@@ -23,16 +23,26 @@
 		</v-card>
 
 		<div v-if="innerdialog">
-			<div>
-				<div class="TrashMusicCardTitle" dark>토닥토닥</div>
-				<div class="TrashMusicCard">
-					<p class="font-weight-bold">다른 유저들에게 자신만의 노래를 추천해보세요.</p>
+			<div class="TrashMusicCardTitle" dark>토닥토닥</div>
+			<div class="TrashMusicCard">
+				<div id="trashmusicinserttext">
+					<p class="font-weight-bold">
+						다른 유저들에게 자신만의 노래를 추천해보세요.
+					</p>
 
 					<v-card-text>
-						<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
+						<v-chip-group
+							v-model="selection"
+							active-class="deep-purple accent-4 white--text"
+							column
+						>
 							<div style="margin: 0 auto; width:90%">
 								<v-row align="center" justify="start">
-									<v-col v-for="item in items" :key="item.text" class="shrink">
+									<v-col
+										v-for="item in items"
+										:key="item.text"
+										class="shrink"
+									>
 										<v-chip>
 											<v-avatar left>
 												<v-img :src="item.src"></v-img>
@@ -44,9 +54,14 @@
 							</div>
 						</v-chip-group>
 						<div style="margin: 0 auto; width:70%">
-							<p class="font-weight-bold">해당 감정에 자주 듣는 노래 url을 입력해주세요.(유투브)</p>
+							<p class="font-weight-bold">
+								해당 감정에 자주 듣는 노래 url을
+								입력해주세요.(유투브)
+							</p>
 							<div style="margin: 0 auto; width:100%;">
-								<div style="display: inline-block; width: 80%; border:2px black">
+								<div
+									style="display: inline-block; width: 80%; border:2px black"
+								>
 									<v-text-field
 										v-model="url"
 										@keyup.enter="insert"
@@ -56,7 +71,12 @@
 										:rules="[youtube_parser]"
 									/>
 								</div>
-								<v-btn text style="display: inline-block; width: 20%;" @click="inserttodack">입력</v-btn>
+								<v-btn
+									text
+									style="display: inline-block; width: 20%;"
+									@click="inserttodack"
+									>입력</v-btn
+								>
 							</div>
 						</div>
 					</v-card-text>
@@ -67,6 +87,8 @@
 </template>
 <script>
 import axios from "axios";
+import $ from "jquery";
+
 import { getMusic, postMusic } from "../../../../src/api/music";
 
 export default {
@@ -92,6 +114,22 @@ export default {
 				this.url = "";
 				this.thumbnail = "";
 				this.musicname = "";
+				this.selection = null;
+				$("#trashmusicinserttext").css({
+					"background-color": "#ffffff",
+				});
+			}
+		},
+		selection: function(newVal, oldVal) {
+			var item = this.items[this.selection];
+			if (!this.trashdialog) return;
+			for (var i = 0; i < this.items.length; i++) {
+				if (this.items[i].text == item.text) {
+					$("#trashmusicinserttext").css({
+						"background-color": this.items[i].colorcode,
+					});
+					break;
+				}
 			}
 		},
 	},
@@ -105,7 +143,7 @@ export default {
 			var item = this.items[this.selection];
 
 			if (videoId == false) {
-				alert("옳바른 유투브 주소를 입력해주세요.");
+				alert("올바른 유투브 주소를 입력해주세요.");
 				return;
 			}
 			this.innerdialog = false;
@@ -135,6 +173,13 @@ export default {
 							videoid: videoId,
 						})
 							.then(response => {
+								if (response.data.code != undefined) {
+									if (response.data.code == "031") {
+										alert(response.data.msg);
+										this.innerdialog = true;
+										return;
+									}
+								}
 								setTimeout(() => {
 									this.innerdialog = true;
 									this.trashdialog = false;
@@ -175,14 +220,13 @@ export default {
 	},
 };
 </script>
-<style >
+<style>
 .TrashMusicCard {
-	background-color: palegoldenrod;
-
 	margin: 0 auto;
 	margin-top: -15px;
 	border-radius: 10px;
 	z-index: 1;
+	background-color: white;
 }
 .TrashMusicCardTitle {
 	width: 120px;
