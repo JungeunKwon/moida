@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.ssafy.moida.domain.account.Account;
 
 import lombok.Builder;
@@ -41,7 +44,7 @@ public class Music {
 	@Column(nullable = true)
 	private String thumbnail;
 	
-	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;

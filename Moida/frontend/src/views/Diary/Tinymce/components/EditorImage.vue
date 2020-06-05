@@ -11,22 +11,24 @@
 				<div class="tinymceimgbtn">
 					<img-inputer
 						ref="profile"
+						size="large"
 						v-model="file"
 						name="file"
 						placeholder="Drop file here or click"
 						bottom-text="Drop file here or click"
 						exceed-size-text="사진의 크기가 초과하였습니다"
-						:max-size="1024"
+						:max-size="1024*1024"
+						width="400px"
 						@onExceed="exceedHandler"
 						id="signUp_img"
 					/>
 				</div>
 				<div>
-					<div style="display:inline-block;">
-						<el-button @click="dialogVisible = false">Cancel</el-button>
+					<div style="display:inline-block; margin:10px">
+						<el-button class="diaryWriteBtn" @click="handleSubmit">Confirm</el-button>
 					</div>
-					<div style="display:inline-block;">
-						<el-button type="primary" @click="handleSubmit">Confirm</el-button>
+					<div style="display:inline-block; margin:10px">
+						<el-button class="diaryWriteBtn" @click="dialogVisible = false">Cancel</el-button>
 					</div>
 				</div>
 			</div>
@@ -102,6 +104,7 @@ export default {
 	background-color: white;
 	margin: 0 auto;
 	width: 100%;
+	padding: 20px;
 }
 .upload-container {
 	background-color: white;

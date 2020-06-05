@@ -32,7 +32,7 @@ public class AccountHabittracker {
 	
 	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
-	@JoinColumn(name="grouptb_id")
+	@JoinColumn(name="habittracker_id")
 	private Habittracker habittracker;
 	
 	@Builder

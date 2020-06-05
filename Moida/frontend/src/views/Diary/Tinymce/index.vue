@@ -6,13 +6,13 @@
 	>
 		<div>
 			<div class="editor-custom-btn-container-submit">
-				<div style="display:inline-block; height:30px">
+				<div v-if="!isSD" style="display:inline-block; height:30px">
 					<!-- <v-time-picker v-model="picker" scrollable color="#fadf99"></v-time-picker> -->
 
 					<v-radio-group v-model="isPrivate" row>
-						<v-radio color="grey" label="전체공개" value="3"></v-radio>
+						<v-radio color="grey" label="전체공개" value="1"></v-radio>
 						<v-radio color="grey" label="친구공개" value="2"></v-radio>
-						<v-radio color="grey" label="비공개" value="1"></v-radio>
+						<v-radio color="grey" label="비공개" value="3"></v-radio>
 					</v-radio-group>
 				</div>
 				<el-button
@@ -102,18 +102,21 @@
 	</div>
 </template>
 
+
 <script>
 /**
  * docs:
  * https://panjiachen.github.io/vue-element-admin-site/feature/component/rich-editor.html#tinymce
  */
+
 import editorImage from "./components/EditorImage";
 import plugins from "./plugins";
 import toolbar from "./toolbar";
 import load from "./dynamicLoadScript";
-import { mapActions } from "vuex";
-
+import { mapActions, mapMutations } from "vuex";
 import mainimgselect from "./components/mainimgselector";
+import moment from "moment";
+
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
 const tinymceCDN =
 	"https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js";
@@ -173,8 +176,10 @@ export default {
 			hasChange: false,
 			hasInit: false,
 			tinymceId: this.id,
-			inputdate: null,
-			inputtime: null,
+			inputdate: new Date().toISOString().substring(0, 10),
+			inputtime: moment()
+				.local("ko")
+				.format("HH:mm"),
 			datemenu: null,
 			timemenu: null,
 
@@ -189,8 +194,9 @@ export default {
 				es: "es_MX",
 				ja: "ja",
 			},
-			isPrivate: "3",
+			isPrivate: "1",
 			imglist: [],
+			isSD: false,
 		};
 	},
 	computed: {
@@ -217,6 +223,9 @@ export default {
 		if (this.diaryid != undefined && this.diaryid != "") {
 			this.getsearchById(this.diaryid);
 		}
+		this.isSD = this.$store.getters.writingSD;
+		console.log(this.isSD);
+		this.TOGGLE_WRITINGSD(false);
 	},
 	activated() {
 		if (window.tinymce) {
@@ -231,6 +240,7 @@ export default {
 	},
 	methods: {
 		...mapActions("diary", ["postDiary", "searchById", "putDiary"]),
+		...mapMutations("sharedDiary", ["TOGGLE_WRITINGSD"]),
 		getsearchById(id) {
 			var here = this;
 			this.searchById(id)
@@ -278,35 +288,32 @@ export default {
 				advlist_number_styles: "default",
 				default_link_target: "_blank",
 				link_title: false,
-
+				paste_data_images: true,
+				auto_convert_smileys: true,
 				resize: false,
 				content_css:
 					"//www.tiny.cloud/css/codepen.min.css,/./font/font.css",
 				imagetools_toolbar:
 					"rotateleft rotateright | flipv fliph | editimage imageoptions",
-
 				min_heght: 500,
 				font_formats:
-					"Andale Mono=andale mono,times;" +
 					"Arial=arial,helvetica,sans-serif;" +
 					"Arial Black=arial black,avant garde;" +
-					"Book Antiqua=book antiqua,palatino;" +
-					"Comic Sans MS=comic sans ms,sans-serif;" +
-					"Courier New=courier new,courier;" +
-					"Georgia=georgia,palatino;" +
-					"Helvetica=helvetica;" +
-					"Impact=impact,chicago;" +
-					"Symbol=symbol;" +
-					"Tahoma=tahoma,arial,helvetica,sans-serif;" +
-					"Terminal=terminal,monaco;" +
-					"Times New Roman=times new roman,times;" +
-					"Trebuchet MS=trebuchet ms,geneva;" +
-					"Verdana=verdana,geneva;" +
-					"Webdings=webdings;" +
-					"Wingdings=wingdings,zapf dingbats;" +
-					"KyoboHand=KyoboHand;" +
+					"교보 손글씨=KyoboHand;" +
 					"Recipekorea=Recipekorea;" +
-					"Noto Sans KR=Noto Sans KR",
+					"Noto Sans KR=Noto Sans KR;" +
+					"마포 한아름=MapoPeacefull;" +
+					"마포꽃섬=MapoFlowerIsland;" +
+					"어비 슬비로운생활체=UhBeeSeulvely;" +
+					"어비 미미체=UhBeeMiMi;" +
+					"조선 궁서체=ChosunGs;" +
+					"조선일보 명조체=Chosunilbo_myungjo;" +
+					"Gmarket Sans B=GmarketSansBold;" +
+					"Gmarket Sans M=GmarketSansMedium;" +
+					"Neo둥근모=NeoDunggeunmo;" +
+					"KCC은영체=KCC-eunyoung;" +
+					"타닥타닥체=TDTDTadakTadak;" +
+					"봉숭아틴트=777Balsamtint",
 				nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
 				init_instance_callback: editor => {
 					if (_this.value) {
@@ -403,32 +410,51 @@ export default {
 				return;
 			}
 			var date = this.inputdate + " " + this.inputtime;
-			console.log(date);
+			let sharedDiaryId = this.$store.getters.sharedDiaryId;
 			if (this.isEdit) {
-				this.putDiary({
-					id: this.diaryid,
-					description: ed,
-					isPrivate: parseInt(this.isPrivate),
-					imgurl: this.mainimg,
-					inputDate: date,
-				})
+				this.putDiary(inputData)
 					.then(response => {
 						console.log(response);
-						this.$router.push("/detaildiary/" + response.data);
+						if (this.isSD) {
+							this.$router.push("/shared/" + sharedDiaryId);
+						} else {
+							this.$router.push("/detaildiary/" + response.data);
+						}
 					})
 					.catch(error => {
 						console.log(error);
 					});
 			} else {
-				this.postDiary({
-					description: ed,
-					isPrivate: parseInt(this.isPrivate),
-					imgurl: this.mainimg,
-					inputDate: date,
-				})
+				let inputData = {};
+
+				if (this.isSD) {
+					inputData = {
+						groupid: sharedDiaryId,
+						description: ed,
+						isPrivate: parseInt(this.isPrivate),
+						imgurl: this.mainimg,
+						inputDate: date,
+					};
+				} else {
+					inputData = {
+						description: ed,
+						isPrivate: parseInt(this.isPrivate),
+						imgurl: this.mainimg,
+						inputDate: date,
+					};
+				}
+
+				console.log("여기라고 했다");
+				console.log(inputData);
+
+				this.postDiary(inputData)
 					.then(response => {
 						console.log(response);
-						this.$router.push("/detaildiary/" + response.data);
+						if (this.isSD) {
+							this.$router.push("/shared/" + sharedDiaryId);
+						} else {
+							this.$router.push("/detaildiary/" + response.data);
+						}
 					})
 					.catch(error => {
 						console.log(error);

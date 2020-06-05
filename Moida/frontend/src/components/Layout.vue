@@ -15,11 +15,8 @@
 				params: { nickname: $store.getters.nickname },
 			}"
 			class="myTag t4"
-			>my</router-link
-		>
-		<router-link to="/login" @click.native="logout" class="myTag t5"
-			>logout</router-link
-		>
+		>my</router-link>
+		<router-link to="/login" @click.native="logout" class="myTag t5">logout</router-link>
 	</div>
 </template>
 

@@ -11,5 +11,6 @@ import com.ssafy.moida.web.dto.follow.FollowResponseDTO;
 public interface FollowRepository extends JpaRepository<Follow, Long>{
 	List<Follow> findByFollowerId(Long followerid);
 	List<Follow> findByFollowingId(Long followingid);
+	int countByFollowingIdAndFollowerId(Long followingid,Long followerid);
 
 }

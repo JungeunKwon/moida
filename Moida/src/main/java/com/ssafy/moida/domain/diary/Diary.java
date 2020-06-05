@@ -17,6 +17,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.comment.Comment;
 import com.ssafy.moida.domain.common.BaseEntity;
@@ -44,6 +47,9 @@ public class Diary extends BaseEntity{
 	private LocalDateTime deleteDate;
 	
 	@Column(nullable = true)
+	private String inputDate;
+	
+	@Column(nullable = true)
 	private String mood;
 	
 	@Lob
@@ -56,10 +62,12 @@ public class Diary extends BaseEntity{
 	@Column(nullable = false)
 	private Long viewcount;
 	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
 	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="groupTB_id")
 	private GroupTB groupTB;
@@ -67,15 +75,20 @@ public class Diary extends BaseEntity{
 	@OneToMany(mappedBy = "diary")
 	private List<Comment> commentList = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "diary")
+	private List<DiaryLikes> diarylikelist = new ArrayList<>();
+	
+	
 	public void updateViewCount() {
 		this.viewcount++;
 	}
 	
-	public void updateDiaryinfo(String description, String mood, String imgurl, int isPrivate) {
+	public void updateDiaryinfo(String description, String mood, String imgurl, int isPrivate, String inputDate) {
 		this.description = description;
 		this.mood = mood;
 		this.imgurl = imgurl;
 		this.isPrivate = isPrivate;
+		this.inputDate = inputDate;
 	}
 	
 	public void deleteDiary(LocalDateTime deleteDate) {
@@ -84,7 +97,7 @@ public class Diary extends BaseEntity{
 	
 	@Builder
 	public Diary(Long id, String description, LocalDateTime deleteDate, String mood, String imgurl, int isPrivate,
-			Account account, GroupTB groupTB,Long viewcount) {
+			Account account, GroupTB groupTB,Long viewcount,String inputDate) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -95,6 +108,7 @@ public class Diary extends BaseEntity{
 		this.account = account;
 		this.groupTB = groupTB;
 		this.viewcount = viewcount;
+		this.inputDate = inputDate;
 	}
 	
 	

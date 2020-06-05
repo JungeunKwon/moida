@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.common.BaseEntity;
 import com.ssafy.moida.domain.diary.Diary;
@@ -32,27 +35,34 @@ public class Comment extends BaseEntity{
 	@Column(nullable = false)
 	private String description;
 	
-	@Column(nullable = false)
-	private Long likecount;
-	
 	@Column(nullable = true)
 	private LocalDateTime deleteDate;
 	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
 	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="diary")
 	private Diary diary;
-
+	
+	public void delete() {
+		this.deleteDate = LocalDateTime.now();
+	}
+	
+	public void updateinfo(String description) {
+		this.description = description;
+	}
+	
+	
 	@Builder
-	public Comment(Long id, String description, Long likecount, LocalDateTime deleteDate, Account account,
+	public Comment(Long id, String description, LocalDateTime deleteDate, Account account,
 			Diary diary) {
 		super();
 		this.id = id;
 		this.description = description;
-		this.likecount = likecount;
 		this.deleteDate = deleteDate;
 		this.account = account;
 		this.diary = diary;

@@ -10,5 +10,7 @@ public interface DiaryLikeRepository extends JpaRepository<DiaryLikes, Long>{
 
 
 	DiaryLikes findByDiaryAndAccount(Diary diary, Account account);
+	Long countByDiary(Diary diary);
+	short countByDiaryAndAccount(Diary diary, Account account);
 	
 }

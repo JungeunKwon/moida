@@ -24,7 +24,6 @@ export function deletetDiary(id) {
 	return request({
 		url: "/v1/diary/" + id,
 		method: "delete",
-		data,
 	});
 }
 export function searchById(id) {
@@ -50,5 +49,18 @@ export function uploadimg(data) {
 		url: "/v1/upload",
 		method: "post",
 		data,
+	});
+}
+export function diaryLike(id) {
+	return request({
+		url: "/v1/diary/like/" + id,
+		method: "post",
+	});
+}
+
+export function diaryDisLike(id) {
+	return request({
+		url: "/v1/diary/like/" + id,
+		method: "delete",
 	});
 }

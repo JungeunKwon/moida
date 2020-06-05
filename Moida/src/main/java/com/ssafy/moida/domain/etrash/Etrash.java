@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.common.BaseEntity;
 import com.ssafy.moida.domain.music.Music;
@@ -43,10 +46,12 @@ public class Etrash extends BaseEntity{
 	@Column(nullable = true)
 	private LocalDateTime deleteDate;
 	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
 	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="music_id")
 	private Music music;

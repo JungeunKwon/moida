@@ -165,15 +165,24 @@ public class GroupServiceImpl implements GroupService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<AccountGroupGroupResponseDto> findGroupbyAccount() throws NumberFormatException, BaseException{
-		return accountGroupRepository.findByAccount(accountService.getAccount()).stream()
-				.map(AccountGroupGroupResponseDto :: new)
+	public List<GroupResponseDto> findGroupbyAccount() throws NumberFormatException, BaseException{	
+		Account account = accountService.getAccount();
+		
+		
+		return groupTBRepository.findByAccountid(account.getId()).stream()
+				.map(GroupResponseDto :: new)
 				.collect(Collectors.toList());
 	}
 	
 	@Transactional(readOnly = true)
 	public GroupResponseDto findByGroupId(Long groupId) throws BaseException {
 		GroupTB group = groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		Boolean isJoin = false;
+		if(accountGroupRepository.countByGroupTBAndAccount(group, accountService.getAccount()) >0) {
+			isJoin = true;
+		}
+		
+		
 		return GroupResponseDto.builder()
 				.id(group.getId())
 				.subject(group.getSubject())
@@ -186,6 +195,7 @@ public class GroupServiceImpl implements GroupService {
 				.hostNickname(group.getHost().getNickname())
 				.hostProfileImg(group.getHost().getProfileImg())
 				.curUser(accountGroupRepository.countByGroupId(groupId))
+				.isJoin(isJoin)
 				.build();
 				
 	}

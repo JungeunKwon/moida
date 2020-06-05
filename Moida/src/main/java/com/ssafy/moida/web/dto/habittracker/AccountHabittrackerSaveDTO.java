@@ -19,9 +19,11 @@ public class AccountHabittrackerSaveDTO {
 
 
 	private Long habitid;
+	private Account account;
+	private Habittracker habit;
 	
 	
-	public AccountHabittracker toEntity(Account account,Habittracker habit) {
+	public AccountHabittracker toEntity() {
 		return AccountHabittracker.builder()
 				.account(account)
 				.habittracker(habit)
@@ -29,9 +31,12 @@ public class AccountHabittrackerSaveDTO {
 	}
 	
 	@Builder
-	public AccountHabittrackerSaveDTO( Long habitid) {
+	public AccountHabittrackerSaveDTO( Long habitid,Account account, Habittracker habit) {
 		super();
 		this.habitid = habitid;
+		this.account = account;
+		this.habit = habit;
+		
 	}
 	
 	
