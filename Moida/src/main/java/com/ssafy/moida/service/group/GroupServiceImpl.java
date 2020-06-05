@@ -165,9 +165,12 @@ public class GroupServiceImpl implements GroupService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<AccountGroupGroupResponseDto> findGroupbyAccount() throws NumberFormatException, BaseException{
-		return accountGroupRepository.findByAccount(accountService.getAccount()).stream()
-				.map(AccountGroupGroupResponseDto :: new)
+	public List<GroupResponseDto> findGroupbyAccount() throws NumberFormatException, BaseException{	
+		Account account = accountService.getAccount();
+		
+		
+		return groupTBRepository.findByAccountid(account.getId()).stream()
+				.map(GroupResponseDto :: new)
 				.collect(Collectors.toList());
 	}
 	
