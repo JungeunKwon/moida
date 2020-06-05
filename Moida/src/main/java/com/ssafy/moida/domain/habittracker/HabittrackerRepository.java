@@ -14,11 +14,10 @@ public interface HabittrackerRepository extends JpaRepository<Habittracker, Long
 	List<Habittracker> findByGroupTB(Long groupid);
 	List<Habittracker> findByGroupTBAndStartDateLessThanAndEndDateGreaterThan(GroupTB group,LocalDateTime now,LocalDateTime now2);
 	
-	@Query(value="SELECT DISTINCT habittracker.* , account_habittracker.account_id\r\n" + 
-			"FROM habittracker\r\n" + 
-			"LEFT OUTER JOIN account_habittracker ON account_habittracker.habittracker_id = habittracker.id\r\n" + 
-			"WHERE grouptb_id = ?1 AND account_habittracker.account_id = ?2",nativeQuery=true)
-	List<Habittracker> findByGroupTBAndAccountAndStartDateLessThanAndEndDateGreaterThan(GroupTB group,Account account,LocalDateTime now,LocalDateTime now2);
+	@Query(value="SELECT DISTINCT habittracker.* FROM habittracker LEFT OUTER JOIN account_habittracker ON account_habittracker.habittracker_id = habittracker.id WHERE grouptb_id = ?1 AND account_habittracker.account_id = ?2 AND ISNULL(habittracker.delete_date)",nativeQuery=true)
+	List<Habittracker> findByGroupTBAndAccountAndStartDateLessThanAndEndDateGreaterThan(Long groupid,Long accountid,LocalDateTime now,LocalDateTime now2);
+	
+	
 	List<Habittracker> findByAccount(Account account);
 	
 	

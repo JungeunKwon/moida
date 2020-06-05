@@ -34,6 +34,11 @@ public class FollowServiceImpl implements FollowService{
 		FollowSaveRequest requestDTO = new FollowSaveRequest();
 		requestDTO.setFollower(accountService.getAccount());
 		requestDTO.setFollowing(accountRepository.findById(followingid).get());
+		
+		if(0<followRepository.countByFollowingIdAndFollowerId(followingid, requestDTO.getFollower().getId())) {
+			return 0L;
+		}
+		
 		return followRepository.save(requestDTO.toEntity()).getId();
 	}
 
