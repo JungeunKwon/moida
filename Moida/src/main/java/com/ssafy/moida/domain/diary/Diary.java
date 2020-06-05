@@ -17,6 +17,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.comment.Comment;
 import com.ssafy.moida.domain.common.BaseEntity;
@@ -59,10 +62,12 @@ public class Diary extends BaseEntity{
 	@Column(nullable = false)
 	private Long viewcount;
 	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
 	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="groupTB_id")
 	private GroupTB groupTB;
