@@ -7,7 +7,7 @@
 		<el-col :span="18" class="us-content">
 			<el-row style="height: 30%">
 				<el-col class="us-nickname">{{
-					$store.getters.nickname
+					$route.params.nickname
 				}}</el-col>
 			</el-row>
 			<el-row style="height: 70%">
@@ -23,6 +23,7 @@ export default {
 	data() {
 		return {};
 	},
+	computed: {},
 };
 </script>
 

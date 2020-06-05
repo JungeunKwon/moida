@@ -24,6 +24,8 @@ public class DiarySaveRequest {
 	private Account account;
 	private GroupTB groupTB;
 	private Long viewcount;
+	private String inputDate;
+	private Long groupid;
 
 	
 	public Diary toEntity() {
@@ -35,12 +37,13 @@ public class DiarySaveRequest {
 				.account(account)
 				.groupTB(groupTB)
 				.viewcount(viewcount)
+				.inputDate(inputDate)
 				.build();
 	}
 	
 	@Builder
 	public DiarySaveRequest(String description, String mood, String imgurl, Account account, int isPrivate,
-			GroupTB groupTB,Long viewcount) {
+			GroupTB groupTB,Long viewcount,String inputDate,Long groupid) {
 		super();
 		this.description = description;
 		this.mood = mood;
@@ -49,6 +52,8 @@ public class DiarySaveRequest {
 		this.account = account;
 		this.groupTB = groupTB;
 		this.viewcount = viewcount;
+		this.inputDate = inputDate;
+		this.groupid = groupid;
 	}
 	
 	

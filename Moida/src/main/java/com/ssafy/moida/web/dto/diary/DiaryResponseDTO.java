@@ -3,10 +3,11 @@ package com.ssafy.moida.web.dto.diary;
 
 
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ssafy.moida.domain.diary.Diary;
-
+import com.ssafy.moida.domain.diary.DiaryLikes;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -24,17 +25,17 @@ public class DiaryResponseDTO {
 	private String mood;
 	private String imgurl;
 	private int isPrivate;
-	private Long viewconut;
+	private Long viewcount;
 	private Long groupid;
-	
+	private String inputDate;
 	private Boolean isLike;
-	
-	private Long accountid;
+	private int likecount;
+	private Long hostid;
 	private String nickname;
 	private String profileurl;
+	private Long commentcount;
 	
 	
-	private LocalDateTime createDate;
 
 	
 	
@@ -47,15 +48,23 @@ public class DiaryResponseDTO {
 		this.mood = diary.getMood();
 		this.imgurl = diary.getImgurl();
 		this.isPrivate = diary.getIsPrivate();
-		this.createDate = diary.getCreateDate();
-		this.viewconut = diary.getViewcount();
-		this.accountid = diary.getAccount().getId();
+		this.viewcount = diary.getViewcount();
+		this.hostid = diary.getAccount().getId();
 		this.nickname = diary.getAccount().getNickname();
 		this.profileurl = diary.getAccount().getProfileImg();
+		this.inputDate = diary.getInputDate();
 		
-		if(diary.getGroupTB() !=null)
+		if(diary.getGroupTB() !=null) {
 			this.groupid = diary.getGroupTB().getId();
+		}
+		if(diary.getDiarylikelist() != null) {
+			this.likecount = diary.getDiarylikelist().size();
+		}
+		
+		this.commentcount = (long) diary.getCommentList().size();
 	}
+	
+	
 	
 	
 }

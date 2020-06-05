@@ -15,15 +15,17 @@ public class DiaryUpdateRequest {
 	private String mood;
 	private String imgurl;
 	private int isPrivate;
+	private String inputDate;
 	
 	@Builder
-	public DiaryUpdateRequest(Long id,String description, String mood, String imgurl, int isPrivate) {
+	public DiaryUpdateRequest(Long id,String description, String mood, String imgurl, int isPrivate,String inputDate) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.mood = mood;
 		this.imgurl = imgurl;
 		this.isPrivate = isPrivate;
+		this.inputDate = inputDate;
 	}
 	
 	

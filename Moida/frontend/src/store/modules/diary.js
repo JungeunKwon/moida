@@ -7,10 +7,11 @@ import {
 	searchByDay,
 	searchByGroup,
 	uploadimg,
+	diaryLike,
+	diaryDisLike,
 } from "@/api/diary";
 
 const state = {};
-
 const mutations = {};
 
 const actions = {
@@ -36,7 +37,7 @@ const actions = {
 				});
 		});
 	},
-	putDiary(diaryinfo) {
+	putDiary({ commit }, diaryinfo) {
 		return new Promise((resolve, reject) => {
 			putDiary(diaryinfo)
 				.then(response => {
@@ -47,7 +48,7 @@ const actions = {
 				});
 		});
 	},
-	deletetDiary(id) {
+	deletetDiary({ commit }, id) {
 		return new Promise((resolve, reject) => {
 			deletetDiary(id)
 				.then(response => {
@@ -96,6 +97,28 @@ const actions = {
 		formData.append("uploadFile", data.uploadFile);
 		return new Promise((resolve, reject) => {
 			uploadimg(formData)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
+	},
+	diaryLike({ commit }, id) {
+		return new Promise((resolve, reject) => {
+			diaryLike(id)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
+	},
+	diaryDisLike({ commit }, id) {
+		return new Promise((resolve, reject) => {
+			diaryDisLike(id)
 				.then(response => {
 					resolve(response);
 				})

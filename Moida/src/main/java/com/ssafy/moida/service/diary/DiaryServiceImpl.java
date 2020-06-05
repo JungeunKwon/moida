@@ -2,6 +2,7 @@ package com.ssafy.moida.service.diary;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,23 +46,48 @@ public class DiaryServiceImpl implements DiaryService{
 	private final DiaryLikeRepository diaryLikeRepository;
 	private final UploadS3 uploadS3;
 	
+	
+	public List<DiaryResponseDTO> makelikecount(List<Diary> diarylist) throws NumberFormatException, BaseException{
+		
+		Account account = accountService.getAccount();
+		List<DiaryResponseDTO> list = diarylist.stream()
+				.map(DiaryResponseDTO::new)
+				.collect(Collectors.toList());
+	
+		
+		List<DiaryLikes> diarylikelist;
+		for(int i=0;i<list.size();i++) {
+			diarylikelist = diarylist.get(i).getDiarylikelist();
+			
+			for(DiaryLikes d : diarylikelist) {
+				list.get(i).setIsLike(false);
+				if(d.getAccount().getId() == account.getId() && d.getDiary().getId() == list.get(i).getId()) {
+					list.get(i).setIsLike(true);
+				}
+			}
+		}
+		
+		return list;
+		
+	}
+	
+	
 	@Transactional(readOnly = true)
 	public List<DiaryResponseDTO> findAll(Pageable pageable) throws NumberFormatException, BaseException {
 		
-		List<DiaryResponseDTO> list = diaryRepository.find(accountService.getAccount().getId()).stream()
-				.map(DiaryResponseDTO::new)
-				.collect(Collectors.toList());
+		List<Diary> diarylist = diaryRepository.find(accountService.getAccount().getId());
 		
+	
 		
-		
-		return list;
+		return makelikecount(diarylist);
 	}
 
 	@Transactional
 	public Long saveDiary(DiarySaveRequest dto) throws NumberFormatException, BaseException {
 		dto.setAccount(accountService.getAccount());
-		if(dto.getGroupTB()!=null) {
-			dto.setGroupTB(dto.getGroupTB());
+		if(dto.getGroupid()!=null) {
+			
+			dto.setGroupTB(groupTBRepository.findById(dto.getGroupid()).get());
 		}
 		dto.setViewcount(0L);
 		return diaryRepository.save(dto.toEntity()).getId();
@@ -77,7 +103,7 @@ public class DiaryServiceImpl implements DiaryService{
 	@Transactional
 	public DiaryResponseDTO updateinfo(DiaryUpdateRequest dto) {
 		Diary diary = diaryRepository.findById(dto.getId()).get();
-		diary.updateDiaryinfo(dto.getDescription(), dto.getMood(), dto.getImgurl(),dto.getIsPrivate());
+		diary.updateDiaryinfo(dto.getDescription(), dto.getMood(), dto.getImgurl(),dto.getIsPrivate(),dto.getInputDate());
 		return DiaryResponseDTO.builder().diary(diary).build();
 	}
 
@@ -150,7 +176,15 @@ public class DiaryServiceImpl implements DiaryService{
 		DiaryLikeSaveRequestDTO requestDTO = new DiaryLikeSaveRequestDTO();
 		requestDTO.setAccount(account);
 		requestDTO.setDiary(diaryRepository.findById(diaryid).get());
-		return diaryLikeRepository.save(requestDTO.toEntity()).getId();
+		Long id = 0L;
+		if(diaryLikeRepository.countByDiaryAndAccount(requestDTO.getDiary(), account) == 0 ) {
+			id = diaryLikeRepository.save(requestDTO.toEntity()).getId();
+		}
+		
+	
+
+		
+		return diaryLikeRepository.countByDiary(requestDTO.getDiary());
 	}
 
 	@Transactional
@@ -161,7 +195,8 @@ public class DiaryServiceImpl implements DiaryService{
 		DiaryLikes deleteid = diaryLikeRepository.findByDiaryAndAccount(diary, account);
 		diaryLikeRepository.deleteById(deleteid.getId());
 		
-		return diaryid;
+		
+		return diaryLikeRepository.countByDiary(diary);
 	}
 
 

@@ -3,8 +3,8 @@
 
 const toolbar = [
 	"fontselect | fontsizeselect",
-	"bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo code codesample",
-	"hr bullist numlist charmap preview anchor pagebreak insertdatetime table emoticons forecolor backcolor image",
+	"bold italic underline strikethrough alignleft aligncenter alignright outdent indent undo redo code codesample",
+	"hr bullist numlist charmap preview pagebreak insertdatetime table forecolor backcolor image paste",
 ];
 
 export default toolbar;
