@@ -84,11 +84,9 @@
 			</div>
 		</div>
 		<div class="bottomdiary">
-			<div class="bottomdiray">
-				<v-btn @click="openwrite">
-					<v-icon x-large>mdi-pencil</v-icon>
-				</v-btn>
-			</div>
+			<v-btn @click="openwrite">
+				<v-icon x-large>mdi-pencil</v-icon>
+			</v-btn>
 		</div>
 	</div>
 </template>
@@ -320,6 +318,7 @@ export default {
 	height: 100%;
 	padding: 20px;
 }
+
 .bottomdiary {
 	position: absolute;
 	bottom: 30px;
@@ -327,9 +326,6 @@ export default {
 	width: 50px;
 	height: 60px;
 	margin: 0 auto;
-}
-.bottomdiray {
-	background-color: #fce4ec;
 }
 
 .diraydrawer {

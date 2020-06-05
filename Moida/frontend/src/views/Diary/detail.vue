@@ -1,31 +1,38 @@
 <template>
 	<div class="diraydeatilcontainer">
 		<div class="diarycontext">
-			<div class="diarywriter" @click="gotouser(membernickname)">
-				<div id="diarydetailMemberDiv">
-					<div class="diarydetailMember">
-						<img :src="memberimg" />
-						<div>{{ membernickname }}</div>
-					</div>
+			<!-- <div class="diarywriter" @click="gotouser(membernickname)"> -->
+			<div class="diarydetailMember">
+				<img :src="memberimg" @click="gotouser(membernickname)" />
+				<div @click="gotouser(membernickname)">
+					{{ membernickname }}
 				</div>
 			</div>
+			<!-- </div> -->
 			<div class="diaryinfo">
-				<div class="diaryicons">
+				<div id="left">
+					<div>
+						<v-icon>mdi-eye</v-icon>&nbsp;
+						<b>{{ viewcount }}</b>
+					</div>
+					<div>
+						<v-icon>mdi-calendar</v-icon>
+						&nbsp;
+						{{ createdate }}
+					</div>
+				</div>
+				<div id="right">
 					<div
 						v-if="$store.getters.nickname == membernickname"
-						style="display:inline-block; cursor:pointer"
-						class="diaryicons"
 						@click="editdiary"
 					>
-						<v-icon>mdi-pencil</v-icon>수정하기
+						<v-icon>mdi-pencil</v-icon>&nbsp;수정하기
 					</div>
 					<div
 						v-if="$store.getters.nickname == membernickname"
-						style="display:inline-block; cursor:pointer"
-						class="diaryicons"
 						@click="setdeletediary"
 					>
-						<v-icon>mdi-delete</v-icon>삭제하기
+						<v-icon>mdi-delete</v-icon>&nbsp;삭제하기
 					</div>
 				</div>
 			</div>
@@ -33,25 +40,26 @@
 				<div v-html="context"></div>
 			</div>
 			<div class="diaryinfobottom">
-				<div class="diaryicons">
-					<v-icon>mdi-calendar</v-icon>
-					{{ createdate }}
+				<div style="float: right;">
+					<div style="display: inline-block;">
+						<v-icon>mdi-message-reply-text</v-icon>
+						<span style="font-size: 14px;"
+							>&nbsp;{{ commentcount }}</span
+						>
+					</div>
+					<div style="display: inline-block;">
+						<v-item v-slot:default="{ active, toggle }">
+							<v-btn text @click="like(toggle, active, isLike)">
+								<v-icon color="pink lighten-4">{{
+									isLike ? "mdi-heart" : "mdi-heart-outline"
+								}}</v-icon>
+								<span style="font-weight: 300 !important"
+									>&nbsp;{{ likecount }}</span
+								>
+							</v-btn>
+						</v-item>
+					</div>
 				</div>
-
-				<v-item v-slot:default="{ active, toggle }" class="diaryicons">
-					<v-btn text @click="like(toggle, active, isLike)">
-						<v-icon color="pink lighten-4">{{
-							isLike ? "mdi-heart" : "mdi-heart-outline"
-						}}</v-icon>
-						{{ likecount }}
-					</v-btn>
-				</v-item>
-
-				<div class="diaryicons">
-					<v-icon>mdi-eye</v-icon>
-					<b>{{ viewcount }}</b>
-				</div>
-				<v-divider></v-divider>
 			</div>
 		</div>
 		<div class="diarycomment">
@@ -100,6 +108,7 @@ export default {
 			context: "",
 			memberimg: "",
 			membernickname: "",
+			commentcount: 0,
 			createdate: "",
 			viewcount: 0,
 			inputcomment: "",
@@ -160,10 +169,11 @@ export default {
 					here.context = response.data.description;
 					here.memberimg = response.data.profileurl;
 					here.membernickname = response.data.nickname;
-					here.createdate = response.data.inputDate.substring(0, 10);
+					here.createdate = response.data.inputDate;
 					here.viewcount = response.data.viewcount;
 					here.likecount = response.data.likecount;
 					here.isLike = response.data.isLike;
+					here.commentcount = response.data.commentcount;
 				})
 				.catch(error => {
 					console.log(error);
@@ -242,16 +252,14 @@ export default {
 	overflow: auto;
 	padding-bottom: 100px;
 }
-.diarywriter {
-	background-color: whitesmoke;
-}
+
 .diarycontext {
 	position: relative;
 	display: inline-block;
 	height: 100%;
 	width: 50%;
 	overflow: hidden;
-	border-right: 1px solid black;
+	border-right: 1px solid silver;
 	background-image: url("../../assets/images/note.png");
 	background-size: cover;
 }
@@ -277,27 +285,77 @@ export default {
 	width: 100%;
 	bottom: 0;
 }
-#diarydetailMemberDiv {
-	height: 85%;
-	overflow: auto;
-	padding: 10px;
-}
+
 .diaryinfo {
-	text-align: right;
-	padding-right: 10px;
+	display: inline-block;
+	width: 100%;
 	background-color: white;
-	margin-top: 3px;
+	padding: 7px 5px 0 5px;
+	height: 30px;
+	z-index: 2;
+	position: relative;
+}
+
+.diaryinfo #left {
+	float: left;
+}
+
+.diaryinfo #right {
+	float: right;
+}
+
+.diaryinfo #right div,
+.diaryinfo #left div {
+	float: left;
+	margin: 2px;
 }
 
 .diaryinfobottom {
-	text-align: right;
-	padding-right: 10px;
-	background-color: white;
 	position: absolute;
 	width: 100%;
+	height: 35px;
+	background-color: white;
+	padding-right: 10px;
 	bottom: 0;
 	right: 0;
 }
+
+.diarydetailMember {
+	background-color: white;
+	box-shadow: 1px 1px 5px rgba(192, 192, 192, 0.425);
+	width: 100%;
+	line-height: 50px;
+	height: 60px;
+	padding: 10px;
+	z-index: 10;
+	position: relative;
+}
+
+.diarydetailMember img {
+	float: left;
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.diarydetailMember div {
+	float: left;
+	margin-left: 10px;
+	font-size: 17px;
+	cursor: pointer;
+}
+
+.diarycomment_input {
+	display: block;
+	height: 60px;
+	width: 100%;
+}
+.diarycomment_btn {
+	height: 60px;
+	text-align: center;
+}
+
 @media screen and (max-width: 774px) {
 	.diraydeatilcontainer {
 		width: 100%;
@@ -306,19 +364,14 @@ export default {
 	}
 
 	.diarywriter {
-		height: 80px;
+		height: 60px;
 		display: block;
-		background-color: whitesmoke;
 		overflow: hidden;
 	}
 	.diarydetail {
 		text-align: left;
 		padding: 10px;
 		padding-bottom: 100px;
-	}
-	#diarydetailMemberDiv {
-		height: 100%;
-		overflow: hidden;
 	}
 
 	.diarycontext {
@@ -345,40 +398,5 @@ export default {
 		bottom: 0;
 		height: 100px;
 	}
-}
-.diarydetailMember {
-	display: inline-block;
-	width: 100%;
-	line-height: 50px;
-	height: 60px;
-	padding: 5px;
-	border-radius: 10px;
-	cursor: pointer;
-}
-.diaryicons {
-	display: inline-block;
-	margin-left: 5px;
-	margin-right: 5px;
-}
-.diarydetailMember img {
-	float: left;
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-}
-
-.diarydetailMember div {
-	float: left;
-	margin-left: 10px;
-}
-
-.diarycomment_input {
-	display: block;
-	height: 60px;
-	width: 100%;
-}
-.diarycomment_btn {
-	height: 60px;
-	text-align: center;
 }
 </style>

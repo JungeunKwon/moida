@@ -11,6 +11,10 @@ const getters = {
 	currentMonth: state => state.calendar.currentMonth,
 	firstDay: state => state.calendar.firstDay,
 	isFirst: state => state.user.isFirst,
+
+	//sharedDiary
+	writingSD: state => state.sharedDiary.writingSD,
+	sharedDiaryId: state => state.sharedDiary.diaryId,
 };
 
 export default getters;

@@ -8,6 +8,7 @@
 				type="text"
 				placeholder="이메일"
 				@focus="emailCheck = false"
+				@keyup.enter="handlerLogin()"
 			/>
 			<span v-if="emailCheck" class="errorMsg">{{ emailMsg }}</span>
 			<input
@@ -16,14 +17,13 @@
 				type="password"
 				placeholder="비밀번호"
 				@focus="pwCheck = false"
+				@keyup.enter="handlerLogin()"
 			/>
 			<span v-if="pwCheck" class="errorMsg">{{ pwMsg }}</span>
-			<button id="login_btn" @click="handlerLogin()" @keyup.enter="handlerLogin()">로그인</button>
+			<button id="login_btn" @click="handlerLogin()">로그인</button>
 			<div id="login_bottom">
 				<hr id="div_line" />
 				<span class="login_bottom_text" @click="findPW">비밀번호 찾기</span>
-				<!-- <img id="text_div" src="../assets/icons/text_div.png" />
-				<span class="login_bottom_text" @click="signUp">회원가입</span>-->
 			</div>
 		</div>
 	</div>

@@ -113,7 +113,7 @@ import editorImage from "./components/EditorImage";
 import plugins from "./plugins";
 import toolbar from "./toolbar";
 import load from "./dynamicLoadScript";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import mainimgselect from "./components/mainimgselector";
 import moment from "moment";
 
@@ -196,6 +196,7 @@ export default {
 			},
 			isPrivate: "3",
 			imglist: [],
+			isSD: false,
 		};
 	},
 	computed: {
@@ -222,6 +223,8 @@ export default {
 		if (this.diaryid != undefined && this.diaryid != "") {
 			this.getsearchById(this.diaryid);
 		}
+		this.isSD = this.$store.getters.writingSD;
+		this.TOGGLE_WRITINGSD(false);
 	},
 	activated() {
 		if (window.tinymce) {
@@ -236,6 +239,7 @@ export default {
 	},
 	methods: {
 		...mapActions("diary", ["postDiary", "searchById", "putDiary"]),
+		...mapMutations("sharedDiary", ["TOGGLE_WRITINGSD"]),
 		getsearchById(id) {
 			var here = this;
 			this.searchById(id)
@@ -405,18 +409,38 @@ export default {
 				return;
 			}
 			var date = this.inputdate + " " + this.inputtime;
-			console.log(date);
+			let sharedDiaryId = this.$store.getters.sharedDiaryId;
+			console.log("화긘 " + sharedDiaryId);
 			if (this.isEdit) {
-				this.putDiary({
-					id: this.diaryid,
-					description: ed,
-					isPrivate: parseInt(this.isPrivate),
-					imgurl: this.mainimg,
-					inputDate: date,
-				})
+				let inputData = {};
+
+				if (this.isSD) {
+					inputData = {
+						groupId: sharedDiaryId,
+						id: this.diaryid,
+						description: ed,
+						isPrivate: parseInt(this.isPrivate),
+						imgurl: this.mainimg,
+						inputDate: date,
+					};
+				} else {
+					inputData = {
+						id: this.diaryid,
+						description: ed,
+						isPrivate: parseInt(this.isPrivate),
+						imgurl: this.mainimg,
+						inputDate: date,
+					};
+				}
+
+				this.putDiary(inputData)
 					.then(response => {
 						console.log(response);
-						this.$router.push("/detaildiary/" + response.data.id);
+						if (this.isSD) {
+							this.$router.push("/shared/" + sharedDiaryId);
+						} else {
+							this.$router.push("/detaildiary/" + response.data);
+						}
 					})
 					.catch(error => {
 						console.log(error);
@@ -430,7 +454,11 @@ export default {
 				})
 					.then(response => {
 						console.log(response);
-						this.$router.push("/detaildiary/" + response.data);
+						if (this.isSD) {
+							this.$router.push("/shared/" + sharedDiaryId);
+						} else {
+							this.$router.push("/detaildiary/" + response.data);
+						}
 					})
 					.catch(error => {
 						console.log(error);

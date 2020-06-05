@@ -12,36 +12,38 @@
 			<div id="detailRight">
 				<div id="detailSubject">
 					{{ detail.subject }}
-					<span id="detailCnt">
-						{{ detail.curUser }} / {{ detail.limitUser }}</span
-					>
+					<img v-if="isHost" id="setting" src="../../../assets/icons/setting.png" />
+					<span id="detailCnt">{{ detail.curUser }} / {{ detail.limitUser }}</span>
+					<div id="exitSharedDiaryDiv">
+						<img
+							id="exitSharedDiary"
+							@click="exitSharedDiary(detail.id)"
+							src="../../../assets/icons/exit.png"
+						/>
+					</div>
 				</div>
 				<div id="detailHostDiv">
 					<div id="hostName">{{ detail.hostNickname }}</div>
 					<img id="hostIcon" :src="detail.hostProfileImg" />
 				</div>
 				<div id="toggle">
-					<div
-						:style="!isMember ? toggleStyle : ''"
-						@click="isMember = false"
-					>
-						상세내용
-					</div>
-					<div
-						:style="isMember ? toggleStyle : ''"
-						@click="getMembers()"
-					>
-						참여자
-					</div>
+					<div :style="!isMember ? toggleStyle : ''" @click="isMember = false">상세내용</div>
+					<div :style="isMember ? toggleStyle : ''" @click="getMembers()">참여자</div>
 				</div>
 				<div v-if="isMember" id="detailMemberDiv">
 					<div
 						class="detailMember"
 						v-for="(member, idx) in members"
 						:key="idx"
+						@click="goMypage(member.accountNickname)"
 					>
-						<img :src="member.accountrofileImg" />
+						<img :src="member.accountProfileImg" />
 						<div>{{ member.accountNickname }}</div>
+						<img
+							v-if="isHost"
+							src="../../../assets/icons/ban.png"
+							@click.stop="deleteMember(member.accountId)"
+						/>
 					</div>
 				</div>
 				<div v-else id="detailDesc">{{ detail.description }}</div>
@@ -53,10 +55,11 @@
 <script>
 import { mapActions } from "vuex";
 export default {
-	name: "SharedDiaryDetail",
+	name: "SharedDiaryInfo",
 	props: { detail: {} },
 	data() {
 		return {
+			isHost: false,
 			dialog: false,
 			isMember: false,
 			toggleStyle: {
@@ -67,22 +70,29 @@ export default {
 			members: {},
 		};
 	},
-	mounted() {},
+	mounted() {
+		if (this.$store.getters.nickname == this.detail.hostNickname)
+			this.isHost = true;
+	},
 	methods: {
 		...mapActions("sharedDiary", ["getSharedDiaryUser"]),
 		getMembers() {
-			console.log("^^");
-			console.log(this.detail.id);
 			this.getSharedDiaryUser(this.detail.id)
 				.then(response => {
 					this.members = response.data;
-					console.log(this.members);
 				})
 				.catch(error => {
 					console.log(error);
 				});
 			this.isMember = true;
 		},
+		goMypage(nickname) {
+			console.log(nickname);
+		},
+		deleteMember(memberId) {
+			console.log(memberId);
+		},
+		exitSharedDiary(diaryId) {},
 	},
 };
 </script>
@@ -121,6 +131,11 @@ export default {
 	font-size: 20px;
 }
 
+#setting {
+	width: 17px;
+	margin-right: 5px;
+}
+
 #detailCnt {
 	font-weight: 300;
 	font-size: 14px;
@@ -132,17 +147,18 @@ export default {
 	margin-top: 5px;
 	font-size: 15px;
 	overflow: auto;
-	height: 72%;
+	height: 83%;
 	padding: 5px;
 }
 
 #detailMemberDiv {
-	height: 85%;
+	height: 83%;
 	overflow: auto;
 	padding: 10px;
 }
 
 .detailMember {
+	position: relative;
 	display: inline-block;
 	width: 100%;
 	line-height: 50px;
@@ -156,11 +172,27 @@ export default {
 	box-shadow: 1px 1px 5px rgba(119, 119, 119, 0.438);
 }
 
-.detailMember img {
+.detailMember img:first-child {
 	float: left;
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
+}
+
+.detailMember img:last-child {
+	float: right;
+	width: 25px;
+	height: 25px;
+
+	position: absolute;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	right: 10px;
+}
+
+.detailMember img:last-child:hover {
+	opacity: 0.5;
 }
 
 .detailMember div {
@@ -196,12 +228,17 @@ export default {
 	cursor: pointer;
 }
 
-/* #toggle div:first-child {
-	background-color: rgb(250, 223, 153);
-	color: white;
-	text-shadow: 1px 1px 2px rgba(128, 128, 128, 0.514);
+#exitSharedDiaryDiv {
+	float: right;
+	text-align: right;
 }
 
-#toggle div:last-child {
-} */
+#exitSharedDiary {
+	width: 20px;
+	cursor: pointer;
+}
+
+#exitSharedDiary:hover {
+	opacity: 0.5;
+}
 </style>
