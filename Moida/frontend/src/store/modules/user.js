@@ -51,7 +51,7 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			searchByNickname(nickname)
 				.then(response => {
-					resolve(response);
+					resolve(response.data);
 				})
 				.catch(error => {
 					reject(error);
@@ -91,7 +91,7 @@ const actions = {
 					commit("SET_GENDER", info.gender);
 					commit("SET_NICKNAME", info.nickname);
 					commit("SET_PHONE", info.phone);
-					commit("SET_PROFILE_IMG", info.profile_img);
+					commit("SET_PROFILE_IMG", info.profileImg);
 					resolve();
 				})
 				.catch(error => reject());
