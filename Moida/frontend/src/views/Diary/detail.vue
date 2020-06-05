@@ -4,9 +4,7 @@
 			<!-- <div class="diarywriter" @click="gotouser(membernickname)"> -->
 			<div class="diarydetailMember">
 				<img :src="memberimg" @click="gotouser(membernickname)" />
-				<div @click="gotouser(membernickname)">
-					{{ membernickname }}
-				</div>
+				<div @click="gotouser(membernickname)">{{ membernickname }}</div>
 			</div>
 			<!-- </div> -->
 			<div class="diaryinfo">
@@ -22,16 +20,10 @@
 					</div>
 				</div>
 				<div id="right">
-					<div
-						v-if="$store.getters.nickname == membernickname"
-						@click="editdiary"
-					>
+					<div v-if="$store.getters.nickname == membernickname" @click="editdiary">
 						<v-icon>mdi-pencil</v-icon>&nbsp;수정하기
 					</div>
-					<div
-						v-if="$store.getters.nickname == membernickname"
-						@click="setdeletediary"
-					>
+					<div v-if="$store.getters.nickname == membernickname" @click="setdeletediary">
 						<v-icon>mdi-delete</v-icon>&nbsp;삭제하기
 					</div>
 				</div>
@@ -43,19 +35,17 @@
 				<div style="float: right;">
 					<div style="display: inline-block;">
 						<v-icon>mdi-message-reply-text</v-icon>
-						<span style="font-size: 14px;"
-							>&nbsp;{{ commentcount }}</span
-						>
+						<span style="font-size: 14px;">&nbsp;{{ commentcount }}</span>
 					</div>
 					<div style="display: inline-block;">
 						<v-item v-slot:default="{ active, toggle }">
 							<v-btn text @click="like(toggle, active, isLike)">
-								<v-icon color="pink lighten-4">{{
+								<v-icon color="pink lighten-4">
+									{{
 									isLike ? "mdi-heart" : "mdi-heart-outline"
-								}}</v-icon>
-								<span style="font-weight: 300 !important"
-									>&nbsp;{{ likecount }}</span
-								>
+									}}
+								</v-icon>
+								<span style="font-weight: 300 !important">&nbsp;{{ likecount }}</span>
 							</v-btn>
 						</v-item>
 					</div>
@@ -64,11 +54,7 @@
 		</div>
 		<div class="diarycomment">
 			<div class="diarycommentdetail">
-				<div
-					style="width: 100%;"
-					v-for="(comment, index) in comments"
-					:key="comment.id"
-				>
+				<div style="width: 100%;" v-for="(comment, index) in comments" :key="comment.id">
 					<diarycomment :comment="comment" :index="index" @ />
 				</div>
 			</div>
@@ -84,9 +70,7 @@
 						outlined
 						style="float: left; width: calc(100% - 50px);"
 					/>
-					<button class="diarycomment_btn" @click="addcomment">
-						작성
-					</button>
+					<button class="diarycomment_btn" @click="addcomment">작성</button>
 				</div>
 			</div>
 		</div>
@@ -308,6 +292,14 @@ export default {
 .diaryinfo #left div {
 	float: left;
 	margin: 2px;
+}
+
+.diaryinfo #right div {
+	cursor: pointer;
+}
+
+.diaryinfo #right div:hover {
+	opacity: 0.5;
 }
 
 .diaryinfobottom {

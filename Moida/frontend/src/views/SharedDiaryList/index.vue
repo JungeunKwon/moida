@@ -28,7 +28,12 @@
 			</div>
 		</div>
 		<div id="sharedListBottom">
-			<SharedDiaryListItem v-for="(item, idx) in diaries" :key="idx" :item="item" />
+			<SharedDiaryListItem
+				v-for="(item, idx) in diaries"
+				:key="idx"
+				:isMyDiaryList="isMyDiaryList"
+				:item="item"
+			/>
 		</div>
 	</div>
 </template>

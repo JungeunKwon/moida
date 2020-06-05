@@ -55,6 +55,7 @@ export default {
 			this.TOGGLE_WRITINGSD(true);
 			this.SET_DIARYID(this.detail.id);
 			console.log("아듸 세팅 " + this.detail.id);
+			console.log(this.$store.getters.sharedDiaryId);
 			this.$router.push("/writediary");
 		},
 		getSD() {

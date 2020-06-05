@@ -47,7 +47,9 @@ const mutations = {
 
 const actions = {
 	//searchByNickname
-	searchByNickname({ commit }, nickname) {
+	searchByNickname({
+		commit
+	}, nickname) {
 		return new Promise((resolve, reject) => {
 			searchByNickname(nickname)
 				.then(response => {
@@ -58,18 +60,22 @@ const actions = {
 				});
 		});
 	},
-	logout({ commit }) {
+	logout({
+		commit
+	}) {
 		commit("TOGGLE_ISFIRST", true);
 		commit("SET_TOKEN", "");
 	},
 	// user login
-	login({ commit }, userInfo) {
+	login({
+		commit
+	}, userInfo) {
 		console.log(userInfo);
 		return new Promise((resolve, reject) => {
 			login({
-				email: userInfo.email.trim(),
-				password: userInfo.password,
-			})
+					email: userInfo.email.trim(),
+					password: userInfo.password,
+				})
 				.then(response => {
 					if (response.data.code == undefined) {
 						commit("SET_TOKEN", response.data);
@@ -81,7 +87,9 @@ const actions = {
 				});
 		});
 	},
-	getInfo({ commit }, token) {
+	getInfo({
+		commit
+	}, token) {
 		return new Promise((resolve, reject) => {
 			getInfo()
 				.then(response => {
@@ -91,13 +99,15 @@ const actions = {
 					commit("SET_GENDER", info.gender);
 					commit("SET_NICKNAME", info.nickname);
 					commit("SET_PHONE", info.phone);
-					commit("SET_PROFILE_IMG", info.profile_img);
+					commit("SET_PROFILE_IMG", info.profileImg);
 					resolve();
 				})
 				.catch(error => reject());
 		});
 	},
-	signUp({ commit }, signupForm) {
+	signUp({
+		commit
+	}, signupForm) {
 		const formData = new FormData();
 		formData.append("email", signupForm.email);
 		formData.append("password", signupForm.password);
@@ -121,7 +131,9 @@ const actions = {
 				});
 		});
 	},
-	checkEmail({ commit }, email) {
+	checkEmail({
+		commit
+	}, email) {
 		console.log("modules > user > action > checkEmail : " + email);
 		return new Promise((resolve, reject) => {
 			checkEmail(email)
@@ -133,7 +145,9 @@ const actions = {
 				});
 		});
 	},
-	checkNickname({ commit }, nickname) {
+	checkNickname({
+		commit
+	}, nickname) {
 		console.log("modules > user > action > checkNickname : " + nickname);
 		return new Promise((resolve, reject) => {
 			checkNickname(nickname)

@@ -1,5 +1,5 @@
 <template>
-	<SharedDiaryListItemDetail :detail="detail">
+	<SharedDiaryListItemDetail v-if="!isMyDiaryList" :detail="detail">
 		<div @click="openSharedDiaryDetail()" id="sharedDiaryItem">
 			<div id="detailImgDiv">
 				<img id="detailImg" :src="item.imgUrl" />
@@ -18,6 +18,23 @@
 			</div>
 		</div>
 	</SharedDiaryListItemDetail>
+	<div v-else @click="openSharedDiaryDetail()" id="sharedDiaryItem">
+		<div id="detailImgDiv">
+			<img id="detailImg" :src="item.imgUrl" />
+		</div>
+		<div id="diaryInfo">
+			<div id="subjectDiv">
+				<div id="roomId">{{ item.id }}</div>
+				<div id="roomSubject">{{ item.subject }}</div>
+			</div>
+			<div id="hostDiv">
+				<div id="hostName">{{ item.hostNickname }}</div>
+				<img id="hostIcon" :src="item.hostProfileImg" />
+			</div>
+			<div style="clear: both;" />
+			<div id="desc">{{ item.description }}</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -26,7 +43,7 @@ import SharedDiaryListItemDetail from "./SharedDiaryListItemDetail";
 export default {
 	name: "SharedDiaryListItem",
 	components: { SharedDiaryListItemDetail },
-	props: { item: {} },
+	props: { item: {}, isMyDiaryList: {} },
 	data() {
 		return {
 			detail: {},
@@ -40,6 +57,9 @@ export default {
 			this.getSharedDiaryDetail(this.item.id)
 				.then(response => {
 					this.detail = response.data;
+					if (this.isMyDiaryList) {
+						this.$router.push(`/shared/${this.detail.id}`);
+					}
 				})
 				.catch(error => {
 					console.log(error);

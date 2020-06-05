@@ -6,7 +6,7 @@
 	>
 		<div>
 			<div class="editor-custom-btn-container-submit">
-				<div style="display:inline-block; height:30px">
+				<div v-if="!isSD" style="display:inline-block; height:30px">
 					<!-- <v-time-picker v-model="picker" scrollable color="#fadf99"></v-time-picker> -->
 
 					<v-radio-group v-model="isPrivate" row>
@@ -194,7 +194,7 @@ export default {
 				es: "es_MX",
 				ja: "ja",
 			},
-			isPrivate: "3",
+			isPrivate: "1",
 			imglist: [],
 			isSD: false,
 		};
@@ -224,6 +224,7 @@ export default {
 			this.getsearchById(this.diaryid);
 		}
 		this.isSD = this.$store.getters.writingSD;
+		console.log(this.isSD);
 		this.TOGGLE_WRITINGSD(false);
 	},
 	activated() {
@@ -410,29 +411,7 @@ export default {
 			}
 			var date = this.inputdate + " " + this.inputtime;
 			let sharedDiaryId = this.$store.getters.sharedDiaryId;
-			console.log("화긘 " + sharedDiaryId);
 			if (this.isEdit) {
-				let inputData = {};
-
-				if (this.isSD) {
-					inputData = {
-						groupId: sharedDiaryId,
-						id: this.diaryid,
-						description: ed,
-						isPrivate: parseInt(this.isPrivate),
-						imgurl: this.mainimg,
-						inputDate: date,
-					};
-				} else {
-					inputData = {
-						id: this.diaryid,
-						description: ed,
-						isPrivate: parseInt(this.isPrivate),
-						imgurl: this.mainimg,
-						inputDate: date,
-					};
-				}
-
 				this.putDiary(inputData)
 					.then(response => {
 						console.log(response);
@@ -446,12 +425,29 @@ export default {
 						console.log(error);
 					});
 			} else {
-				this.postDiary({
-					description: ed,
-					isPrivate: parseInt(this.isPrivate),
-					imgurl: this.mainimg,
-					inputDate: date,
-				})
+				let inputData = {};
+
+				if (this.isSD) {
+					inputData = {
+						groupid: sharedDiaryId,
+						description: ed,
+						isPrivate: parseInt(this.isPrivate),
+						imgurl: this.mainimg,
+						inputDate: date,
+					};
+				} else {
+					inputData = {
+						description: ed,
+						isPrivate: parseInt(this.isPrivate),
+						imgurl: this.mainimg,
+						inputDate: date,
+					};
+				}
+
+				console.log("여기라고 했다");
+				console.log(inputData);
+
+				this.postDiary(inputData)
 					.then(response => {
 						console.log(response);
 						if (this.isSD) {
