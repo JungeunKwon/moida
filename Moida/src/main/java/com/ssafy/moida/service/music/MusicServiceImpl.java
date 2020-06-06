@@ -13,8 +13,8 @@ import com.ssafy.moida.exception.EnumMusicException;
 import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.service.etrash.EtrashService;
 import com.ssafy.moida.web.dto.music.MusicFindByMoodRequestDTO;
-import com.ssafy.moida.web.dto.music.MusicFindByMoodResponseDTO;
-import com.ssafy.moida.web.dto.music.MusicFindByVideoResponse;
+import com.ssafy.moida.web.dto.music.MusicResponseDTO;
+
 import com.ssafy.moida.web.dto.music.MusicFindByVideoidRequestDTO;
 import com.ssafy.moida.web.dto.music.MusicSaveRequestDTO;
 import com.ssafy.moida.web.dto.music.MusicSelcetMusicRequest;
@@ -40,10 +40,10 @@ public class MusicServiceImpl implements MusicService{
 	}
 
 	@Transactional(readOnly = true)
-	public Page<MusicFindByMoodResponseDTO> findByMood(MusicFindByMoodRequestDTO requestDto) {
+	public Page<MusicResponseDTO> findByMood(MusicFindByMoodRequestDTO requestDto) {
 		
 		return musicRepository.findByMoodOrderByLikecountDesc(requestDto.getMood(), requestDto.getPageable())
-				.map(MusicFindByMoodResponseDTO::new);
+				.map(MusicResponseDTO::new);
 	}
 
 	@Transactional
@@ -56,16 +56,11 @@ public class MusicServiceImpl implements MusicService{
 
 
 	@Transactional(readOnly = true)
-	public MusicFindByVideoResponse findByVideoid(MusicFindByVideoidRequestDTO requestDTO) {
+	public MusicResponseDTO findByVideoid(MusicFindByVideoidRequestDTO requestDTO) {
 		Music music = musicRepository.findByVideoid(requestDTO.getVideoid()).get();
 		
-		return MusicFindByVideoResponse.builder()
-				.id(music.getId())
-				.mood(music.getMood())
-				.musicname(music.getMusicname())
-				.likecount(music.getLikecount())
-				.videoid(music.getVideoid())
-				.account(music.getAccount())
+		return MusicResponseDTO.builder()
+				.music(music)
 				.build();
 	}
 	

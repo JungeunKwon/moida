@@ -9,7 +9,7 @@
 				<slot name="fc-header-right"></slot>
 			</div>
 		</c-header>
-		<c-body :nickname="nickname">
+		<c-body :events.sync="events">
 			<div slot="body-card">
 				<slot name="fc-body-card"></slot>
 			</div>
@@ -21,7 +21,7 @@
 import { mapGetters, mapMutations, mapActions } from "vuex";
 import moment from "moment";
 export default {
-	props: { nickname: "" },
+	props: { nickname: "", events: { type: Array, default: [] } },
 	components: {
 		cHeader: () => import("./components/header.vue"),
 		cBody: () => import("./components/body.vue"),

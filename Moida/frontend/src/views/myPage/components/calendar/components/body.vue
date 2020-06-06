@@ -1,17 +1,15 @@
 <template>
 	<div class="full-calendar-body">
 		<div class="weeks">
-			<strong class="week" v-for="dayIndex in 7" :key="dayIndex">
-				{{ (dayIndex - 1) | localeWeekDay(firstDay, locale) }}
-			</strong>
+			<strong
+				class="week"
+				v-for="dayIndex in 7"
+				:key="dayIndex"
+			>{{ (dayIndex - 1) | localeWeekDay(firstDay, locale) }}</strong>
 		</div>
 		<div class="dates" ref="dates">
 			<div class="dates-bg">
-				<div
-					class="week-row"
-					v-for="(week, idx) in currentDates"
-					:key="idx"
-				>
+				<div class="week-row" v-for="(week, idx) in currentDates" :key="idx">
 					<div
 						class="day-cell"
 						v-for="(day, idx) in week"
@@ -69,7 +67,7 @@
 
 <script>
 import moment from "moment";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import dateFunc from "../dateFunc";
 export default {
 	components: {
@@ -78,7 +76,6 @@ export default {
 	data() {
 		return {
 			eventLimit: 3,
-			events: [],
 			showMore: false,
 			morePos: {
 				top: 0,
@@ -88,20 +85,13 @@ export default {
 		};
 	},
 	props: {
-		nickname: "",
+		events: { type: Array, default: [] },
 	},
 	created() {
 		window.addEventListener("click", this.outOfMore);
 	},
 	beforeDestroy() {
 		window.removeEventListener("click", this.outOfMore);
-	},
-	mounted() {
-		this.getDiary(this.$route.params.nickname)
-			.then(response => {
-				this.events = response;
-			})
-			.catch(error => console.log(error.response));
 	},
 	computed: {
 		...mapGetters(["currentMonth", "firstDay", "locale"]),
@@ -110,7 +100,6 @@ export default {
 		},
 	},
 	methods: {
-		...mapActions("calendar", ["getDiary"]),
 		outOfMore(e) {
 			if (document.getElementById("more-events").contains(e.target)) {
 			} else {
@@ -200,11 +189,10 @@ export default {
 	.dates {
 		position: relative;
 		.week-row {
-			// width: 100%;
-			// position:absolute;
 			border-left: 1px solid #e0e0e0;
 			display: flex;
 			.day-cell {
+				width: 1px;
 				flex: 1;
 				min-height: 112px;
 				padding: 4px;
@@ -230,6 +218,9 @@ export default {
 						padding-right: 2px;
 						color: rgba(0, 0, 0, 0.38);
 						font-size: 14px;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
 					}
 					.event-item {
 						cursor: pointer;

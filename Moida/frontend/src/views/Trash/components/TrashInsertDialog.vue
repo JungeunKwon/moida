@@ -76,61 +76,107 @@
 					<v-btn @click="getmood">작성</v-btn>
 				</div>
 				<div v-if="analyzing">
-					<img width="500" src="../../../assets/icons/analyzing.gif" />
+					<img
+						width="500"
+						src="../../../assets/icons/analyzing.gif"
+					/>
 				</div>
 			</v-card-text>
 		</v-card>
 		<v-card v-if="innerdialog && !isMusic && afteranaly">
-			<v-card-text v-if="!selectanswer">
-				<div class="anaylzedmood">'{{ mood }}'</div>
-				<p class="font-weight-bold">감정이 {{score}} % 들어가셨네요,, 아니면 다시 선택해주세요.</p>
-				<v-btn @click="afteranswer=true, selectanswer=true">예</v-btn>
-				<v-btn @click="afteranswer=false, selectanswer=true">아니요</v-btn>
-			</v-card-text>
-			<v-card-text v-if="selectanswer && afteranswer" id="trashinserttext">
-				<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
-				<v-col cols="12">
-					<v-subheader class="pl-0">Time</v-subheader>
-					<v-slider v-model="time" thumb-label="always" thumb-color="red" :max="24"></v-slider>
-				</v-col>
-
-				<div style="margin: 0 auto; width:100%">
-					<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">노래선택</v-btn>
-				</div>
-			</v-card-text>
-			<v-card-text v-if="selectanswer && !afteranswer" id="trashinserttext">
-				<div>
-					<p class="font-weight-bold">감정을 다시 선택해주세요.</p>
-
-					<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
-						<div style="margin: 0 auto; width:80%">
-							<v-row align="center" justify="start">
-								<v-col v-for="item in items" :key="item.text" class="shrink">
-									<v-chip>
-										<v-avatar left>
-											<v-img :src="item.src"></v-img>
-										</v-avatar>
-										{{ item.text }}
-									</v-chip>
-								</v-col>
-							</v-row>
-						</div>
-					</v-chip-group>
+			<div id="trashinserttext">
+				<v-card-text v-if="!selectanswer">
+					<div class="anaylzedmood">'{{ mood }}'</div>
+					<p class="font-weight-bold">
+						감정이 {{ score }} % 들어가셨네요,, 아니면 다시
+						선택해주세요.
+					</p>
+					<v-btn @click="(afteranswer = true), (selectanswer = true)"
+						>예</v-btn
+					>
+					<v-btn @click="(afteranswer = false), (selectanswer = true)"
+						>아니요</v-btn
+					>
+				</v-card-text>
+				<v-card-text v-if="selectanswer && afteranswer">
 					<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
 					<v-col cols="12">
 						<v-subheader class="pl-0">Time</v-subheader>
-						<v-slider v-model="time" thumb-label="always" thumb-color="red" :max="24"></v-slider>
+						<v-slider
+							v-model="time"
+							thumb-label="always"
+							thumb-color="red"
+							:max="24"
+						></v-slider>
 					</v-col>
 
 					<div style="margin: 0 auto; width:100%">
-						<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">노래선택</v-btn>
+						<v-btn
+							text
+							style="display: inline-block; width: 20%;"
+							@click="getmusic"
+							>노래선택</v-btn
+						>
 					</div>
-				</div>
-			</v-card-text>
+				</v-card-text>
+				<v-card-text v-if="selectanswer && !afteranswer">
+					<div>
+						<p class="font-weight-bold">
+							감정을 다시 선택해주세요.
+						</p>
+
+						<v-chip-group
+							v-model="selection"
+							active-class="deep-purple accent-4 white--text"
+							column
+						>
+							<div style="margin: 0 auto; width:80%">
+								<v-row align="center" justify="start">
+									<v-col
+										v-for="item in items"
+										:key="item.text"
+										class="shrink"
+									>
+										<v-chip>
+											<v-avatar left>
+												<v-img :src="item.src"></v-img>
+											</v-avatar>
+											{{ item.text }}
+										</v-chip>
+									</v-col>
+								</v-row>
+							</div>
+						</v-chip-group>
+						<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
+						<v-col cols="12">
+							<v-subheader class="pl-0">Time</v-subheader>
+							<v-slider
+								v-model="time"
+								thumb-label="always"
+								thumb-color="red"
+								:max="24"
+							></v-slider>
+						</v-col>
+
+						<div style="margin: 0 auto; width:100%">
+							<v-btn
+								text
+								style="display: inline-block; width: 20%;"
+								@click="getmusic"
+								>노래선택</v-btn
+							>
+						</div>
+					</div>
+				</v-card-text>
+			</div>
 		</v-card>
 		<v-card v-if="innerdialog && isMusic">
 			<p class="font-weight-bold">이 노래 한번 들어보세요.</p>
-			<img id="back_arrow" src="../../../assets/icons/back.png" @click="moveLeft" />
+			<img
+				id="back_arrow"
+				src="../../../assets/icons/back.png"
+				@click="moveLeft"
+			/>
 			<div id="musicList">
 				<div id="category" class="music">
 					<v-item-group>
@@ -142,7 +188,7 @@
 							v-slot:default="{ active, toggle }"
 						>
 							<v-card
-								:color="active ?  getcolor() : 'grey lighten-5'"
+								:color="active ? getcolor() : 'grey lighten-5'"
 								style="innermusiclist"
 								@click="tempclick(toggle, active, music.id)"
 							>
@@ -156,16 +202,29 @@
 										loading="lazy"
 									></iframe>
 								</div>
-								<div style="width:100%; height:50px; text-align:center">{{ music.musicname }}</div>
+								<div
+									style="width:100%; height:50px; text-align:center"
+								>
+									{{ music.musicname }}
+								</div>
 							</v-card>
 						</v-item>
 					</v-item-group>
 				</div>
 			</div>
-			<img id="next_arrow" src="../../../assets/icons/next.png" @click="moveRight" />
+			<img
+				id="next_arrow"
+				src="../../../assets/icons/next.png"
+				@click="moveRight"
+			/>
 
 			<div style="margin: 0 auto; width:100%">
-				<v-btn text style="display: inline-block; width: 20%;" @click="inserttrash">노래선택</v-btn>
+				<v-btn
+					text
+					style="display: inline-block; width: 20%;"
+					@click="inserttrash"
+					>노래선택</v-btn
+				>
 			</div>
 		</v-card>
 	</v-dialog>
@@ -190,7 +249,7 @@ export default {
 			time: 0,
 			url: "",
 			score: null,
-			selection: 0,
+			selection: null,
 			musiclist: [],
 			model: null,
 			width: null,
@@ -226,6 +285,12 @@ export default {
 			}
 		},
 		selection: function(newVal, oldVal) {
+			if (this.selection == undefined) {
+				$("#trashinserttext").css({
+					"background-color": "#ffffff",
+				});
+				return;
+			}
 			var item = this.items[this.selection];
 			if (!this.trashdialog) return;
 			for (var i = 0; i < this.items.length; i++) {
@@ -291,6 +356,10 @@ export default {
 		getmusic() {
 			if (this.time == 0) {
 				alert("시간을 선택해주세요.");
+				return;
+			}
+			if (this.selection == undefined || this.selection == null) {
+				alert("감정을 선택해주세요.");
 				return;
 			}
 			var item = this.items[this.selection];

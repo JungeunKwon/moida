@@ -53,7 +53,7 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			searchByNickname(nickname)
 				.then(response => {
-					resolve(response);
+					resolve(response.data);
 				})
 				.catch(error => {
 					reject(error);
