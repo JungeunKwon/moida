@@ -213,6 +213,7 @@ export default {
 					console.log("댓글!", response);
 					data.id = response.data;
 					this.comments.push(data);
+					this.inputcomment = "";
 				})
 				.catch(error => {
 					console.log(error);
@@ -379,6 +380,12 @@ export default {
 		height: 400px;
 	}
 
+	.diarycommentdetail {
+		width: 100%;
+		height: 80%;
+		overflow: auto;
+		display: block;
+	}
 	.diarycommentinput {
 		background-color: whitesmoke;
 		padding: 10px;
