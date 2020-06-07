@@ -1,5 +1,7 @@
 <template>
-	<div></div>
+	<div>
+		<div>해빗트래커 만들기</div>
+	</div>
 </template>
 
 <script>

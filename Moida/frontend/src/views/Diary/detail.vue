@@ -55,7 +55,7 @@
 		<div class="diarycomment">
 			<div class="diarycommentdetail" id="diarycommentdetail">
 				<div style="width: 100%;" v-for="(comment, index) in comments" :key="comment.id">
-					<diarycomment :comment="comment" :index="index" @ />
+					<diarycomment :comment="comment" :index="index" />
 				</div>
 			</div>
 			<div class="diarycommentinput">
@@ -207,11 +207,13 @@ export default {
 				nickname: this.$store.getters.nickname,
 				modifiedDate: date,
 				likecount: 0,
+				id: null,
 			};
 			console.log("DATA", data);
 			await this.postComment(data)
 				.then(response => {
 					this.inputcomment = "";
+					data.id = response.data;
 					this.comments.push(data);
 				})
 				.catch(error => {
@@ -219,9 +221,6 @@ export default {
 				});
 			var objDiv = document.getElementById("diarycommentdetail");
 			objDiv.scrollTop = objDiv.scrollHeight;
-		},
-		deletecomment(index) {
-			this.comments.splice(index, 1);
 		},
 	},
 };
