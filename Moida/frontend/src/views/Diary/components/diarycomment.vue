@@ -6,30 +6,35 @@
 
 		<div class="commentcontent">
 			<div>{{ comment.nickname }}</div>
-			<div v-if="!isEdit">{{ inputcomment }}</div>
-			<div v-else id="editComment">
-				<input
-					type="text"
-					ref="inputcommenttext"
-					v-model="inputcomment"
-					name="input-10-2"
-					color="#00000"
-					@keyup.enter="editcomment"
-					outlined
-				/>
+			<div v-if="deleteDate == null">
+				<div v-if="!isEdit">{{ inputcomment }}</div>
+				<div v-else id="editComment">
+					<input
+						type="text"
+						ref="inputcommenttext"
+						v-model="inputcomment"
+						name="input-10-2"
+						color="#00000"
+						@keyup.enter="editcomment"
+						outlined
+					/>
+				</div>
 			</div>
+			<div v-if="deleteDate != null">삭제된 메세지 입니다.</div>
 		</div>
-		<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && !isEdit">
-			<div class="diaryicons" @click="setdeletecomment">
-				<v-icon>mdi-delete</v-icon>
+		<div v-if="deleteDate == null">
+			<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && !isEdit">
+				<div class="diaryicons" @click="setdeletecomment">
+					<v-icon>mdi-delete</v-icon>
+				</div>
+				<div class="diaryicons" @click="setFocus">
+					<v-icon>mdi-pencil</v-icon>
+				</div>
 			</div>
-			<div class="diaryicons" @click="setFocus">
-				<v-icon>mdi-pencil</v-icon>
-			</div>
-		</div>
-		<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && isEdit">
-			<div class="diaryicons" @click="editcomment">
-				<v-icon>mdi-check</v-icon>
+			<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && isEdit">
+				<div class="diaryicons" @click="editcomment">
+					<v-icon>mdi-check</v-icon>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -50,12 +55,13 @@ export default {
 		},
 	},
 	data() {
-		return { isEdit: false, inputcomment: "" };
+		return { isEdit: false, inputcomment: "", deleteDate: null };
 	},
 
 	created() {},
 	mounted() {
 		this.inputcomment = this.comment.description;
+		this.deleteDate = this.comment.deleteDate;
 	},
 	methods: {
 		...mapActions("comment", ["deletetComment", "putComment"]),
@@ -70,7 +76,8 @@ export default {
 		setdeletecomment() {
 			this.deletetComment(this.comment.id)
 				.then(response => {
-					this.$emit("deletecomment", this.index);
+					this.inputcomment = "삭제된 메세지 입니다.";
+					this.deleteDate = "delete";
 				})
 				.catch(error => {
 					console.log(error);
