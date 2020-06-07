@@ -16,7 +16,7 @@ public class DohabitSaveRequestDTO {
 	
 	private Long habitid;
 	private String description;
-	private String clearate;
+	private String clearDate;
 	
 	private Account account;
 	private Habittracker habittracker;
@@ -24,7 +24,7 @@ public class DohabitSaveRequestDTO {
 	public DoHabit toEntity() {
 		return DoHabit.builder()
 				.account(account)
-				.cleardate(clearate)
+				.cleardate(clearDate)
 				.habittracker(habittracker)
 				.description(description)
 				.build();
@@ -36,7 +36,7 @@ public class DohabitSaveRequestDTO {
 		super();
 		this.habitid = habitid;
 		this.description = description;
-		this.clearate = date;
+		this.clearDate = date;
 	}
 	
 	
