@@ -19,6 +19,7 @@ public interface GroupTBRepository extends JpaRepository<GroupTB, Long>{
 	List<GroupTB> findByDescriptionContaining(String description);
 	List<GroupTB> findByDeleteTimeIsNull();
 	
+	
 	@Query(value = "SELECT DISTINCT * FROM grouptb LEFT OUTER JOIN account_group ON account_group.group_id = grouptb.id WHERE account_group.account_id = ?1", nativeQuery = true)
 	List<GroupTB> findByAccountid(Long accountid);
 }
