@@ -75,10 +75,10 @@ public class DiaryController {
 	@ApiOperation(value = "다이어리그룹조회", httpMethod = "GET", notes = "다이어리그룹으로 검색하는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/diary/search/group/{groupid}")
-	public Page<DiaryResponseDTO> findByGroup(@PathVariable Long groupid,Pageable pageable
+	public ResponseEntity<List<DiaryResponseDTO>> findByGroup(@PathVariable Long groupid,Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
 	
-		return diaryService.findByGroupTB(groupid,pageable);
+		return new ResponseEntity<List<DiaryResponseDTO>>(diaryService.findByGroupTB(groupid,pageable), HttpStatus.OK);
 	}
 	
 	@ApiImplicitParams({
