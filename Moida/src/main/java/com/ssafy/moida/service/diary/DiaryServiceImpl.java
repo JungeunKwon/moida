@@ -57,13 +57,16 @@ public class DiaryServiceImpl implements DiaryService{
 	
 		
 		List<DiaryLikes> diarylikelist;
+
 		for(int i=0;i<list.size();i++) {
 			diarylikelist = diarylist.get(i).getDiarylikelist();
-			
+
+			list.get(i).setIsLike(false);
 			for(DiaryLikes d : diarylikelist) {
-				list.get(i).setIsLike(false);
+				
 				if(d.getAccount().getId() == account.getId() && d.getDiary().getId() == list.get(i).getId()) {
 					list.get(i).setIsLike(true);
+			
 				}
 			}
 		}
