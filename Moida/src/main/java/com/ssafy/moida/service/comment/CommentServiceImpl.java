@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService{
 	public List<CommentResponseDTO> findByDiaryId(Long diaryid) {
 		Diary diary = diaryRepository.findById(diaryid).get();
 		
-		return commentRepository.findByDiaryAndDeleteDateIsNull(diary).stream()
+		return commentRepository.findByDiary(diary).stream()
 				.map(CommentResponseDTO :: new)
 				.collect(Collectors.toList());
 	}
