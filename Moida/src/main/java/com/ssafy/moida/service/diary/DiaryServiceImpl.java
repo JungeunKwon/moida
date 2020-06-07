@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -94,10 +95,10 @@ public class DiaryServiceImpl implements DiaryService{
 	}
 
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findByGroupTB(Long id, Pageable pageable) {
+	public List<DiaryResponseDTO> findByGroupTB(Long id, Pageable pageable) throws NumberFormatException, BaseException {
 		GroupTB group = groupTBRepository.findById(id).get();
-		return diaryRepository.findByGroupTBAndDeleteDateIsNull(group, pageable)
-				.map(DiaryResponseDTO::new);
+				
+		return makelikecount(diaryRepository.findByGroupTBAndDeleteDateIsNull(group,Sort.by("id").descending()));
 	}
 
 	@Transactional
