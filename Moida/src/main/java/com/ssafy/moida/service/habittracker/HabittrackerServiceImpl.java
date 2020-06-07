@@ -23,6 +23,7 @@ import com.ssafy.moida.exception.EnumHabittrackerException;
 import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.web.dto.group.GroupResponseDto;
 import com.ssafy.moida.web.dto.habittracker.AccountHabittrackerSaveDTO;
+import com.ssafy.moida.web.dto.habittracker.DohabitResponseDTO;
 import com.ssafy.moida.web.dto.habittracker.DohabitSaveRequestDTO;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerResponseDTO;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerSaveRequestDTO;
@@ -194,6 +195,14 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 		Account account = accountService.getAccount();
 		return habittrackerRepository.findByAccount(account)
 				.stream().map(HabittrackerResponseDTO :: new).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<DohabitResponseDTO> findByHabit(Long habitid) throws NumberFormatException, BaseException {
+		Account account = accountService.getAccount();
+		List<DohabitResponseDTO> reponseDTO = doHabitRepository.findByHabittrackerIdAndAccountId(habitid,account.getId()).stream()
+				.map(DohabitResponseDTO::new).collect(Collectors.toList());
+		return reponseDTO;
 	}
 
 	

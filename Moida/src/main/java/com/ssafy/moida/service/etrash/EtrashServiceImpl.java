@@ -4,6 +4,9 @@ package com.ssafy.moida.service.etrash;
 import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +32,7 @@ public class EtrashServiceImpl implements EtrashService{
 	private final MusicRepository musicRepository;
 	private final AccountService accountservice;
 	
+
 	
 	@Transactional(readOnly = true)
 	public Page<EtrashResponseDto> findByMood(EtrashAllRequestDTO requestDto) {
@@ -39,6 +43,8 @@ public class EtrashServiceImpl implements EtrashService{
 
 	@Transactional(readOnly = true)
 	public Page<EtrashResponseDto> findAll(EtrashAllRequestDTO requestDto) {	
+		
+		requestDto.getPageable();
 		LocalDateTime now = LocalDateTime.now();
 		return etrashRepository.findAllByDeleteDateGreaterThan(now,requestDto.getPageable())
 				.map(EtrashResponseDto::new);
