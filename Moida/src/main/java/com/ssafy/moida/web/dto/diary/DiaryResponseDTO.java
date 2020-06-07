@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ssafy.moida.domain.comment.Comment;
 import com.ssafy.moida.domain.diary.Diary;
 import com.ssafy.moida.domain.diary.DiaryLikes;
 
@@ -62,6 +63,12 @@ public class DiaryResponseDTO {
 		}
 		
 		this.commentcount = (long) diary.getCommentList().size();
+		for(Comment c :diary.getCommentList()) {
+			
+			if(c.getDeleteDate() != null) {
+				this.commentcount--;
+			}
+		}
 	}
 	
 	
