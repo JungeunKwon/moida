@@ -7,8 +7,14 @@
 				<img src="../../assets/icons/info.png" width="20px" />
 			</SharedDiaryInfo>
 		</div>
+
 		<HabitTracker></HabitTracker>
-		<v-date-picker id="sharedCal" v-model="picker" color="purple lighten-3" @change="test()"></v-date-picker>
+
+		<v-date-picker id="sharedCal" v-model="picker" color="#fadf99" @change="test()" />
+
+		<div id="sharedDiaryMain">
+			<SharedDiaryItem v-for="(item, idx) in sharedDiarys" :key="idx" :sharedDiary="item" />
+		</div>
 
 		<div id="writeDiaryDiv">
 			<v-btn @click="openWrite">
@@ -21,16 +27,18 @@
 import { mapActions, mapMutations } from "vuex";
 import SharedDiaryInfo from "./components/SharedDiaryInfo";
 import HabitTracker from "./components/HabitTracker";
+import SharedDiaryItem from "./components/SharedDiaryItem";
 export default {
 	components: {
 		SharedDiaryInfo,
 		HabitTracker,
+		SharedDiaryItem,
 	},
 	data() {
 		return {
 			detail: {},
 			picker: "",
-			timestamp: "",
+			sharedDiarys: {},
 		};
 	},
 	mounted() {
@@ -54,15 +62,12 @@ export default {
 		openWrite() {
 			this.TOGGLE_WRITINGSD(true);
 			this.SET_DIARYID(this.detail.id);
-			console.log("아듸 세팅 " + this.detail.id);
-			console.log(this.$store.getters.sharedDiaryId);
 			this.$router.push("/writediary");
 		},
 		getSD() {
 			this.getSharedDiary(this.detail.id)
 				.then(response => {
-					console.log("여기여기!!!!!공다여기!!!!!!!!!");
-					console.log(response.data);
+					this.sharedDiarys = response.data.content;
 				})
 				.catch(error => {
 					console.log(error);
@@ -100,21 +105,34 @@ export default {
 </script>
 
 <style>
+#sharedDiary {
+	height: 100%;
+}
+
+/* 공다 메인 */
+#sharedDiaryMain {
+	float: right;
+	background-color: blanchedalmond;
+	height: 100%;
+	width: 75%;
+}
+
 /* 달력 색상 변경 */
 .v-picker__title {
 	color: black !important;
 }
 
-#sharedCal {
-	position: absolute;
-	left: 10px;
-	top: 50px;
-}
-
-#sharedCal > div.v-picker__title.purple.lighten-3 {
+#sharedCal > div.v-picker__title {
 	background-color: white !important;
 }
 
+#sharedCal {
+	position: absolute;
+	left: 10px;
+	bottom: 10px;
+}
+
+/* 공다 제목 */
 #diarySubjectDiv {
 	position: fixed;
 	font-family: KyoboHand;
@@ -142,6 +160,7 @@ export default {
 	opacity: 0.5;
 }
 
+/* 글쓰기 버튼 */
 #writeDiaryDiv {
 	position: absolute;
 	bottom: 30px;

@@ -489,9 +489,6 @@ export default {
 					};
 				}
 
-				console.log("여기라고 했다");
-				console.log(inputData);
-
 				this.postDiary(inputData)
 					.then(response => {
 						console.log(response);

@@ -343,6 +343,7 @@ export default {
 }
 
 .diary-card-content:hover {
+	cursor: pointer;
 	opacity: 0.8;
 }
 
