@@ -21,7 +21,6 @@ public class SaveAccountGroupRequestDto {
 		return AccountGroup.builder()
 				.account(account)
 				.groupTB(groupTB)
-				.groupId(groupId)
 				.build();
 	}
 
