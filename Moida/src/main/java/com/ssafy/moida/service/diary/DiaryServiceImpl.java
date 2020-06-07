@@ -132,6 +132,10 @@ public class DiaryServiceImpl implements DiaryService{
 
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByMoodAndBydeleteDateIsNull(String mood, Pageable pageable) {
+		
+		Page<DiaryResponseDTO> page = diaryRepository.findByMoodAndDeleteDateIsNull(mood, pageable)
+				.map(DiaryResponseDTO::new);
+		
 		return diaryRepository.findByMoodAndDeleteDateIsNull(mood, pageable)
 				.map(DiaryResponseDTO::new);
 	}

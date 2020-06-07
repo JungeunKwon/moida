@@ -175,4 +175,16 @@ public class DiaryController {
 		
 		return new ResponseEntity<Long>(diaryService.deletelikeDiary(diaryid), HttpStatus.OK);
 	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "다이어리 무드 검색", httpMethod = "GET", notes = "")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@GetMapping(value = "/diary/search/{mood}")
+	public Page<DiaryResponseDTO> searchByMood(@PathVariable String mood, Pageable pageable
+			) throws IllegalArgumentException, IOException, BaseException{
+		
+		return diaryService.findByMoodAndBydeleteDateIsNull(mood, pageable);
+	}
 }
