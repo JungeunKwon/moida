@@ -107,7 +107,7 @@ public class HabittrackerController {
 	})
 	@ApiOperation(value = "해빗 오늘치 완료", httpMethod = "POST", notes = "해빗트래커 do 해버리는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@PostMapping(value = "/habit/dohbit")
+	@PostMapping(value = "/habit/dohabit")
 	public ResponseEntity<Long> doHabit(@RequestBody DohabitSaveRequestDTO requestDTO
 			) throws IllegalArgumentException, IOException, BaseException{
 		
@@ -120,7 +120,7 @@ public class HabittrackerController {
 	})
 	@ApiOperation(value = "해빗 오늘치 삭제", httpMethod = "DELETE", notes = "해빗트래커 do 삭제 해버리는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@DeleteMapping(value = "/habit/dohbit/{dohabitid}")
+	@DeleteMapping(value = "/habit/dohabit/{dohabitid}")
 	public ResponseEntity<Boolean> deletedoHabit(@PathVariable Long dohabitid
 			) throws IllegalArgumentException, IOException, BaseException{
 		
