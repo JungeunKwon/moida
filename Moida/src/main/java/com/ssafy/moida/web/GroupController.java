@@ -194,6 +194,7 @@ public class GroupController {
 		return new ResponseEntity<GroupResponseDto>(groupService.findByGroupId(groupId), HttpStatus.OK);
 	}
 	
+	
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
