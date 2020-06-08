@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-import com.ssafy.moida.web.dto.follow.FollowResponseDTO;
+import com.ssafy.moida.web.dto.follow.FollowingResponseDTO;
 
 public interface FollowRepository extends JpaRepository<Follow, Long>{
 	List<Follow> findByFollowerId(Long followerid);

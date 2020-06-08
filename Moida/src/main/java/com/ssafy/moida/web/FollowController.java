@@ -25,8 +25,9 @@ import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.etrash.EtrashService;
 import com.ssafy.moida.service.follow.FollowService;
 import com.ssafy.moida.web.dto.etrash.EtrashSaveRequestDto;
-import com.ssafy.moida.web.dto.follow.FollowResponseDTO;
+import com.ssafy.moida.web.dto.follow.FollowingResponseDTO;
 import com.ssafy.moida.web.dto.follow.FollowSaveRequest;
+import com.ssafy.moida.web.dto.follow.FollowerResponseDTO;
 import com.ssafy.moida.web.dto.etrash.EtrashAllRequestDTO;
 import com.ssafy.moida.web.dto.etrash.EtrashDescriptionDTO;
 import com.ssafy.moida.web.dto.etrash.EtrashResponseDto;
@@ -76,9 +77,9 @@ public class FollowController {
 	@ApiOperation(value = "팔로잉 찾기", httpMethod = "GET", notes = "팔로잉 찾는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/following/{followingid}")
-	public ResponseEntity<List<FollowResponseDTO>> findfollowing(Pageable pageable
+	public ResponseEntity<List<FollowerResponseDTO>> findfollowing(@PathVariable Long followingid, Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
-		return new ResponseEntity<List<FollowResponseDTO>>(followService.Followerlist(), HttpStatus.OK);
+		return new ResponseEntity<List<FollowerResponseDTO>>(followService.Followerlist(followingid), HttpStatus.OK);
 
 	}
 	@ApiImplicitParams({
@@ -87,9 +88,9 @@ public class FollowController {
 	@ApiOperation(value = "팔로워 찾기", httpMethod = "GET", notes = "팔로워 찾는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/follower/{followerid}")
-	public ResponseEntity<List<FollowResponseDTO>> findfollower(Pageable pageable
+	public ResponseEntity<List<FollowingResponseDTO>> findfollower(@PathVariable Long followerid, Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
-		return new ResponseEntity<List<FollowResponseDTO>>(followService.Followinglist(), HttpStatus.OK);
+		return new ResponseEntity<List<FollowingResponseDTO>>( followService.Followinglist(followerid), HttpStatus.OK);
 
 	}
 	
