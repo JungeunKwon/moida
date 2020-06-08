@@ -16,15 +16,18 @@ import lombok.Setter;
 public class ChatroomUserDto {
 	private Long id;
 	private String roomuuid;
-	private Account account;
+	private String userNickname;
+	private String userProfile;
 	private LocalDateTime lastDate;
 	private String lastSentence;
 	
 	@Builder
-	public ChatroomUserDto(Long id, String roomuuid, Account account, LocalDateTime lastDate, String lastSentence) {
+	public ChatroomUserDto(Long id, String roomuuid, String userNickname, String userProfile, LocalDateTime lastDate,
+			String lastSentence) {
 		this.id = id;
 		this.roomuuid = roomuuid;
-		this.account = account;
+		this.userNickname = userNickname;
+		this.userProfile = userProfile;
 		this.lastDate = lastDate;
 		this.lastSentence = lastSentence;
 	}

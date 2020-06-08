@@ -44,7 +44,8 @@ public class ChatroomServiceImpl implements ChatroomService{
 				targetAccounts.add(ChatroomUserDto.builder()
 									.id(c.getId())
 									.roomuuid(c.getRoomuuid())
-									.account(c.getChat_user())
+									.userNickname(c.getChat_user().getNickname())
+									.userProfile(c.getChat_user().getProfileImg())
 									.lastDate(c.getCreateDate())
 									.lastSentence(directMessageRepository.findTop1ByRoomuuidOrderByIdDesc(c.getRoomuuid()).get().getContent())
 									.build());
@@ -54,7 +55,8 @@ public class ChatroomServiceImpl implements ChatroomService{
 				targetAccounts.add(ChatroomUserDto.builder()
 						.id(c.getId())
 						.roomuuid(c.getRoomuuid())
-						.account(c.getChat_host())
+						.userNickname(c.getChat_host().getNickname())
+						.userProfile(c.getChat_host().getProfileImg())
 						.lastDate(c.getCreateDate())
 						.lastSentence(directMessageRepository.findTop1ByRoomuuidOrderByIdDesc(c.getRoomuuid()).get().getContent())
 						.build());
