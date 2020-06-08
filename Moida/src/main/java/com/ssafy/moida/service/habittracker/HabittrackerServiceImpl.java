@@ -142,9 +142,14 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 
 		Account account = accountService.getAccount();
 		requestDTO.setAccount(account);
-		requestDTO.setHabit(habittrackerRepository.findById(requestDTO.getHabitid()).get());
+		Habittracker habit =  habittrackerRepository.findById(requestDTO.getHabitid()).get();
 		
-		accountHabittrackerRepository.delete(requestDTO.toEntity());
+		
+		
+		AccountHabittracker accounthabit =  accountHabittrackerRepository.findByAccountAndHabittracker(account, habit);
+		
+		accountHabittrackerRepository.deleteById(accounthabit.getId());
+		
 		return requestDTO.getHabitid();
 	
 	}
