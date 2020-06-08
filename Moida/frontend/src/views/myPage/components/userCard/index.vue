@@ -45,8 +45,8 @@ import { mapMutations } from "vuex";
 export default {
 	props: {
 		user: { type: Object, default: {} },
-		following: { type: Array, default: [] },
-		follower: { type: Array, default: [] },
+		following: { type: Array, default: () => [] },
+		follower: { type: Array, default: () => [] },
 	},
 	data() {
 		return {
@@ -78,7 +78,10 @@ export default {
 					data => this.$store.getters.nickname === data.nickname,
 				).length == 0
 			)
-				this.follower.push({ nickname: this.$store.getters.nickname });
+				this.follower.push({
+					nickname: this.$store.getters.nickname,
+					profileimg: this.$store.profileimg,
+				});
 		},
 		deleteFollow() {
 			deleteFollow(this.user.id);
