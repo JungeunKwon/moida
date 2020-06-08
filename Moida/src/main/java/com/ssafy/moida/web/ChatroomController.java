@@ -87,7 +87,7 @@ public class ChatroomController {
 	})
 	@GetMapping("/room/{hostName}/{userName}")
 	@ResponseBody
-	public ChatroomDto roomCheck(@PathVariable String hostName, @PathVariable String userName) throws BaseException {
+	public ChatroomResponseDto roomCheck(@PathVariable String hostName, @PathVariable String userName) throws BaseException {
 		return chatroomService.isRoomExist(hostName, userName);
 	}
 }
