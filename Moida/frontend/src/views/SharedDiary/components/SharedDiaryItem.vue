@@ -78,7 +78,6 @@ export default {
 			}
 		},
 		goSharedDiaryDetail() {
-			console.log(this.sharedDiary.id);
 			this.$router.push("/detailDiary/" + this.sharedDiary.id);
 		},
 	},

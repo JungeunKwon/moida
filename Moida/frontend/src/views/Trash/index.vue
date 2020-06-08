@@ -384,6 +384,7 @@ export default {
 </script>
 <style>
 .trashcontainer {
+	background-color: rgba(192, 192, 192, 0.1);
 	height: 100%;
 	margin: 0 auto;
 	overflow-y: auto;

@@ -314,6 +314,7 @@ export default {
 	margin: 0 auto;
 	overflow-y: auto;
 	overflow-x: hidden;
+	background-color: #f7ebc375;
 }
 .middlediary {
 	margin-top: 80px;

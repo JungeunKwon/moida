@@ -8,11 +8,11 @@
 			</SharedDiaryInfo>
 		</div>
 
-		<HabitTracker></HabitTracker>
+		<HabitTracker :sharedDiaryId="detail.id" id="ht"></HabitTracker>
 
 		<div v-if="showCal">
 			<v-date-picker id="sharedCal" v-model="picker" color="#fadf99" @change="getSharedDiaryByDate()" />
-			<div id="sharedCalText" @click="getSD">전체보기</div>
+			<div id="sharedCalText" @click="getSharedDiaryAll">전체보기</div>
 		</div>
 		<img v-if="showCalImg" id="shardCalImg" @click="toggleCal()" src="../../assets/icons/cal.png" />
 
@@ -50,6 +50,7 @@ export default {
 		this.getSharedDiaryDetail(this.$route.params.id)
 			.then(response => {
 				this.detail = response.data;
+				console.log(this.detail);
 				this.getSD();
 			})
 			.catch(error => {
@@ -76,6 +77,7 @@ export default {
 				this.showCalImg = false;
 			}
 		},
+
 		toggleCal() {
 			this.showCal = !this.showCal;
 		},
@@ -257,5 +259,17 @@ export default {
 
 #sharedCalText:hover {
 	opacity: 0.7;
+}
+
+#ht {
+	position: absolute;
+	left: 10px;
+	top: 50px;
+	width: 290px;
+	height: 32%;
+	z-index: 101;
+	background-color: white;
+	border-radius: 3px;
+	box-shadow: 1px 1px 3px rgba(128, 128, 128, 0.286);
 }
 </style>
