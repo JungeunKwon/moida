@@ -16,7 +16,9 @@ import com.ssafy.moida.domain.dm.RedisDMRepository;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.exception.EnumAccountException;
 import com.ssafy.moida.service.account.AccountService;
+import com.ssafy.moida.web.dto.account.AccountResponseDto;
 import com.ssafy.moida.web.dto.dm.ChatroomDto;
+import com.ssafy.moida.web.dto.dm.ChatroomResponseDto;
 import com.ssafy.moida.web.dto.dm.ChatroomUserDto;
 import com.ssafy.moida.web.dto.dm.DirectMessageDto;
 
@@ -68,7 +70,7 @@ public class ChatroomServiceImpl implements ChatroomService{
 				.collect(Collectors.toList());
 	}
 
-	public ChatroomDto createRoom(String targetNickname) throws NumberFormatException, BaseException {
+	public ChatroomResponseDto createRoom(String targetNickname) throws NumberFormatException, BaseException {
 		Account host = accountService.getAccount();
 		Account user = accountRepository.findByNickname(targetNickname).orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
 		ChatroomDto room = ChatroomDto.builder()
@@ -77,6 +79,14 @@ public class ChatroomServiceImpl implements ChatroomService{
 					.build();
 		ChatroomDto newroom = redisDMRepository.createChatRoom(room);
 		chatroomRepository.save(newroom.toEntity());
+		ChatroomResponseDto responseDto = ChatroomResponseDto.builder()
+										.id(newroom.getId())
+										.roomuuid(newroom.getRoomuuid())
+										.hostNickname(newroom.getHost().getNickname())
+										.hostProfileImg(newroom.getHost().getProfileImg())
+										.userNickname(newroom.getUser().getNickname())
+										.userProfileImg(newroom.getUser().getProfileImg())
+										.build();
 		DirectMessageDto message = DirectMessageDto.builder()
 								    .roomuuid(newroom.getRoomuuid())
 								    .type(DirectMessageDto.MessageType.TALK)
@@ -84,7 +94,7 @@ public class ChatroomServiceImpl implements ChatroomService{
 								    .content("방 개설 성공 ,DM을 시작해보세요!")
 								    .build();
 		directMessagMessageService.putMessage(message);
-		return newroom;
+		return responseDto;
 	}
 
 	public boolean updatedate(String roomuuid) throws BaseException {
