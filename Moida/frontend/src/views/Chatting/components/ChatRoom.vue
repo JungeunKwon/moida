@@ -138,8 +138,8 @@ export default {
 	mounted() {},
 
 	created() {
-		this.targetNickname = this.chat.account.nickname;
-		this.targetImg = this.chat.account.profileImg;
+		this.targetNickname = this.chat.userNickname;
+		this.targetImg = this.chat.userProfile;
 		this.userNickname = this.$store.getters.nickname;
 		this.roomuuid = this.chat.roomuuid;
 		var socketUrl = "https://k02d106.p.ssafy.io/ws-stomp";
