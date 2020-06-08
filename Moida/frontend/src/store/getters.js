@@ -19,9 +19,10 @@ const getters = {
 	//chat
 	targetNickname: state => state.chat.targetNickname,
 	targetImgUrl: state => state.chat.targetImgUrl,
-
+	isShare: state => state.chat.isShare,
+	groupid: state => state.chat.groupid,
 	//habitTracker
-	HTSharedDiaryId: state => state.habitTracker.sharedDiaryId
+	HTSharedDiaryId: state => state.habitTracker.sharedDiaryId,
 };
 
 export default getters;

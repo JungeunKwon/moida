@@ -214,7 +214,9 @@ export default {
 				return;
 			}
 			var date =
-				new Date().toISOString().substring(0, 10) +
+				moment()
+					.local("ko")
+					.format("yyyy-MM-DD") +
 				" " +
 				moment()
 					.local("ko")

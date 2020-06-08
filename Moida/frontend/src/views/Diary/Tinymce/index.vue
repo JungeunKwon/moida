@@ -213,7 +213,9 @@ export default {
 			hasChange: false,
 			hasInit: false,
 			tinymceId: this.id,
-			inputdate: new Date().toISOString().substring(0, 10),
+			inputdate: moment()
+				.local("ko")
+				.format("yyyy-MM-DD"),
 			inputtime: moment()
 				.local("ko")
 				.format("HH:mm"),
