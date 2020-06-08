@@ -35,6 +35,8 @@ import lombok.NoArgsConstructor;
 public class Account extends BaseEntity
 implements UserDetails {
 
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

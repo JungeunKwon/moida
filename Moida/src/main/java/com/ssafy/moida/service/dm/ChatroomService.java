@@ -8,8 +8,9 @@ import com.ssafy.moida.web.dto.dm.ChatroomUserDto;
 
 public interface ChatroomService {
 	List<ChatroomUserDto> findByAllAccountIn(String user) throws NumberFormatException, BaseException;
-	List<ChatroomDto> selectByUser(String user);
+	List<ChatroomDto> findByNickName(String nickname) throws BaseException;
 	public ChatroomDto createRoom(String targetNickname) throws NumberFormatException, BaseException;
-	public boolean updatedate(ChatroomDto room);
+	public boolean updatedate(String roomuuid) throws BaseException;
 	public boolean delete(ChatroomDto room);
+	ChatroomDto isRoomExist(String hostName, String userName) throws BaseException;
 }

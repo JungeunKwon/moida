@@ -12,6 +12,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import com.ssafy.moida.domain.account.Account;
+import com.ssafy.moida.domain.common.BaseEntity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Chatroom {
+public class Chatroom extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -36,6 +37,10 @@ public class Chatroom {
 	@JoinColumn(name = "user_id")
 	private Account chat_user;
 
+	public void updateCreateDate(){
+		super.setCreateDate(LocalDateTime.now());
+	}
+	
 	@Builder
 	public Chatroom(Long id, String roomuuid, Account chat_host, Account chat_user) {
 		this.id = id;

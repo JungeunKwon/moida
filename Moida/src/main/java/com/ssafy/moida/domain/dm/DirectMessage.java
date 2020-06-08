@@ -29,23 +29,23 @@ public class DirectMessage extends BaseEntity{
 	@Column(nullable = true)
 	private String content;
 	
-	@ManyToOne
-	@JoinColumn(name="account_id")
-	private Account writer;
+	@Column(nullable = true)
+	private String writer;
 	
-	@ManyToOne
-	@JoinColumn(name="Chatroom_id")
-	private Chatroom chatroom;
+	@Column
+	private String roomuuid;
 	
 	@Column(nullable = false)
 	private String type;
 
 	@Builder
-	public DirectMessage(Long id, String content, Account writer, Chatroom chatroom, String type) {
+	public DirectMessage(Long id, String content, String writer, String roomuuid, String type) {
 		this.id = id;
 		this.content = content;
 		this.writer = writer;
-		this.chatroom = chatroom;
+		this.roomuuid = roomuuid;
 		this.type = type;
 	}
+
+	
 }

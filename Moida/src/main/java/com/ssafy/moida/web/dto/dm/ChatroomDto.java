@@ -1,5 +1,7 @@
 package com.ssafy.moida.web.dto.dm;
 
+import java.io.Serializable;
+
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.dm.Chatroom;
 
@@ -11,7 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ChatroomDto {
+public class ChatroomDto implements Serializable{
+	private static final long serialVersionUID = 6494678977089006639L;
 	private Long id;
     private String roomuuid;
 	private Account host;
@@ -34,4 +37,10 @@ public class ChatroomDto {
     			.build();
     }
     
+    public ChatroomDto(Chatroom entity) {
+    	this.id = entity.getId();
+    	this.roomuuid = entity.getRoomuuid();
+    	this.host = entity.getChat_host();
+    	this.user = entity.getChat_user();
+    }
 }

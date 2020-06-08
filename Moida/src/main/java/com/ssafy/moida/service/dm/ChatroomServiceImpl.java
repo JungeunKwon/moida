@@ -2,7 +2,6 @@ package com.ssafy.moida.service.dm;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,12 +10,12 @@ import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.account.AccountRepository;
 import com.ssafy.moida.domain.dm.Chatroom;
 import com.ssafy.moida.domain.dm.ChatroomRepository;
+import com.ssafy.moida.domain.dm.DirectMessageRepository;
 import com.ssafy.moida.domain.dm.RedisDMRepository;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.exception.EnumAccountException;
 import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.web.dto.dm.ChatroomDto;
-import com.ssafy.moida.web.dto.dm.ChatroomResponseDto;
 import com.ssafy.moida.web.dto.dm.ChatroomUserDto;
 
 import lombok.RequiredArgsConstructor;
@@ -29,10 +28,11 @@ public class ChatroomServiceImpl implements ChatroomService{
 	private final AccountRepository accountRepository;
 	private final AccountService accountService;
 	private final RedisDMRepository redisDMRepository;
+	private final DirectMessageRepository directMessageRepository;
 	
 	public List<ChatroomUserDto> findByAllAccountIn(String user) throws NumberFormatException, BaseException {
 		Account account = accountRepository.findByNickname(user).orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
-		List<Chatroom> rooms = chatroomRepository.findByAllAccountIn(account.getId());
+		List<Chatroom> rooms = chatroomRepository.queryAllAccountIn(account.getId(), account.getId());
 		List<ChatroomUserDto> targetAccounts = new ArrayList<>();
 		for(Chatroom c : rooms) {
 			if(c.getChat_host().getNickname().equals(account.getNickname())) {
@@ -40,6 +40,8 @@ public class ChatroomServiceImpl implements ChatroomService{
 									.id(c.getId())
 									.roomuuid(c.getRoomuuid())
 									.account(c.getChat_user())
+									.lastDate(c.getCreateDate())
+									.lastSentence(directMessageRepository.findTop1ByRoomuuidOrderByIdDesc(c.getRoomuuid()).get().getContent())
 									.build());
 									
 			}
@@ -48,16 +50,18 @@ public class ChatroomServiceImpl implements ChatroomService{
 						.id(c.getId())
 						.roomuuid(c.getRoomuuid())
 						.account(c.getChat_host())
+						.lastDate(c.getCreateDate())
+						.lastSentence(directMessageRepository.findTop1ByRoomuuidOrderByIdDesc(c.getRoomuuid()).get().getContent())
 						.build());
 			}
 		}
 		return targetAccounts;
 	}
 
-	public List<ChatroomResponseDto> findByNickName(String nickname) throws BaseException {
+	public List<ChatroomDto> findByNickName(String nickname) throws BaseException {
 		Account account = accountRepository.findByNickname(nickname).orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
-		return chatroomRepository.findByAllAccountIn(account.getId()).stream()
-				.map(ChatroomResponseDto :: new)
+		return chatroomRepository.queryAllAccountIn(account.getId(), account.getId()).stream()
+				.map(ChatroomDto :: new)
 				.collect(Collectors.toList());
 	}
 
@@ -73,11 +77,26 @@ public class ChatroomServiceImpl implements ChatroomService{
 		return newroom;
 	}
 
-	public boolean updatedate(ChatroomDto room) {
-		return false;
+	public boolean updatedate(String roomuuid) throws BaseException {
+		Chatroom room = chatroomRepository.findByRoomuuid(roomuuid).get();
+		room.updateCreateDate();
+		return true;
 	}
 
 	public boolean delete(ChatroomDto room) {
 		return false;
+	}
+
+	@Override
+	public ChatroomDto isRoomExist(String hostName, String userName) throws BaseException {
+		Account user1 = accountRepository.findByNickname(hostName).orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
+		Account user2 = accountRepository.findByNickname(userName).orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
+		List<Chatroom> list = chatroomRepository.isRoomExist(user1.getId(), user2.getId());
+		if(list.size()==0) return null;
+		else return ChatroomDto.builder().id(list.get(0).getId())
+										.roomuuid(list.get(0).getRoomuuid())
+										.host(list.get(0).getChat_host())
+										.user(list.get(0).getChat_user())
+										.build();
 	}
 }
