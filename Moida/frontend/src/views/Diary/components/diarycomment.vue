@@ -21,10 +21,15 @@
 				</div>
 			</div>
 			<div v-if="deleteDate != null">삭제된 메세지 입니다.</div>
-			<div style="text-align:right">{{getLastDate(comment.modifiedDate)}}</div>
+			<div style="text-align:right">
+				{{ getLastDate(comment.modifiedDate) }}
+			</div>
 		</div>
 		<div v-if="deleteDate == null">
-			<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && !isEdit">
+			<div
+				class="commenticon"
+				v-if="$store.getters.nickname == comment.nickname && !isEdit"
+			>
 				<div class="diaryicons" @click="setdeletecomment">
 					<v-icon>mdi-delete</v-icon>
 				</div>
@@ -32,7 +37,10 @@
 					<v-icon>mdi-pencil</v-icon>
 				</div>
 			</div>
-			<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && isEdit">
+			<div
+				class="commenticon"
+				v-if="$store.getters.nickname == comment.nickname && isEdit"
+			>
 				<div class="diaryicons" @click="editcomment">
 					<v-icon>mdi-check</v-icon>
 				</div>
@@ -72,7 +80,6 @@ export default {
 		},
 		setFocus() {
 			this.isEdit = true;
-			this.$refs.inputcommenttext.focus();
 		},
 		setdeletecomment() {
 			this.deletetComment(this.comment.id)
