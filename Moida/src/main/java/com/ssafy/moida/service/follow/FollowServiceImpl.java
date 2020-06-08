@@ -10,13 +10,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.account.AccountRepository;
 import com.ssafy.moida.domain.follow.FollowRepository;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.account.AccountService;
-import com.ssafy.moida.web.dto.follow.FollowResponseDTO;
+import com.ssafy.moida.web.dto.follow.FollowingResponseDTO;
 import com.ssafy.moida.web.dto.follow.FollowSaveRequest;
 import com.ssafy.moida.web.dto.follow.FollowSeachRequest;
+import com.ssafy.moida.web.dto.follow.FollowerResponseDTO;
 import com.ssafy.moida.web.dto.group.GroupResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -55,20 +57,21 @@ public class FollowServiceImpl implements FollowService{
 	}
 
 	@Transactional(readOnly=true)
-	public List<FollowResponseDTO> Followinglist() throws NumberFormatException, BaseException {
-		
-		return followRepository.findByFollowingId(accountService.getAccount().getId())
+	public List<FollowingResponseDTO> Followinglist(Long followingid) throws NumberFormatException, BaseException {
+
+		return followRepository.findByFollowingId(followingid)
 				.stream()
-				.map(FollowResponseDTO :: new)
+				.map(FollowingResponseDTO :: new)
 				.collect(Collectors.toList());
 	}
 
 	@Transactional(readOnly=true)
-	public List<FollowResponseDTO> Followerlist() throws NumberFormatException, BaseException {
-		return followRepository.findByFollowerId(accountService.getAccount().getId()).stream()
-				.map(FollowResponseDTO :: new)
+	public List<FollowerResponseDTO> Followerlist(Long followerid) throws NumberFormatException, BaseException {
+		return followRepository.findByFollowerId(followerid).stream()
+				.map(FollowerResponseDTO :: new)
 				.collect(Collectors.toList());
 	}
+	
 	
 
 }
