@@ -15,6 +15,7 @@ import com.ssafy.moida.domain.group.GroupTB;
 import com.ssafy.moida.domain.group.GroupTBRepository;
 import com.ssafy.moida.domain.habittracker.AccountHabittracker;
 import com.ssafy.moida.domain.habittracker.AccountHabittrackerRepository;
+import com.ssafy.moida.domain.habittracker.DoHabit;
 import com.ssafy.moida.domain.habittracker.DoHabitRepository;
 import com.ssafy.moida.domain.habittracker.Habittracker;
 import com.ssafy.moida.domain.habittracker.HabittrackerRepository;
@@ -153,9 +154,19 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 		requestDTO.setAccount(accountService.getAccount());
 		requestDTO.setHabittracker(habittrackerRepository.findById(requestDTO.getHabitid()).get());
 		
-		
+		if(0<doHabitRepository.countByAccountAndCleardateAndHabittracker(requestDTO.getAccount(), requestDTO.getClearDate(), requestDTO.getHabittracker())) {
+			return 0L;
+		}
 		
 		return doHabitRepository.save(requestDTO.toEntity()).getId();
+	}
+	
+	@Transactional
+	public Boolean deleteclearHabittracker(Long dohabitid) throws NumberFormatException, BaseException {
+	
+		doHabitRepository.deleteById(dohabitid);
+		
+		return true;
 	}
 
 	@Transactional(readOnly=true)
@@ -204,7 +215,6 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 		return reponseDTO;
 	}
 
-	
-	
+
 
 }
