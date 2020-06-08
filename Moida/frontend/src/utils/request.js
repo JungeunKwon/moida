@@ -3,7 +3,7 @@ import store from "@/store";
 
 const service = axios.create({
 	//baseURL: "http://172.20.10.2:8080", // url = base url + request url
-	baseURL: "http://k02d1061.p.ssafy.io:8080", // url = base url + request url
+	baseURL: "https://k02d1061.p.ssafy.io/", // url = base url + request url
 	timeout: 5000,
 });
 
