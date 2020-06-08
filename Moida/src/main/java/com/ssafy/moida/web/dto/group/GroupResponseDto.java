@@ -54,6 +54,7 @@ public class GroupResponseDto {
 		this.hostNickname = hostNickname;
 		this.hostProfileImg = hostProfileImg;
 		this.curUser = curUser;
+		this.isJoin = isJoin;
 
 	}
 	
