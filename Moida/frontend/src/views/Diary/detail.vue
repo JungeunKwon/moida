@@ -166,7 +166,6 @@ export default {
 			var here = this;
 			this.getCommentById(id)
 				.then(response => {
-					console.log("댓글", response);
 					here.comments = response.data;
 				})
 				.catch(error => {
@@ -197,7 +196,7 @@ export default {
 				" " +
 				moment()
 					.local("ko")
-					.format("HH:mm");
+					.format("HH:mm:SS");
 			var data = {
 				diaryid: this.diaryid,
 				description: this.inputcomment,
@@ -210,7 +209,6 @@ export default {
 			console.log("DATE", data);
 			this.postComment(data)
 				.then(response => {
-					console.log("댓글!", response);
 					data.id = response.data;
 					this.comments.push(data);
 					this.inputcomment = "";
