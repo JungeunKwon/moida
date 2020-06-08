@@ -31,7 +31,7 @@ public class DmController {
 			redisPublisher.publish(redisDMRepository.getTopic(message.getRoomuuid()), message);
 			for (int i = 0; i < messages.size(); i++) {
 				DirectMessageDto inmessage = messages.get(i);
-				if (!DirectMessageDto.MessageType.SHARE.equals(inmessage.getType())) {
+				if (!"SHARE".equals(inmessage.getType2String())) {
 					inmessage.setType(DirectMessageDto.MessageType.LOG);
 				}
 				inmessage.setLoguser(message.getWriter());
