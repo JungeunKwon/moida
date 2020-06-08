@@ -2,7 +2,11 @@
 	<div class="mp-main-container">
 		<el-row type="flex" class="mp-first-row">
 			<el-col :xs="18" :sm="18" :md="18" :lg="18" :xl="18">
-				<user-card :user="user" />
+				<user-card
+					:user="user"
+					:follower="follower"
+					:following="following"
+				/>
 			</el-col>
 			<el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
 				<shared-diary-list :diaries.sync="diaries" :user="user" />
@@ -18,6 +22,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import { getFollower, getFollowing } from "../../api/follow";
 export default {
 	name: "myPage",
 	components: {
@@ -30,6 +35,8 @@ export default {
 			user: {},
 			events: [],
 			diaries: [],
+			follower: [],
+			following: [],
 		};
 	},
 	async mounted() {
@@ -37,11 +44,18 @@ export default {
 			this.user = await this.searchByNickname(
 				this.$route.params.nickname,
 			);
-			this.events = await this.getDiary(this.user.nickname);
-			let data = await this.searchByMember(this.user.nickname);
-			this.diaries = data.data;
-			console.log("diary here");
-			console.log(this.diaries);
+			// this.events = await this.getDiary(this.user.nickname);
+			this.events = await this.getDiaryap();
+			let payload = await this.searchByMember(this.user.nickname);
+			this.diaries = payload.data;
+			payload = await getFollower(this.user.id);
+			this.follower = payload.data;
+			// console.log("follower");
+			// console.log(this.follower);
+			payload = await getFollowing(this.user.id);
+			this.following = payload.data;
+			// console.log("following");
+			// console.log(this.following);
 		} catch (error) {
 			console.log(error);
 		}
@@ -52,6 +66,7 @@ export default {
 		...mapActions("sharedDiaryList", {
 			searchByMember: "searchByMember",
 		}),
+		...mapActions("diary", ["getDiaryap"]),
 	},
 };
 </script>
@@ -63,7 +78,7 @@ export default {
 .mp-main-container {
 	width: 100%;
 	height: 100%;
-	background: #60c76e;
+	background: #e2f0cb;
 	overflow: auto;
 }
 .mp-myInfo {
