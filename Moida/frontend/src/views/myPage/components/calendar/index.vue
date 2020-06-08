@@ -9,7 +9,7 @@
 				<slot name="fc-header-right"></slot>
 			</div>
 		</c-header>
-		<c-body :events.sync="events">
+		<c-body :events.sync="events" :nickname="nickname">
 			<div slot="body-card">
 				<slot name="fc-body-card"></slot>
 			</div>

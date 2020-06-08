@@ -302,39 +302,39 @@ export default {
 			setTimeout(() => {
 				this.afteranaly = true;
 				this.analyzing = false;
-				this.mood = this.items[0].text;
-				this.moodsrc = this.items[0].src;
-				this.selection = this.items[0].id;
-				this.color = this.items[0].colorcode;
-				this.score = 80;
+				// this.mood = this.items[0].text;
+				// this.moodsrc = this.items[0].src;
+				// this.selection = this.items[0].id;
+				// this.color = this.items[0].colorcode;
+				// this.score = 80;
 			}, 2000);
-			// this.sentimentanalysis({
-			// 	description: this.trashcontent,
-			// })
-			// 	.then(response => {
-			// 		this.score = response.data.score2;
-			// 		for (var i = 0; i < this.items.length; i++) {
-			// 			if (this.items[i].text == response.data.sentimental) {
-			// 				this.mood = this.items[i].text;
-			// 				this.moodsrc = this.items[i].src;
-			// 				this.selection = this.items[i].id;
-			// this.color = this.items[i].colorcode;
-			// 				$("#trashinserttext").css({
-			// 					"background-color": this.items[i].colorcode,
-			// 				});
-			// 				break;
-			// 			}
+			this.sentimentanalysis({
+				description: this.trashcontent,
+			})
+				.then(response => {
+					this.score = response.data.score2;
+					for (var i = 0; i < this.items.length; i++) {
+						if (this.items[i].text == response.data.sentimental) {
+							this.mood = this.items[i].text;
+							this.moodsrc = this.items[i].src;
+							this.selection = this.items[i].id;
+							this.color = this.items[i].colorcode;
+							$("#trashinserttext").css({
+								"background-color": this.items[i].colorcode,
+							});
+							break;
+						}
 
-			// 			setTimeout(() => {
-			// 				this.afteranaly = true;
-			// 				this.analyzing = false;
-			// 			}, 2000);
-			// 		}
-			// 	})
-			// 	.catch(error => {
-			// 		this.afteranaly = false;
-			// 		this.analyzing = false;
-			// 	});
+						setTimeout(() => {
+							this.afteranaly = true;
+							this.analyzing = false;
+						}, 2000);
+					}
+				})
+				.catch(error => {
+					this.afteranaly = false;
+					this.analyzing = false;
+				});
 		},
 		getmusic() {
 			if (this.time == 0) {
