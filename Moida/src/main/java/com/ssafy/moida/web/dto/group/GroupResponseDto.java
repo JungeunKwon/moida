@@ -36,6 +36,7 @@ public class GroupResponseDto {
 		this.hostId = entity.getHost().getId();
 		this.hostNickname = entity.getHost().getNickname();
 		this.hostProfileImg = entity.getHost().getProfileImg();
+		
 	}
 	
 	@Builder

@@ -180,10 +180,6 @@ public class GroupServiceImpl implements GroupService {
 	public GroupResponseDto findByGroupId(Long groupId) throws BaseException {
 		
 		GroupTB group = groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
-		Boolean isJoin = false;
-		if(accountGroupRepository.countByGroupTBAndAccount(group, accountService.getAccount()) >0) {
-			isJoin = true;
-		}
 		
 		
 		return GroupResponseDto.builder()
@@ -203,7 +199,7 @@ public class GroupServiceImpl implements GroupService {
 				
 	}
 
-	@Override
+	@Transactional
 	public Boolean kickByGroup(Long groupid, Long kickaccountid) throws NumberFormatException, BaseException {
 		GroupTB group = groupTBRepository.findById(groupid).get();
 		Account account = accountService.getAccount();
@@ -214,5 +210,15 @@ public class GroupServiceImpl implements GroupService {
 		
 		return null;
 	}
+
+	@Transactional
+	public List<GroupResponseDto> findJoinGroupByNickname(String nickname) throws NumberFormatException, BaseException {
+		Account account = accountRepository.findByNickname(nickname).get();
+		
+		return groupTBRepository.findByAccountid(account.getId()).stream()
+				.map(GroupResponseDto::new).collect(Collectors.toList());
+	}
+	
+	
 	
 }
