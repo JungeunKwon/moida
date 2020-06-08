@@ -36,6 +36,8 @@ public class GroupResponseDto {
 		this.hostId = entity.getHost().getId();
 		this.hostNickname = entity.getHost().getNickname();
 		this.hostProfileImg = entity.getHost().getProfileImg();
+
+		
 	}
 	
 	@Builder
@@ -53,6 +55,7 @@ public class GroupResponseDto {
 		this.hostProfileImg = hostProfileImg;
 		this.curUser = curUser;
 		this.isJoin = isJoin;
+
 	}
 	
 }

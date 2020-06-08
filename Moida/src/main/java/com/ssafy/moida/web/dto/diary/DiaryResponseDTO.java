@@ -63,12 +63,11 @@ public class DiaryResponseDTO {
 		}
 		
 		this.commentcount = (long) diary.getCommentList().size();
-		for(Comment c :diary.getCommentList()) {
-			
-			if(c.getDeleteDate() != null) {
-				this.commentcount--;
-			}
-		}
+		/*
+		   for(Comment c :diary.getCommentList()) {
+		   
+		   if(c.getDeleteDate() != null) { this.commentcount--; } }
+		 */
 	}
 	
 	

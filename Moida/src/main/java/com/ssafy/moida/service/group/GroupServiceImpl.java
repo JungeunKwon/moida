@@ -59,13 +59,14 @@ public class GroupServiceImpl implements GroupService {
 		
 		Long groupid = groupTBRepository.save(requestDto.toEntity()).getId();
 		
+		GroupTB group = groupTBRepository.findById(groupid).get();
 		SaveAccountGroupRequestDto accountgroup = new SaveAccountGroupRequestDto();
 		accountgroup.setAccount(accountService.getAccount());
 		accountgroup.setGroupTB(groupTBRepository.findById(groupid).get());
 		accountgroup.setGroupId(groupid);
 		accountGroupRepository.save(accountgroup.toEntity());
 		
-		if(accountGroupRepository.countByGroupIdAndAccountId(groupid,requestDto.getHost().getId()) <= 0) { 
+		if(accountGroupRepository.countByGroupTBAndAccountId(group,requestDto.getHost().getId()) <= 0) { 
 			accountGroupRepository.save(accountgroup.toEntity());
 			
 		}
@@ -79,7 +80,7 @@ public class GroupServiceImpl implements GroupService {
 		List<AccountGroup> groupList = accountService.getAccount().getGroupList();
 		
 		for(AccountGroup obj : groupList) {
-			if(obj.getGroupId()==requestDto.getGroupId()) {
+			if(obj.getGroupTB().getId()==requestDto.getGroupId()) {
 				throw new BaseException(EnumGroupException.GROUP_DUPLICATE_JOIN);
 			}
 		}
@@ -94,7 +95,8 @@ public class GroupServiceImpl implements GroupService {
 	
 	@Transactional
 	public void deleteAccountGroup(Long groupId) throws NumberFormatException, BaseException {
-		AccountGroup accountGroup = accountGroupRepository.findByAccountAndGroupTB(accountService.getAccount().getId(), groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		GroupTB group = groupTBRepository.findById(groupId).get();
+		AccountGroup accountGroup = accountGroupRepository.findByAccountAndGroupTB(accountService.getAccount().getId(), group).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
 		accountGroupRepository.delete(accountGroup);
 	}
 	
@@ -176,6 +178,7 @@ public class GroupServiceImpl implements GroupService {
 	
 	@Transactional(readOnly = true)
 	public GroupResponseDto findByGroupId(Long groupId) throws BaseException {
+		
 		GroupTB group = groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
 		Boolean isJoin = false;
 		if(accountGroupRepository.countByGroupTBAndAccount(group, accountService.getAccount()) >0) {
@@ -194,10 +197,32 @@ public class GroupServiceImpl implements GroupService {
 				.hostId(group.getHost().getId())
 				.hostNickname(group.getHost().getNickname())
 				.hostProfileImg(group.getHost().getProfileImg())
-				.curUser(accountGroupRepository.countByGroupId(groupId))
+				.curUser(accountGroupRepository.countByGroupTB(group))
 				.isJoin(isJoin)
 				.build();
 				
 	}
+
+	@Transactional
+	public Boolean kickByGroup(Long groupid, Long kickaccountid) throws NumberFormatException, BaseException {
+		GroupTB group = groupTBRepository.findById(groupid).get();
+		Account account = accountService.getAccount();
+		if(group.getHost().getId() == account.getId()) {
+			accountGroupRepository.deleteByAccountIdAndGroupTB(kickaccountid, group);
+		}
+		
+		
+		return null;
+	}
+
+	@Transactional
+	public List<GroupResponseDto> findJoinGroupByNickname(String nickname) throws NumberFormatException, BaseException {
+		Account account = accountRepository.findByNickname(nickname).get();
+		
+		return groupTBRepository.findByAccountid(account.getId()).stream()
+				.map(GroupResponseDto::new).collect(Collectors.toList());
+	}
+	
+	
 	
 }

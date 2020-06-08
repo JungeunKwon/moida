@@ -40,7 +40,7 @@
 						<img :src="member.accountProfileImg" />
 						<div>{{ member.accountNickname }}</div>
 						<img
-							v-if="isHost"
+							v-if="isHost && member.accountNickname != $store.getters.nickname"
 							src="../../../assets/icons/ban.png"
 							@click.stop="deleteMember(member.accountId)"
 						/>
@@ -70,9 +70,16 @@ export default {
 			members: {},
 		};
 	},
-	mounted() {
-		if (this.$store.getters.nickname == this.detail.hostNickname)
-			this.isHost = true;
+	mounted() {},
+	watch: {
+		dialog: function() {
+			if (this.dialog) {
+				if (this.$store.getters.nickname == this.detail.hostNickname) {
+					this.isHost = true;
+					console.log("쥔인지?" + this.isHost);
+				}
+			}
+		},
 	},
 	methods: {
 		...mapActions("sharedDiary", ["getSharedDiaryUser"]),
@@ -87,12 +94,17 @@ export default {
 			this.isMember = true;
 		},
 		goMypage(nickname) {
-			console.log(nickname);
+			this.$router.push("/myPage/" + nickname);
 		},
 		deleteMember(memberId) {
 			console.log(memberId);
+			if (confirm("정말 내보내실거에요,,?")) {
+			}
 		},
-		exitSharedDiary(diaryId) {},
+		exitSharedDiary(diaryId) {
+			if (confirm("정말 공다 나갈건지,,?")) {
+			}
+		},
 	},
 };
 </script>

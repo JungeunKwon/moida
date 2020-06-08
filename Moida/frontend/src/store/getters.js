@@ -15,6 +15,10 @@ const getters = {
 	//sharedDiary
 	writingSD: state => state.sharedDiary.writingSD,
 	sharedDiaryId: state => state.sharedDiary.diaryId,
+
+	//chat
+	targetNickname: state => state.chat.targetNickname,
+	targetImgUrl: state => state.chat.targetImgUrl,
 };
 
 export default getters;

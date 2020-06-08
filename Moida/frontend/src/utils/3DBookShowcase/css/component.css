@@ -426,12 +426,10 @@
 		height: 400px;
 	}
 
-	/* 중앙 책 제목 */
 	.book-1 .bk-cover h2 span:first-child {
 		font-size: 30px;
 	}
 
-	/* 왼쪽 책 제목 */
 	.book-1 .bk-left h2 span:first-child {
 		font-size: 20px;
 	}
@@ -440,13 +438,21 @@
 		display: block;
 	}
 
-	/* 중앙 책 제목 상세 */
 	.book-1 .bk-cover h2 span:last-child {
 		font-size: 15px;
 	}
 
-	/* 왼쪽 책 제목 상세 */
 	.book-1 .bk-left h2 span:last-child {
 		font-size: 10px;
+	}
+
+	.bk-tag {
+		width: 80px;
+		left: 280px;
+		font-size: 15px;
+	}
+
+	.bt2 {
+		top: 75px;
 	}
 }

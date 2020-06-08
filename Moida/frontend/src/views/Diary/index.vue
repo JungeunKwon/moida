@@ -1,9 +1,7 @@
 <template>
 	<div class="diarycontainer">
 		<div class="diraydrawer">
-			<v-app-bar-nav-icon
-				@click.stop="diarydrawer = !diarydrawer"
-			></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon @click.stop="diarydrawer = !diarydrawer"></v-app-bar-nav-icon>
 		</div>
 		<v-navigation-drawer v-model="diarydrawer" absolute temporary>
 			<v-list nav dense>
@@ -11,25 +9,13 @@
 					<template v-slot:activator>
 						<v-list-item-title>정렬</v-list-item-title>
 					</template>
-					<v-list-item-group
-						v-model="group"
-						active-class="deep-purple--text text--accent-4"
-					>
-						<v-list-item
-							v-for="item in sortlist"
-							:key="item.id"
-							@click="changesortSmall(item.text)"
-						>
-							<v-list-item-title>
-								{{ item.text }}
-							</v-list-item-title>
+					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+						<v-list-item v-for="item in sortlist" :key="item.id" @click="changesortSmall(item.text)">
+							<v-list-item-title>{{ item.text }}</v-list-item-title>
 						</v-list-item>
 					</v-list-item-group>
 				</v-list-group>
-				<v-list-item-group
-					v-model="group2"
-					active-class="deep-purple--text text--accent-4"
-				>
+				<v-list-item-group v-model="group2" active-class="deep-purple--text text--accent-4">
 					<v-list-item @click="getDiaryByfilter('전체보기')">
 						<v-list-item-title>전체보기</v-list-item-title>
 					</v-list-item>
@@ -70,23 +56,14 @@
 			</div>
 		</div>
 		<div class="middlediary">
-			<div
-				class="diarymasonry"
-				v-lazy-container="{ selector: 'diarycard' }"
-			>
+			<div class="diarymasonry" v-lazy-container="{ selector: 'diarycard' }">
 				<div v-for="diary in diaries" :key="diary.id" class="diarycard">
-					<DiaryCard
-						:diary="diary"
-						@load="rendered"
-						class="diary-card-content"
-					/>
+					<DiaryCard :diary="diary" @load="rendered" class="diary-card-content" />
 				</div>
 			</div>
 		</div>
-		<div class="bottomdiary">
-			<v-btn @click="openwrite">
-				<v-icon x-large>mdi-pencil</v-icon>
-			</v-btn>
+		<div id="writeDiaryDiv" @click="openwrite">
+			<v-icon large>mdi-pencil</v-icon>&nbsp;다이어리 쓰기
 		</div>
 	</div>
 </template>
@@ -306,26 +283,44 @@ export default {
 };
 </script>
 <style>
+#app-view
+	> div.paper.p3
+	> div
+	> div.diarysort
+	> div.sharedMenu.sel
+	> div
+	> div {
+	padding: 0;
+}
+
+#app-view
+	> div.paper.p3
+	> div
+	> div.diarysort
+	> div.sharedMenu.sel
+	> div
+	> div
+	> div
+	> div.v-input__slot {
+	padding: 5px;
+}
+
+#app-view > div.paper.p3 > div > div.diarysort > div.sharedMenu.sel > div {
+	margin-top: -25px;
+}
+
 .diarycontainer {
 	height: 100%;
 	margin: 0 auto;
 	overflow-y: auto;
 	overflow-x: hidden;
+	background-color: #f7ebc375;
 }
 .middlediary {
 	margin-top: 80px;
 	z-index: 1;
 	height: 100%;
 	padding: 20px;
-}
-
-.bottomdiary {
-	position: absolute;
-	bottom: 30px;
-	right: 10px;
-	width: 50px;
-	height: 60px;
-	margin: 0 auto;
 }
 
 .diraydrawer {
@@ -343,6 +338,7 @@ export default {
 }
 
 .diary-card-content:hover {
+	cursor: pointer;
 	opacity: 0.8;
 }
 
@@ -384,7 +380,25 @@ export default {
 		display: none;
 	}
 }
+#writeDiaryDiv {
+	position: absolute;
+	font-family: KyoboHand;
+	font-size: 20px;
+	bottom: 30px;
+	right: -105px;
+	width: 150px;
+	background-color: white;
+	height: 45px;
+	padding: 5px;
+	border-radius: 10px 0 0 10px;
+	box-shadow: 1px 1px 5px rgba(128, 128, 128, 0.61);
+	transition: 0.3s ease;
+	cursor: pointer;
+}
 
+#writeDiaryDiv:hover {
+	right: 0;
+}
 .sharedMenu.min {
 	cursor: pointer;
 }
