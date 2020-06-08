@@ -33,9 +33,8 @@ export function getMyHabitTrackerRecord(data) {
 }
 export function joinHabitTracker(data) {
     return request({
-        url: "/v1/habit/join/",
+        url: `/v1/habit/join/${data}`,
         method: "post",
-        data
     });
 }
 export function leaveHabitTracker(data) {

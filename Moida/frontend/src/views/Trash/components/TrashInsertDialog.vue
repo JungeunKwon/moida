@@ -83,61 +83,87 @@
 		</v-card>
 		<v-card v-if="innerdialog && !isMusic && afteranaly">
 			<div id="trashinserttext">
-				<v-card-text v-if="!selectanswer">
-					<div class="anaylzedmood">
-						<img :src="moodsrc" width="200px" height="200px" />
-					</div>
-					<div class="font-weight-bold">
-						'{{ mood }}' 감정이 {{ score }} % 들어가셨네요,, 아니면
-						다시 선택해주세요.
-					</div>
-					<v-btn color="white" @click="(afteranswer = true), (selectanswer = true)">예</v-btn>
-					<v-btn color="white" @click="(afteranswer = false), (selectanswer = true)">아니요</v-btn>
-				</v-card-text>
-				<v-card-text v-if="selectanswer && afteranswer">
-					<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
-					<v-col cols="12">
-						<v-subheader class="pl-0">Time</v-subheader>
-						<v-slider v-model="time" thumb-label="always" thumb-color="red" :max="24"></v-slider>
-					</v-col>
-
-					<div style="margin: 0 auto; width:100%">
-						<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">노래선택</v-btn>
-					</div>
-				</v-card-text>
-				<v-card-text v-if="selectanswer && !afteranswer">
-					<div>
-						<p class="font-weight-bold">감정을 다시 선택해주세요.</p>
-
-						<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
-							<div style="margin: 0 auto; width:80%">
-								<v-row align="center" justify="start">
-									<v-col v-for="item in items" :key="item.text" class="shrink">
-										<v-chip>
-											<v-avatar left>
-												<v-img :src="item.src"></v-img>
-											</v-avatar>
-											{{ item.text }}
-										</v-chip>
-									</v-col>
-								</v-row>
+				<div class="moodResultDiv" v-if="!selectanswer">
+					<div class="moodResult">
+						<v-progress-circular :rotate="180" :size="200" :width="15" :value="score" :color="color">
+							<div id="moodImg">
+								<img :src="moodsrc" width="30px" />
+								<div>"{{ mood }}"</div>
 							</div>
-						</v-chip-group>
-						<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
-						<v-col cols="12">
-							<v-subheader class="pl-0">Time</v-subheader>
-							<v-slider v-model="time" thumb-label="always" thumb-color="red" :max="24"></v-slider>
-						</v-col>
-
-						<div style="margin: 0 auto; width:100%">
-							<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">노래선택</v-btn>
+							<div id="moodText">
+								{{ score }}
+								<span>%</span>
+							</div>
+						</v-progress-circular>
+					</div>
+					<v-btn color="white" @click="(afteranswer = true), (selectanswer = true)">맞아요!</v-btn>
+					<v-btn color="white" @click="(afteranswer = false), (selectanswer = true)">아닌 것 같은데...</v-btn>
+				</div>
+				<div v-if="selectanswer && afteranswer" style="padding: 20px;">
+					<div class="deleteDiv">
+						<v-subheader class="pl-0">Time</v-subheader>
+						<v-slider
+							color="black"
+							track-color="gray"
+							v-model="time"
+							thumb-label="always"
+							thumb-color="red"
+							:max="24"
+						></v-slider>
+						<div id="deleteText">
+							<b>{{time}}</b> 시간 뒤에 감정 쓰레기가 사라집니다
 						</div>
 					</div>
-				</v-card-text>
+
+					<div style="margin: 0 auto; width:100%;">
+						<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">다음</v-btn>
+					</div>
+				</div>
+				<div class="reselectDiv" v-if="selectanswer && !afteranswer">
+					<div>
+						<span class="tmTitle">감정을 다시 선택해주세요.</span>
+					</div>
+					<v-chip-group v-model="selection" active-class="amber lighten-4 accent-4 white--text" column>
+						<div>
+							<v-row align="center" justify="start">
+								<v-col v-for="item in items" :key="item.text" class="shrink">
+									<v-chip color="white" large>
+										<img :src="item.src" width="30px" />
+									</v-chip>
+								</v-col>
+							</v-row>
+						</div>
+					</v-chip-group>
+					<div class="selText" v-if="selection != undefined">
+						<span>선택된 감정은&nbsp;</span>
+						<span>"{{items[selection].text}}"</span>
+						<span>&nbsp;입니다</span>
+					</div>
+					<div class="deleteDiv">
+						<v-subheader class="pl-0">Time</v-subheader>
+						<v-slider
+							color="black"
+							track-color="gray"
+							v-model="time"
+							thumb-label="always"
+							thumb-color="red"
+							:max="24"
+						></v-slider>
+						<div id="deleteText">
+							<b>{{time}}</b> 시간 뒤에 감정 쓰레기가 사라집니다
+						</div>
+					</div>
+					<div style="margin: 0 auto; width:100%">
+						<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">다음</v-btn>
+					</div>
+				</div>
 			</div>
 		</v-card>
-		<v-card v-if="innerdialog && isMusic">
-			<p class="font-weight-bold">이 노래 한번 들어보세요.</p>
+		<v-card v-if="innerdialog && isMusic" style="padding: 20px;">
+			<div
+				class="font-weight-bold"
+				style="font-family: 'kyoboHand'; font-size: 20px;"
+			>~ 영상을 클릭해서 노래를 선택해주세요 ~</div>
 			<img id="back_arrow" src="../../../assets/icons/back.png" @click="moveLeft" />
 			<div id="musicList">
 				<div id="category" class="music">
@@ -197,7 +223,8 @@ export default {
 			isMusic: false,
 			time: 0,
 			url: "",
-			score: null,
+			score: 0,
+			color: "",
 			selection: null,
 			musiclist: [],
 			model: null,
@@ -225,7 +252,7 @@ export default {
 				this.moodsrc = "";
 				this.afteranaly = false;
 				this.analyzing = false;
-				this.score = null;
+				this.score = 0;
 				this.selectanswer = false;
 				this.afteranswer = false;
 				$("#trashinserttext").css({
@@ -275,34 +302,39 @@ export default {
 			setTimeout(() => {
 				this.afteranaly = true;
 				this.analyzing = false;
+				this.mood = this.items[0].text;
+				this.moodsrc = this.items[0].src;
+				this.selection = this.items[0].id;
+				this.color = this.items[0].colorcode;
+				this.score = 80;
 			}, 2000);
-			this.sentimentanalysis({
-				description: this.trashcontent,
-			})
-				.then(response => {
-					this.score = response.data.score2;
-					for (var i = 0; i < this.items.length; i++) {
-						if (this.items[i].text == response.data.sentimental) {
-							this.mood = this.items[i].text;
-							this.moodsrc = this.items[i].src;
-							this.selection = this.items[i].id;
+			// this.sentimentanalysis({
+			// 	description: this.trashcontent,
+			// })
+			// 	.then(response => {
+			// 		this.score = response.data.score2;
+			// 		for (var i = 0; i < this.items.length; i++) {
+			// 			if (this.items[i].text == response.data.sentimental) {
+			// 				this.mood = this.items[i].text;
+			// 				this.moodsrc = this.items[i].src;
+			// 				this.selection = this.items[i].id;
+			// this.color = this.items[i].colorcode;
+			// 				$("#trashinserttext").css({
+			// 					"background-color": this.items[i].colorcode,
+			// 				});
+			// 				break;
+			// 			}
 
-							$("#trashinserttext").css({
-								"background-color": this.items[i].colorcode,
-							});
-							break;
-						}
-
-						setTimeout(() => {
-							this.afteranaly = true;
-							this.analyzing = false;
-						}, 2000);
-					}
-				})
-				.catch(error => {
-					this.afteranaly = false;
-					this.analyzing = false;
-				});
+			// 			setTimeout(() => {
+			// 				this.afteranaly = true;
+			// 				this.analyzing = false;
+			// 			}, 2000);
+			// 		}
+			// 	})
+			// 	.catch(error => {
+			// 		this.afteranaly = false;
+			// 		this.analyzing = false;
+			// 	});
 		},
 		getmusic() {
 			if (this.time == 0) {
@@ -401,8 +433,69 @@ export default {
 .anaylzedmood {
 	width: 200px;
 	height: 200px;
-
 	font-size: 15px;
 	margin: 0 auto;
+}
+
+.moodResultDiv {
+	padding: 20px;
+}
+
+.moodResult {
+	width: 100%;
+	height: 200px;
+	margin: 0 auto;
+	font-family: "kyoboHand";
+	margin-bottom: 10px;
+}
+
+#moodImg {
+	font-size: 25px;
+}
+
+#moodImg div {
+	margin-top: -10px;
+}
+
+#moodText {
+	margin-left: 10px;
+	font-size: 30px;
+	color: black;
+	font-weight: bold;
+}
+
+#moodText span {
+	color: black;
+}
+
+.moodResultDiv > .v-btn {
+	margin: 10px;
+}
+
+.reselectDiv {
+	margin: 0 auto;
+	width: 100%;
+	padding: 20px;
+}
+
+.tmTitle {
+	padding: 5px;
+	background-color: white;
+	font-family: "kyoboHand";
+	font-size: 18px;
+	box-shadow: 1px 1px 3px silver;
+	border-radius: 5px;
+	width: 200px;
+}
+
+.reselectDiv .v-chip-group {
+	display: inline-block;
+	width: 350px;
+	margin-left: 30px;
+}
+
+#deleteText {
+	margin-top: -20px;
+	margin-bottom: 20px;
 }
 </style>
