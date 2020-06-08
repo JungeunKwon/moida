@@ -1,67 +1,82 @@
 <template>
 	<div id="chatRoom">
 		<div id="chatRoom_top">
-			<img
-				id="chat_back"
-				src="../../../assets/icons/chat_back.png"
-				@click="closeChat()"
-			/>
+			<img id="chat_back" src="../../../assets/icons/chat_back.png" @click="closeChat()" />
 			<div id="targetNickname">{{ targetNickname }}</div>
 			<div id="chat_on">
-				<img
-					:src="isOn ? './icons/on.png' : './icons/off.png'"
-					width="15px"
-				/>
+				<img :src="isOn ? './icons/on.png' : './icons/off.png'" width="15px" />
 			</div>
 		</div>
-
 		<div id="chats_div">
 			<div v-for="(msg, idx) in messages" id="chats" :key="idx">
-				<div v-if="msg.writer == targetNickname" class="you">
+				<div v-if="(msg.writer == targetNickname) " class="you">
 					<img :src="targetImg" class="targetImg" />
 					<div>
 						<div id="chats_youdate">
 							&nbsp;&nbsp;&nbsp;&nbsp;
-							{{ msg.date }}
+							{{ getLastDate(msg.lastDate) }}
 						</div>
-						<div v-if="msg.type == 'SHARE'" class="you_store_div">
-							<div class="you_store"></div>
+						<div v-if="msg.type=='SHARE'" class="you_store_div">
+							<!-- <div class="you_store">
+								<div class="store_title" @click="goStore(msg.store.storeId)">
+									<img
+										class="store_icon"
+										src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/place_icon.png"
+									/>
+									<div class="store_name">{{ msg.store.storeName }}</div>
+									<img
+										class="store_arrow"
+										src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png"
+									/>
+								</div>
+								<div class="store_desc">
+									<div class="store_img_div">
+										<img class="store_img" :src="msg.store.storeImage" />
+									</div>
+									<div class="store_detail">
+										<div>REVIEWS : {{ msg.store.reviewCnt }}</div>
+										<div>TEL : {{ msg.store.storeTel }}</div>
+									</div>
+								</div>
+							</div>-->
 						</div>
-						<div
-							v-if="msg.type != 'SHARE' && msg.content != ''"
-							class="you_msg"
-						>
-							{{ msg.content }}
-						</div>
+						<div v-if="msg.type != 'SHARE' && msg.content !=''" class="you_msg">{{ msg.content }}</div>
 					</div>
 				</div>
 
-				<div v-if="msg.writer == userNickname" class="me">
-					<div id="chats_medate">{{ msg.date }}</div>
-					<div v-if="msg.type == 'SHARE'" class="me_store_div">
-						<div class="me_store"></div>
+				<div v-if="(msg.writer == userNickname)" class="me">
+					<div id="chats_medate">{{ getLastDate(msg.lastDate) }}</div>
+					<div v-if="msg.type=='SHARE'" class="me_store_div">
+						<!-- <div class="me_store">
+							<div class="store_title" @click="goStore(msg.store.storeId)">
+								<img
+									class="store_icon"
+									src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/place_icon.png"
+								/>
+								<div class="store_name">{{ msg.store.storeName }}</div>
+								<img
+									class="store_arrow"
+									src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png"
+								/>
+							</div>
+							<div class="store_desc">
+								<div class="store_img_div">
+									<img class="store_img" :src="msg.store.storeImage" />
+								</div>
+								<div class="store_detail">
+									<div>REVIEWS : {{ msg.store.reviewCnt }}</div>
+									<div>TEL : {{ msg.store.storeTel }}</div>
+								</div>
+							</div>
+						</div>-->
 					</div>
-					<div
-						v-if="msg.type != 'SHARE' && msg.content != ''"
-						class="me_msg"
-					>
-						{{ msg.content }}
-					</div>
+					<div v-if="msg.type != 'SHARE' && msg.content !=''" class="me_msg">{{ msg.content }}</div>
 				</div>
 			</div>
 		</div>
 		<div id="send_div">
-			<input
-				id="chatRoom_input"
-				v-model="content"
-				type="text"
-				@keyup.enter="sendMessage()"
-			/>
-			<img
-				id="send"
-				src="../../../assets/icons/send.png"
-				@click="sendMessage()"
-			/>
+			<input id="chatRoom_input" v-model="content" type="text" @keyup.enter="sendMessage()" />
+			<img id="send" src="../../../assets/icons/send.png" @click="sendMessage()" />
 		</div>
 	</div>
 </template>
@@ -103,7 +118,7 @@ export default {
 
 	created() {
 		//var socketUrl = "http://k02d106.p.ssafy.io:8080/ws-stomp";
-		var socketUrl = "http://172.20.10.2:8080/ws-stomp";
+		var socketUrl = "http://192.168.43.253:8080/ws-stomp"; //"http://172.20.10.2:8080/ws-stomp";
 		this.socket = new SockJS(socketUrl);
 		var here = this;
 		this.stompClient = Stomp.over(this.socket);
@@ -127,7 +142,6 @@ export default {
 						roomuuid: here.roomuuid,
 						writer: here.userNickname,
 						content: "",
-						date: here.date,
 					}),
 					{},
 				);
@@ -159,6 +173,10 @@ export default {
 		}
 	},
 	methods: {
+		getLastDate(date) {
+			if (date == undefined) return;
+			return date.replace("T", " ").substring(0, 16);
+		},
 		sendShare() {
 			this.stompClient.send(
 				"/pub/chat/message",
@@ -245,7 +263,7 @@ export default {
 					writer: recv.writer,
 					content: recv.content,
 					type: recv.type,
-					date: recv.date,
+					lastDate: recv.lastDate,
 				});
 			}
 			this.messages.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -337,6 +355,7 @@ export default {
 #chats {
 	width: 100%;
 	padding: 4px 5px 4px 5px;
+	text-align: left;
 }
 
 .me {

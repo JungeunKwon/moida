@@ -4,6 +4,7 @@ import {
 	getRoomInfo,
 	createRoom,
 	getAllRooms,
+	roomCheck,
 } from "../../api/chat";
 const state = {
 	targetNickname: "",
@@ -71,6 +72,17 @@ const actions = {
 	getAllRooms({ commit }, user) {
 		return new Promise((resolve, reject) => {
 			getAllRooms(user)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(reject);
+				});
+		});
+	},
+	roomCheck({ commit }, host, user) {
+		return new Promise((resolve, reject) => {
+			roomCheck(host, user)
 				.then(response => {
 					resolve(response);
 				})

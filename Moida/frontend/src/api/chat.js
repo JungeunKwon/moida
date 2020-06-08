@@ -31,3 +31,9 @@ export function getAllRooms(user) {
 		method: "get",
 	});
 }
+export function roomCheck(host, user) {
+	return request({
+		url: `/chat/room/${host}/${user}`,
+		method: "get",
+	});
+}

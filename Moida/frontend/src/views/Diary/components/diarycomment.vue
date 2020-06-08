@@ -21,6 +21,7 @@
 				</div>
 			</div>
 			<div v-if="deleteDate != null">삭제된 메세지 입니다.</div>
+			<div style="text-align:right">{{getLastDate(comment.modifiedDate)}}</div>
 		</div>
 		<div v-if="deleteDate == null">
 			<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && !isEdit">
@@ -99,6 +100,10 @@ export default {
 					console.log(error);
 				});
 		},
+		getLastDate(date) {
+			if (date == undefined) return;
+			return date.replace("T", " ").substring(0, 19);
+		},
 	},
 };
 </script>
@@ -112,7 +117,7 @@ export default {
 	width: 100%;
 	text-align: left;
 	border-bottom: 1px solid rgba(192, 192, 192, 0.23);
-	padding: 10px 10px 20px 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .commentavatar {

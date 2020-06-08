@@ -1,17 +1,15 @@
 <template>
 	<div id="chatting">
-		<v-btn @click="increateRoom">템ㅅ프</v-btn>
+		<!-- <v-btn @click="increateRoom">템ㅅ프</v-btn> -->
 		<div id="chat_left">
-			<div
-				v-for="(chat, idx) in chatList"
-				id="chat"
-				:key="idx"
-				@click="enterRoom(chat)"
-			>
+			<div v-for="(chat, idx) in chatList" id="chat" :key="idx" @click="enterRoom(chat)">
 				<img id="chat_userImg" :src="chat.account.profileImg" />
 				<div id="chat_nickname">{{ chat.account.nickname }}</div>
-				<!-- <div id="chat_date">{{ chat.lastdate }}</div> -->
-				<div id="chat_new"></div>
+				<div class="chat_left_content">
+					<div id="chat_list_content">{{getContent(chat.lastSentence)}}</div>
+
+					<div id="chat_date">{{ getLastDate(chat.lastDate) }}</div>
+				</div>
 			</div>
 		</div>
 		<div id="chat_right">
@@ -121,6 +119,14 @@ export default {
 			this.isOpen = true;
 			console.log(this.chat);
 		},
+		getLastDate(date) {
+			if (date == undefined) return;
+			return date.replace("T", " ").substring(0, 16);
+		},
+		getContent(content) {
+			if (content.length < 10) return content;
+			return content.substring(0, 10) + "...";
+		},
 	},
 };
 </script>
@@ -207,10 +213,85 @@ export default {
 #createRoom {
 	cursor: pointer;
 }
-#chat_new {
-	background-image: url("../../assets/icons/new.png");
-	width: 20px;
-	height: 20px;
+
+#chat_left_content {
+	word-break: break-all;
+	width: calc(100% - 100px);
 	display: inline-block;
+}
+#chat_list_content {
+	word-break: break-all;
+
+	display: inline-block;
+}
+@media screen and (max-width: 774px) {
+	#chatting {
+		height: 100%;
+		width: 100%;
+		display: block;
+		position: unset;
+	}
+	#chat {
+		padding: 12px;
+		line-height: 50px;
+		cursor: pointer;
+		width: 100%;
+	}
+	#chat_list_content {
+		word-break: break-all;
+
+		display: inline-block;
+	}
+	#chat_left {
+		position: unset;
+		display: block;
+		width: 100%;
+		height: 50%;
+		overflow-y: auto;
+	}
+
+	#chat_right {
+		position: unset;
+		display: block;
+		width: 100%;
+		height: 50%;
+		background-color: rgba(248, 217, 213, 0.151);
+	}
+}
+
+@media screen and (max-width: 330px) {
+	#chatting {
+		height: 100%;
+		width: 100%;
+		display: block;
+		position: unset;
+	}
+	#chat {
+		padding: 12px;
+		height: 150px;
+		line-height: 50px;
+		cursor: pointer;
+		width: 100%;
+	}
+	#chat_list_content {
+		word-break: break-all;
+		width: 100%;
+		display: inline-block;
+	}
+	#chat_left {
+		position: unset;
+		display: block;
+		width: 100%;
+		height: 50%;
+		overflow-y: auto;
+	}
+
+	#chat_right {
+		position: unset;
+		display: block;
+		width: 100%;
+		height: 50%;
+		background-color: rgba(248, 217, 213, 0.151);
+	}
 }
 </style>
