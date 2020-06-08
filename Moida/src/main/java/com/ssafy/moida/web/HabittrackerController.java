@@ -118,6 +118,19 @@ public class HabittrackerController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
+	@ApiOperation(value = "해빗 오늘치 삭제", httpMethod = "DELETE", notes = "해빗트래커 do 삭제 해버리는 부분입니다.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@DeleteMapping(value = "/habit/dohbit/{dohabitid}")
+	public ResponseEntity<Boolean> deletedoHabit(@PathVariable Long dohabitid
+			) throws IllegalArgumentException, IOException, BaseException{
+		
+
+		return new ResponseEntity<Boolean>(habittrackerService.deleteclearHabittracker(dohabitid), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
 	@ApiOperation(value = "전체 해빗 트래커(지워진거 포함)", httpMethod = "GET", notes = "전체 해빗 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/habit")
