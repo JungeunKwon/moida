@@ -14,7 +14,7 @@ import com.ssafy.moida.web.dto.follow.FollowerResponseDTO;
 public interface FollowService {
 	public Long saveFollow(Long followingid) throws NumberFormatException, BaseException;
 	public Boolean deleteFollow(Long followingid) throws NumberFormatException, BaseException;
-	public List<FollowingResponseDTO> Followinglist(Long followingid) throws NumberFormatException, BaseException;
-	public List<FollowerResponseDTO> Followerlist(Long followerid) throws NumberFormatException, BaseException;
+	public List<FollowingResponseDTO> Followinglist(Long followerid) throws NumberFormatException, BaseException;
+	public List<FollowerResponseDTO> Followerlist(Long followingid) throws NumberFormatException, BaseException;
 
 }

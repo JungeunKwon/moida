@@ -63,7 +63,7 @@
 		<v-card v-if="innerdialog && !isMusic && !afteranaly">
 			<v-card-text>
 				<div v-if="!analyzing">
-					<div style="padding:10px">
+					<div class="trashTextDiv" style="padding:10px">
 						<v-textarea
 							v-model="trashcontent"
 							label="감정을 여기다 써주세요."
@@ -71,15 +71,13 @@
 							counter
 							maxlength="500"
 							muilt-line
+							color="gray"
 						></v-textarea>
 					</div>
-					<v-btn @click="getmood">작성</v-btn>
+					<v-btn @click="getmood" color="white">버리기</v-btn>
 				</div>
 				<div v-if="analyzing">
-					<img
-						width="500"
-						src="../../../assets/icons/analyzing.gif"
-					/>
+					<img width="500" src="../../../assets/icons/analyzing.gif" />
 				</div>
 			</v-card-text>
 		</v-card>
@@ -89,56 +87,32 @@
 					<div class="anaylzedmood">
 						<img :src="moodsrc" width="200px" height="200px" />
 					</div>
-					<p class="font-weight-bold">
+					<div class="font-weight-bold">
 						'{{ mood }}' 감정이 {{ score }} % 들어가셨네요,, 아니면
 						다시 선택해주세요.
-					</p>
-					<v-btn @click="(afteranswer = true), (selectanswer = true)"
-						>예</v-btn
-					>
-					<v-btn @click="(afteranswer = false), (selectanswer = true)"
-						>아니요</v-btn
-					>
+					</div>
+					<v-btn color="white" @click="(afteranswer = true), (selectanswer = true)">예</v-btn>
+					<v-btn color="white" @click="(afteranswer = false), (selectanswer = true)">아니요</v-btn>
 				</v-card-text>
 				<v-card-text v-if="selectanswer && afteranswer">
 					<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
 					<v-col cols="12">
 						<v-subheader class="pl-0">Time</v-subheader>
-						<v-slider
-							v-model="time"
-							thumb-label="always"
-							thumb-color="red"
-							:max="24"
-						></v-slider>
+						<v-slider v-model="time" thumb-label="always" thumb-color="red" :max="24"></v-slider>
 					</v-col>
 
 					<div style="margin: 0 auto; width:100%">
-						<v-btn
-							text
-							style="display: inline-block; width: 20%;"
-							@click="getmusic"
-							>노래선택</v-btn
-						>
+						<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">노래선택</v-btn>
 					</div>
 				</v-card-text>
 				<v-card-text v-if="selectanswer && !afteranswer">
 					<div>
-						<p class="font-weight-bold">
-							감정을 다시 선택해주세요.
-						</p>
+						<p class="font-weight-bold">감정을 다시 선택해주세요.</p>
 
-						<v-chip-group
-							v-model="selection"
-							active-class="deep-purple accent-4 white--text"
-							column
-						>
+						<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
 							<div style="margin: 0 auto; width:80%">
 								<v-row align="center" justify="start">
-									<v-col
-										v-for="item in items"
-										:key="item.text"
-										class="shrink"
-									>
+									<v-col v-for="item in items" :key="item.text" class="shrink">
 										<v-chip>
 											<v-avatar left>
 												<v-img :src="item.src"></v-img>
@@ -152,21 +126,11 @@
 						<p class="font-weight-bold">몇 시간 뒤에 지울까요?</p>
 						<v-col cols="12">
 							<v-subheader class="pl-0">Time</v-subheader>
-							<v-slider
-								v-model="time"
-								thumb-label="always"
-								thumb-color="red"
-								:max="24"
-							></v-slider>
+							<v-slider v-model="time" thumb-label="always" thumb-color="red" :max="24"></v-slider>
 						</v-col>
 
 						<div style="margin: 0 auto; width:100%">
-							<v-btn
-								text
-								style="display: inline-block; width: 20%;"
-								@click="getmusic"
-								>노래선택</v-btn
-							>
+							<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">노래선택</v-btn>
 						</div>
 					</div>
 				</v-card-text>
@@ -174,11 +138,7 @@
 		</v-card>
 		<v-card v-if="innerdialog && isMusic">
 			<p class="font-weight-bold">이 노래 한번 들어보세요.</p>
-			<img
-				id="back_arrow"
-				src="../../../assets/icons/back.png"
-				@click="moveLeft"
-			/>
+			<img id="back_arrow" src="../../../assets/icons/back.png" @click="moveLeft" />
 			<div id="musicList">
 				<div id="category" class="music">
 					<v-item-group>
@@ -204,29 +164,16 @@
 										loading="lazy"
 									></iframe>
 								</div>
-								<div
-									style="width:100%; height:50px; text-align:center"
-								>
-									{{ music.musicname }}
-								</div>
+								<div style="width:100%; height:50px; text-align:center">{{ music.musicname }}</div>
 							</v-card>
 						</v-item>
 					</v-item-group>
 				</div>
 			</div>
-			<img
-				id="next_arrow"
-				src="../../../assets/icons/next.png"
-				@click="moveRight"
-			/>
+			<img id="next_arrow" src="../../../assets/icons/next.png" @click="moveRight" />
 
 			<div style="margin: 0 auto; width:100%">
-				<v-btn
-					text
-					style="display: inline-block; width: 20%;"
-					@click="inserttrash"
-					>노래선택</v-btn
-				>
+				<v-btn text style="display: inline-block; width: 20%;" @click="inserttrash">노래선택</v-btn>
 			</div>
 		</v-card>
 	</v-dialog>
