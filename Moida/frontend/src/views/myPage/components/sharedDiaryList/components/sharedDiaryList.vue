@@ -4,10 +4,19 @@
 			<div class="modal-wrapper">
 				<div class="modal-container">
 					<div class="modal-header">
-						<button class="modal-default-button" @click="$emit('close')">다끼</button>
+						<button
+							class="modal-default-button"
+							@click="$emit('close')"
+						>
+							다끼
+						</button>
 					</div>
 					<div class="itemList">
-						<item v-for="(item, idx) in diaries" :key="idx" :item="item" />
+						<item
+							v-for="(item, idx) in diaries"
+							:key="idx"
+							:item="item"
+						/>
 					</div>
 				</div>
 			</div>
@@ -23,6 +32,20 @@ export default {
 	},
 	components: {
 		item: () => import("./SharedDiaryListItem"),
+	},
+	mounted() {
+		window.addEventListener("click", this.outOfMore);
+	},
+	beforeDestroy() {
+		window.removeEventListener("click", this.outOfMore);
+	},
+	methods: {
+		outOfMore(e) {
+			if (document.getElementById("boun").contains(e.target)) {
+			} else {
+				this.$emit("close");
+			}
+		},
 	},
 };
 </script>

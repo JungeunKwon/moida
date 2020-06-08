@@ -10,16 +10,46 @@ import {
 	diaryLike,
 	diaryDisLike,
 } from "@/api/diary";
-
+import moment from "moment";
 const state = {};
 const mutations = {};
-
+function getClass(isPrivate, groupid) {
+	if (groupid) return "group";
+	return isPrivate === 1 ? "public" : isPrivate === 2 ? "friend" : "private";
+}
 const actions = {
 	getDiary() {
 		return new Promise((resolve, reject) => {
 			getDiary()
 				.then(response => {
 					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
+	},
+	getDiaryap() {
+		return new Promise((resolve, reject) => {
+			getDiary()
+				.then(response => {
+					console.log(response);
+					let result = [];
+					let content = response.data;
+					for (let idx = 0; idx < content.length; idx++) {
+						let t = moment(content[idx].inputDate);
+						result.push({
+							id: content[idx].id,
+							day: moment(content[idx].inputDate),
+							content: content[idx].description,
+							nickname: content[idx].nickname,
+							cssClass: getClass(
+								content[idx].isPrivate,
+								content[idx].groupid,
+							),
+						});
+					}
+					resolve(result);
 				})
 				.catch(error => {
 					reject(error);

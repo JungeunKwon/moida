@@ -1,5 +1,5 @@
 <template>
-	<div @click="openSharedDiaryDetail()" class="sharedDiaryItem">
+	<div @click="$router.push(`/shared/${item.id}`)" class="sharedDiaryItem">
 		<div id="detailImgDiv">
 			<img id="detailImg" :src="item.imgUrl" />
 		</div>
@@ -28,9 +28,7 @@ export default {
 	},
 	mounted() {},
 	computed: {},
-	methods: {
-		openSharedDiaryDetail() {},
-	},
+	methods: {},
 };
 </script>
 

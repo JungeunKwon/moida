@@ -1,19 +1,32 @@
 <template>
 	<div class="sdl-root">
 		<div class="sharedMenu mini">
-			<img class="tape" src="@/assets/images/tape.png" />
-			<div class="sharedPaper mini" @click="showModal=true">참가한 다이어리</div>
 			<img
-				v-if="user.nickname && $store.getters.nickname !== user.nickname"
+				v-if="diaries.length !== 0"
+				class="tape"
+				src="@/assets/images/tape.png"
+			/>
+			<mof :diaries="diaries">
+				<div v-if="diaries.length !== 0" class="sharedPaper mini">
+					참가한 다이어리
+				</div>
+			</mof>
+			<img
+				v-if="
+					user.nickname && $store.getters.nickname !== user.nickname
+				"
 				class="tape"
 				src="@/assets/images/tape.png"
 			/>
 			<div
-				v-if="user.nickname && $store.getters.nickname !== user.nickname"
+				v-if="
+					user.nickname && $store.getters.nickname !== user.nickname
+				"
 				class="sharedPaper mini"
-			>채팅걸기</div>
+			>
+				채팅걸기
+			</div>
 		</div>
-		<diary-list v-if="showModal" :diaries="diaries" @close="showModal=false" />
 	</div>
 </template>
 
@@ -29,7 +42,7 @@ export default {
 		};
 	},
 	components: {
-		diaryList: () => import("./components/sharedDiaryList"),
+		mof: () => import("./components/followModal"),
 	},
 };
 </script>
