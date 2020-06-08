@@ -86,10 +86,12 @@
 		<v-card v-if="innerdialog && !isMusic && afteranaly">
 			<div id="trashinserttext">
 				<v-card-text v-if="!selectanswer">
-					<div class="anaylzedmood">'{{ mood }}'</div>
+					<div class="anaylzedmood">
+						<img :src="moodsrc" width="200px" height="200px" />
+					</div>
 					<p class="font-weight-bold">
-						감정이 {{ score }} % 들어가셨네요,, 아니면 다시
-						선택해주세요.
+						'{{ mood }}' 감정이 {{ score }} % 들어가셨네요,, 아니면
+						다시 선택해주세요.
 					</p>
 					<v-btn @click="(afteranswer = true), (selectanswer = true)"
 						>예</v-btn
@@ -327,31 +329,33 @@ export default {
 				this.afteranaly = true;
 				this.analyzing = false;
 			}, 2000);
-			// this.sentimentanalysis({
-			// 	description: this.trashcontent,
-			// })
-			// 	.then(response => {
-			// 		for (var i = 0; i < this.items.length; i++) {
-			// 			if (this.items[i].text == response.data.sentimental) {
-			// 				this.mood = this.items[i].text;
-			// 				this.moodsrc = this.items[i].src;
-			// 				this.selection = this.items[i].id;
-			// 				$("#trashinserttext").css({
-			// 					"background-color": this.items[i].colorcode,
-			// 				});
-			// 				break;
-			// 			}
-			// 			this.score = response.data.score2;
-			// 			setTimeout(() => {
-			// 				this.afteranaly = true;
-			// 				this.analyzing = false;
-			// 			}, 2000);
-			// 		}
-			// 	})
-			// 	.catch(error => {
-			// 		this.afteranaly = false;
-			// 		this.analyzing = false;
-			// 	});
+			this.sentimentanalysis({
+				description: this.trashcontent,
+			})
+				.then(response => {
+					this.score = response.data.score2;
+					for (var i = 0; i < this.items.length; i++) {
+						if (this.items[i].text == response.data.sentimental) {
+							this.mood = this.items[i].text;
+							this.moodsrc = this.items[i].src;
+							this.selection = this.items[i].id;
+
+							$("#trashinserttext").css({
+								"background-color": this.items[i].colorcode,
+							});
+							break;
+						}
+
+						setTimeout(() => {
+							this.afteranaly = true;
+							this.analyzing = false;
+						}, 2000);
+					}
+				})
+				.catch(error => {
+					this.afteranaly = false;
+					this.analyzing = false;
+				});
 		},
 		getmusic() {
 			if (this.time == 0) {
@@ -450,8 +454,7 @@ export default {
 .anaylzedmood {
 	width: 200px;
 	height: 200px;
-	border-radius: 50%;
-	border: 1px solid black;
+
 	font-size: 15px;
 	margin: 0 auto;
 }
