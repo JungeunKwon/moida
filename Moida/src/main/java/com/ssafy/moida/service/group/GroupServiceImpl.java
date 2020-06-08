@@ -194,7 +194,6 @@ public class GroupServiceImpl implements GroupService {
 				.hostNickname(group.getHost().getNickname())
 				.hostProfileImg(group.getHost().getProfileImg())
 				.curUser(accountGroupRepository.countByGroupTB(group))
-				.isJoin(isJoin)
 				.build();
 				
 	}
