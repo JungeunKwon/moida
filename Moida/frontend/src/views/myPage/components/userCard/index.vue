@@ -41,6 +41,7 @@
 </template>
 <script>
 import { deleteFollow, addFollow } from "../../../../api/follow";
+import { mapMutations } from "vuex";
 export default {
 	props: {
 		user: { type: Object, default: {} },
@@ -69,6 +70,7 @@ export default {
 		return {};
 	},
 	methods: {
+		...mapMutations("chat", ["SET_TARGET_NICKNAME"]),
 		addFollow() {
 			addFollow(this.user.id);
 			if (
