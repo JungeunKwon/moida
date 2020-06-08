@@ -6,7 +6,8 @@ import {
 	searchByNickname,
 	searchByDesc,
 	joinSharedDiary,
-	getMySharedDiary
+	getMySharedDiary,
+	searchByMember,
 } from "@/api/sharedDiaryList";
 
 const state = {};
@@ -25,9 +26,7 @@ const actions = {
 				});
 		});
 	},
-	createSharedDiary({
-		commit
-	}, diaryInfo) {
+	createSharedDiary({ commit }, diaryInfo) {
 		const formData = new FormData();
 		formData.append("uploadFile", diaryInfo.uploadFile);
 		formData.append("subject", diaryInfo.subject);
@@ -49,9 +48,7 @@ const actions = {
 				});
 		});
 	},
-	joinSharedDiary({
-		commit
-	}, info) {
+	joinSharedDiary({ commit }, info) {
 		return new Promise((resolve, reject) => {
 			joinSharedDiary(info)
 				.then(response => {
@@ -59,12 +56,10 @@ const actions = {
 				})
 				.catch(error => {
 					reject(error);
-				})
-		})
+				});
+		});
 	},
-	getSharedDiaryDetail({
-		commit
-	}, diaryId) {
+	getSharedDiaryDetail({ commit }, diaryId) {
 		return new Promise((resolve, reject) => {
 			getSharedDiaryDetail(diaryId)
 				.then(response => {
@@ -72,12 +67,10 @@ const actions = {
 				})
 				.catch(error => {
 					reject(error);
-				})
-		})
+				});
+		});
 	},
-	searchBySubject({
-		commit
-	}, text) {
+	searchBySubject({ commit }, text) {
 		return new Promise((resolve, reject) => {
 			searchBySubject(text)
 				.then(response => {
@@ -85,12 +78,10 @@ const actions = {
 				})
 				.catch(error => {
 					reject(error);
-				})
-		})
+				});
+		});
 	},
-	searchByNickname({
-		commit
-	}, text) {
+	searchByNickname({ commit }, text) {
 		return new Promise((resolve, reject) => {
 			searchByNickname(text)
 				.then(response => {
@@ -98,12 +89,21 @@ const actions = {
 				})
 				.catch(error => {
 					reject(error);
-				})
-		})
+				});
+		});
 	},
-	searchByDesc({
-		commit
-	}, text) {
+	searchByMember({ commit }, text) {
+		return new Promise((resolve, reject) => {
+			searchByMember(text)
+				.then(response => {
+					resolve(response);
+				})
+				.catch(error => {
+					reject(error);
+				});
+		});
+	},
+	searchByDesc({ commit }, text) {
 		return new Promise((resolve, reject) => {
 			searchByDesc(text)
 				.then(response => {
@@ -111,12 +111,10 @@ const actions = {
 				})
 				.catch(error => {
 					reject(error);
-				})
-		})
+				});
+		});
 	},
-	getMySharedDiary({
-		commit
-	}) {
+	getMySharedDiary({ commit }) {
 		return new Promise((resolve, reject) => {
 			getMySharedDiary()
 				.then(response => {
@@ -124,9 +122,9 @@ const actions = {
 				})
 				.catch(error => {
 					reject(error);
-				})
-		})
-	}
+				});
+		});
+	},
 };
 
 export default {

@@ -12,8 +12,8 @@ export function joinSharedDiary(data) {
 	return request({
 		url: "/v1/group/join",
 		method: "post",
-		data
-	})
+		data,
+	});
 }
 
 export function getSharedDiary() {
@@ -53,7 +53,14 @@ export function searchByDesc(data) {
 
 export function getMySharedDiary() {
 	return request({
-		url: '/v1/group',
+		url: "/v1/group",
+		method: "get",
+	});
+}
+
+export function searchByMember(nickname) {
+	return request({
+		url: `/v1/group/join/${nickname}`,
 		method: "get",
 	});
 }
