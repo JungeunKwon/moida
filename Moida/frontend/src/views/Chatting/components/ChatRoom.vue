@@ -143,8 +143,8 @@ export default {
 	},
 
 	created() {
-		//var socketUrl = "http://k02d106.p.ssafy.io:8080/ws-stomp";
-		var socketUrl = "http://localhost:8080/ws-stomp"; //"http://172.20.10.2:8080/ws-stomp";
+		var socketUrl = "http://k02d106.p.ssafy.io:8080/ws-stomp";
+		//var socketUrl = "http://192.168.43.253:8080/ws-stomp"; //"http://172.20.10.2:8080/ws-stomp";
 		this.socket = new SockJS(socketUrl);
 		var here = this;
 		this.stompClient = Stomp.over(this.socket);
