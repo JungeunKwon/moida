@@ -52,7 +52,9 @@ public class Music {
 	public void likecount(Long count) {
 		this.likecount = count;
 	}
-	
+	public void likecount() {
+		this.likecount++;
+	}
 	@Builder
 	public Music(Long id, String mood, String musicname, Long likecount, String videoid, Account account,String thumbnail) {
 		this.id = id;

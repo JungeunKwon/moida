@@ -53,7 +53,8 @@ public class EtrashServiceImpl implements EtrashService{
 
 	@Transactional
 	public Long saveEtrash(EtrashSaveRequestDto dto) throws NumberFormatException, BaseException {
-		dto.setAccount(accountservice.getAccount());
+		Music music = musicRepository.findById(dto.getMusic().getId()).get();
+		music.likecount();
 		return etrashRepository.save(dto.toEntity()).getId();
 	}
 
