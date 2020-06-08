@@ -10,6 +10,7 @@ import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.account.AccountRepository;
 import com.ssafy.moida.domain.dm.Chatroom;
 import com.ssafy.moida.domain.dm.ChatroomRepository;
+import com.ssafy.moida.domain.dm.DirectMessage;
 import com.ssafy.moida.domain.dm.DirectMessageRepository;
 import com.ssafy.moida.domain.dm.RedisDMRepository;
 import com.ssafy.moida.exception.BaseException;
@@ -17,6 +18,7 @@ import com.ssafy.moida.exception.EnumAccountException;
 import com.ssafy.moida.service.account.AccountService;
 import com.ssafy.moida.web.dto.dm.ChatroomDto;
 import com.ssafy.moida.web.dto.dm.ChatroomUserDto;
+import com.ssafy.moida.web.dto.dm.DirectMessageDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +31,7 @@ public class ChatroomServiceImpl implements ChatroomService{
 	private final AccountService accountService;
 	private final RedisDMRepository redisDMRepository;
 	private final DirectMessageRepository directMessageRepository;
+	private final DirectMessageService directMessagMessageService;
 	
 	public List<ChatroomUserDto> findByAllAccountIn(String user) throws NumberFormatException, BaseException {
 		Account account = accountRepository.findByNickname(user).orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
@@ -74,6 +77,13 @@ public class ChatroomServiceImpl implements ChatroomService{
 					.build();
 		ChatroomDto newroom = redisDMRepository.createChatRoom(room);
 		chatroomRepository.save(newroom.toEntity());
+		DirectMessageDto message = DirectMessageDto.builder()
+								    .roomuuid(newroom.getRoomuuid())
+								    .type(DirectMessageDto.MessageType.TALK)
+								    .writer(newroom.getHost().getNickname())
+								    .content("방 개설 성공 ,DM을 시작해보세요!")
+								    .build();
+		directMessagMessageService.putMessage(message);
 		return newroom;
 	}
 
