@@ -185,7 +185,6 @@ public class HabittrackerServiceImpl implements HabittrackerService{
 	public List<HabittrackerResponseDTO> findByGroupTBAndAccount(Long groupid) throws NumberFormatException, BaseException {
 		GroupTB group = groupTBRepository.findById(groupid).get();
 		Account account = accountService.getAccount();
-		System.out.println(group.getId() +"            "+account.getId());
 		return habittrackerRepository.findByGroupTBAndAccountAndStartDateLessThanAndEndDateGreaterThan(group.getId(), account.getId(), LocalDateTime.now(),LocalDateTime.now())
 				.stream().map(HabittrackerResponseDTO :: new).collect(Collectors.toList());
 	}
