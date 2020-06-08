@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -56,13 +57,16 @@ public class DiaryServiceImpl implements DiaryService{
 	
 		
 		List<DiaryLikes> diarylikelist;
+
 		for(int i=0;i<list.size();i++) {
 			diarylikelist = diarylist.get(i).getDiarylikelist();
-			
+
+			list.get(i).setIsLike(false);
 			for(DiaryLikes d : diarylikelist) {
-				list.get(i).setIsLike(false);
+				
 				if(d.getAccount().getId() == account.getId() && d.getDiary().getId() == list.get(i).getId()) {
 					list.get(i).setIsLike(true);
+			
 				}
 			}
 		}
@@ -85,24 +89,25 @@ public class DiaryServiceImpl implements DiaryService{
 	@Transactional
 	public Long saveDiary(DiarySaveRequest dto) throws NumberFormatException, BaseException {
 		dto.setAccount(accountService.getAccount());
-		if(dto.getGroupTB()!=null) {
-			dto.setGroupTB(dto.getGroupTB());
+		if(dto.getGroupid()!=null) {
+			
+			dto.setGroupTB(groupTBRepository.findById(dto.getGroupid()).get());
 		}
 		dto.setViewcount(0L);
 		return diaryRepository.save(dto.toEntity()).getId();
 	}
 
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findByGroupTB(Long id, Pageable pageable) {
+	public List<DiaryResponseDTO> findByGroupTB(Long id, Pageable pageable) throws NumberFormatException, BaseException {
 		GroupTB group = groupTBRepository.findById(id).get();
-		return diaryRepository.findByGroupTBAndDeleteDateIsNull(group, pageable)
-				.map(DiaryResponseDTO::new);
+				
+		return makelikecount(diaryRepository.findByGroupTBAndDeleteDateIsNull(group,Sort.by("id").descending()));
 	}
 
 	@Transactional
 	public DiaryResponseDTO updateinfo(DiaryUpdateRequest dto) {
 		Diary diary = diaryRepository.findById(dto.getId()).get();
-		diary.updateDiaryinfo(dto.getDescription(), dto.getMood(), dto.getImgurl(),dto.getIsPrivate());
+		diary.updateDiaryinfo(dto.getDescription(), dto.getMood(), dto.getImgurl(),dto.getIsPrivate(),dto.getInputDate());
 		return DiaryResponseDTO.builder().diary(diary).build();
 	}
 
@@ -127,6 +132,10 @@ public class DiaryServiceImpl implements DiaryService{
 
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByMoodAndBydeleteDateIsNull(String mood, Pageable pageable) {
+		
+		Page<DiaryResponseDTO> page = diaryRepository.findByMoodAndDeleteDateIsNull(mood, pageable)
+				.map(DiaryResponseDTO::new);
+		
 		return diaryRepository.findByMoodAndDeleteDateIsNull(mood, pageable)
 				.map(DiaryResponseDTO::new);
 	}
@@ -154,11 +163,21 @@ public class DiaryServiceImpl implements DiaryService{
 		return uploadImgUrl;
 	}
 	@Transactional
-	public DiaryResponseDTO findById(Long diaryid) {
+	public DiaryResponseDTO findById(Long diaryid) throws NumberFormatException, BaseException {
+		Account account = accountService.getAccount();
 		Diary diary = diaryRepository.findById(diaryid).get();
 		diary.updateViewCount();
 		
-		return DiaryResponseDTO.builder().diary(diary).build();
+		DiaryResponseDTO responseDTO = DiaryResponseDTO.builder().diary(diary).build();
+		Boolean isLike = false;
+		
+		if(0<diaryLikeRepository.countByDiaryAndAccount(diary, account)) {
+			isLike = true;
+		}
+		
+		responseDTO.setIsLike(isLike);
+		
+		return responseDTO;
 	}
 
 	@Transactional(readOnly = true)

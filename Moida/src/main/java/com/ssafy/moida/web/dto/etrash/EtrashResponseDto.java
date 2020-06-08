@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.etrash.Etrash;
 import com.ssafy.moida.domain.music.Music;
+import com.ssafy.moida.web.dto.account.AccountResponseDto;
+import com.ssafy.moida.web.dto.music.MusicResponseDTO;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -24,8 +26,11 @@ public class EtrashResponseDto {
 	private Long likecount;
 	LocalDateTime deleteDate;
 	LocalDateTime createDate;
-	private Account account;
-	private Music music;
+	AccountResponseDto musicAccount;
+	
+	
+	
+	private MusicResponseDTO music;
 	
 	@Builder
 	public EtrashResponseDto(Etrash entity) {
@@ -34,9 +39,10 @@ public class EtrashResponseDto {
 		this.mood = entity.getMood();
 		this.likecount = entity.getLikecount();
 		this.deleteDate = entity.getDeleteDate();
-		this.account = entity.getAccount();
-		this.music = entity.getMusic();
+		this.music = MusicResponseDTO.builder().music(entity.getMusic()).build();
 		this.createDate = entity.getCreateDate();
+		
+		this.musicAccount = AccountResponseDto.builder().nickname(this.music.getNickname()).build();
 	}
 	
 	

@@ -3,6 +3,8 @@ package com.ssafy.moida.service.group;
 import java.io.IOException;
 import java.util.List;
 
+
+
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.web.dto.group.AccountGroupGroupResponseDto;
 import com.ssafy.moida.web.dto.group.AccountGroupResponseDto;
@@ -23,6 +25,10 @@ public interface GroupService {
 	List<GroupResponseDto> findBySubjectLike(String subject);
 	List<GroupResponseDto> findByNicknameLike(String nickname);
 	List<GroupResponseDto> findByDescriptionLike(String description);
-	List<AccountGroupGroupResponseDto> findGroupbyAccount() throws NumberFormatException, BaseException;
+	List<GroupResponseDto> findGroupbyAccount() throws NumberFormatException, BaseException;
 	GroupResponseDto findByGroupId(Long groupId) throws BaseException;
-}
+	Boolean kickByGroup(Long groupid, Long kickaccountid) throws NumberFormatException, BaseException;
+	List<GroupResponseDto> findJoinGroupByNickname(String nickname) throws NumberFormatException, BaseException;
+	
+	
+}	

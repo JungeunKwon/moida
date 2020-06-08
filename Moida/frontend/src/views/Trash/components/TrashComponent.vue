@@ -200,6 +200,7 @@ export default {
 	align-items: center;
 	text-align: right;
 	float: right;
+	margin-right: 10px;
 	/* display: inline-block; */
 }
 </style>

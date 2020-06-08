@@ -22,13 +22,13 @@ import com.ssafy.moida.web.dto.diary.UploadFileDto;
 public interface DiaryService {
 	
 	
-	DiaryResponseDTO findById(Long diaryid);
+	DiaryResponseDTO findById(Long diaryid) throws NumberFormatException, BaseException;
 	
 	Long likeDiary(Long diaryid) throws NumberFormatException, BaseException;
 	Long deletelikeDiary(Long diaryid) throws NumberFormatException, BaseException;
 	
 	Long saveDiary(DiarySaveRequest dto) throws NumberFormatException, BaseException;
-	Page<DiaryResponseDTO> findByGroupTB(Long id , Pageable pagealbe);
+	List<DiaryResponseDTO> findByGroupTB(Long id , Pageable pagealbe) throws NumberFormatException, BaseException;
 	DiaryResponseDTO updateinfo(DiaryUpdateRequest dto);
 	Long deleteDiary(Long id) throws NumberFormatException, BaseException;
 	

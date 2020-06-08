@@ -20,8 +20,8 @@ public class HabittrackerResponseDTO {
 	private String description;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
-	private Account account;
-	private GroupTB groupTB;
+	private Long hostid;
+	private String hostnickname;
 	
 	@Builder
 	public HabittrackerResponseDTO(Habittracker habit) {
@@ -31,8 +31,8 @@ public class HabittrackerResponseDTO {
 		this.description = habit.getDescription();
 		this.startDate = habit.getStartDate();
 		this.endDate = habit.getEndDate();
-		this.account = habit.getAccount();
-		this.groupTB = habit.getGroupTB();
+		this.hostid = habit.getAccount().getId();
+		this.hostnickname = habit.getAccount().getNickname();
 	}
 	
 	

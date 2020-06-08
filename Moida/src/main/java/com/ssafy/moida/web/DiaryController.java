@@ -75,10 +75,10 @@ public class DiaryController {
 	@ApiOperation(value = "다이어리그룹조회", httpMethod = "GET", notes = "다이어리그룹으로 검색하는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/diary/search/group/{groupid}")
-	public Page<DiaryResponseDTO> findByGroup(@PathVariable Long groupid,Pageable pageable
+	public ResponseEntity<List<DiaryResponseDTO>> findByGroup(@PathVariable Long groupid,Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
 	
-		return diaryService.findByGroupTB(groupid,pageable);
+		return new ResponseEntity<List<DiaryResponseDTO>>(diaryService.findByGroupTB(groupid,pageable), HttpStatus.OK);
 	}
 	
 	@ApiImplicitParams({
@@ -174,5 +174,17 @@ public class DiaryController {
 			) throws IllegalArgumentException, IOException, BaseException{
 		
 		return new ResponseEntity<Long>(diaryService.deletelikeDiary(diaryid), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "다이어리 무드 검색", httpMethod = "GET", notes = "")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@GetMapping(value = "/diary/search/{mood}")
+	public Page<DiaryResponseDTO> searchByMood(@PathVariable String mood, Pageable pageable
+			) throws IllegalArgumentException, IOException, BaseException{
+		
+		return diaryService.findByMoodAndBydeleteDateIsNull(mood, pageable);
 	}
 }

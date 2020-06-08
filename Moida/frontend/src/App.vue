@@ -7,21 +7,18 @@
 			<v-fade-transition mode="out-in">
 				<router-view :key="$route.fullPath" />
 			</v-fade-transition>
-			<GoTop />
 		</Layout>
 	</v-app>
 </template>
 
 <script>
 import Layout from "@/components/Layout";
-import GoTop from "@/components/GoTop";
 import First from "@/components/First";
 import { mapState, mapGetters, mapMutations } from "vuex";
 
 export default {
 	components: {
 		Layout,
-		GoTop,
 		First,
 	},
 	mounted() {},

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.ssafy.moida.web.dto.group.GroupResponseDto;
+
 
 public interface GroupTBRepository extends JpaRepository<GroupTB, Long>{
 
@@ -16,4 +18,8 @@ public interface GroupTBRepository extends JpaRepository<GroupTB, Long>{
 	List<GroupTB> findByNicknameLikeQuery(@Param("nickname") String nickname);
 	List<GroupTB> findByDescriptionContaining(String description);
 	List<GroupTB> findByDeleteTimeIsNull();
+	
+	
+	@Query(value = "SELECT DISTINCT * FROM grouptb LEFT OUTER JOIN account_group ON account_group.grouptb_id = grouptb.id WHERE account_group.account_id = ?1", nativeQuery = true)
+	List<GroupTB> findByAccountid(Long accountid);
 }

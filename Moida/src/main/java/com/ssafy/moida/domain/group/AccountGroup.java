@@ -28,6 +28,7 @@ public class AccountGroup {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@OnDelete(action=OnDeleteAction.CASCADE) 
 	@ManyToOne
 	@JoinColumn(name="account_id")
 	private Account account;
@@ -37,14 +38,13 @@ public class AccountGroup {
 	@JoinColumn(name="grouptb_id")
 	private GroupTB groupTB;
 
-	@Column
-	private Long groupId;
+
 	
 	@Builder
-	public AccountGroup(Long id, Account account, GroupTB groupTB, Long groupId) {
+	public AccountGroup(Long id, Account account, GroupTB groupTB) {
 		this.id = id;
 		this.account = account;
 		this.groupTB  = groupTB;
-		this.groupId = groupId;
+
 	}	
 }

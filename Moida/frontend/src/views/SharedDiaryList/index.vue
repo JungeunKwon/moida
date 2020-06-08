@@ -7,9 +7,9 @@
 					<div class="sharedPaper mini">공다 만들기</div>
 				</div>
 			</createSharedDiary>
-			<div class="sharedMenu mini">
+			<div class="sharedMenu mini" @click="toggleDiaryList()">
 				<img class="tape" src="../../assets/images/tape.png" />
-				<div class="sharedPaper mini">내 공다 목록</div>
+				<div class="sharedPaper mini">{{ myDiaryText }}</div>
 			</div>
 			<div class="sharedMenu mini">
 				<img class="tape" src="../../assets/images/tape.png" />
@@ -28,7 +28,12 @@
 			</div>
 		</div>
 		<div id="sharedListBottom">
-			<SharedDiaryListItem v-for="(item, idx) in diaries" :key="idx" :item="item" />
+			<SharedDiaryListItem
+				v-for="(item, idx) in diaries"
+				:key="idx"
+				:isMyDiaryList="isMyDiaryList"
+				:item="item"
+			/>
 		</div>
 	</div>
 </template>
@@ -46,12 +51,15 @@ export default {
 		return {
 			searchText: "",
 			diaries: [],
+			myDiaries: [],
 			sels: [
 				{ text: "제목", value: 0 },
 				{ text: "닉네임", value: 1 },
 				{ text: "내용", value: 2 },
 			],
 			searchSel: "",
+			isMyDiaryList: false,
+			myDiaryText: "내 공다 목록",
 		};
 	},
 	mounted() {
@@ -70,6 +78,7 @@ export default {
 			"searchBySubject",
 			"searchByDesc",
 			"searchByNickname",
+			"getMySharedDiary",
 		]),
 		searchSharedDiary() {
 			console.log(this.searchSel);
@@ -101,12 +110,36 @@ export default {
 					});
 			}
 		},
+		toggleDiaryList() {
+			if (!this.isMyDiaryList) {
+				this.getMySharedDiary()
+					.then(response => {
+						this.isMyDiaryList = true;
+						this.myDiaryText = "내 공다 목록";
+						this.diaries = response.data;
+						console.log(this.myDiaries);
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			} else {
+				this.getSharedDiary()
+					.then(response => {
+						this.isMyDiaryList = false;
+						this.myDiaryText = "전체보기";
+						this.diaries = response.data;
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			}
+		},
 	},
 };
 </script>
 
 <style>
-#sharedListTop > div:nth-child(4) > div > div > div > div.v-input__slot {
+#sharedListTop > div.sharedMenu.mini > div > div > div > div.v-input__slot {
 	box-shadow: none;
 }
 
