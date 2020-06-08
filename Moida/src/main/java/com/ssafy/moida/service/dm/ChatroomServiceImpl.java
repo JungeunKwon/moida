@@ -107,16 +107,17 @@ public class ChatroomServiceImpl implements ChatroomService{
 		return false;
 	}
 
-	@Override
-	public ChatroomDto isRoomExist(String hostName, String userName) throws BaseException {
+	public ChatroomResponseDto isRoomExist(String hostName, String userName) throws BaseException {
 		Account user1 = accountRepository.findByNickname(hostName).orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
 		Account user2 = accountRepository.findByNickname(userName).orElseThrow(()->new BaseException(EnumAccountException.USER_NOT_FOUND));
 		List<Chatroom> list = chatroomRepository.isRoomExist(user1.getId(), user2.getId());
 		if(list.size()==0) return null;
-		else return ChatroomDto.builder().id(list.get(0).getId())
+		else return ChatroomResponseDto.builder().id(list.get(0).getId())
 										.roomuuid(list.get(0).getRoomuuid())
-										.host(list.get(0).getChat_host())
-										.user(list.get(0).getChat_user())
+										.hostNickname(list.get(0).getChat_host().getNickname())
+										.hostProfileImg(list.get(0).getChat_host().getProfileImg())
+										.userNickname(list.get(0).getChat_user().getNickname())
+										.userProfileImg(list.get(0).getChat_user().getProfileImg())
 										.build();
 	}
 }

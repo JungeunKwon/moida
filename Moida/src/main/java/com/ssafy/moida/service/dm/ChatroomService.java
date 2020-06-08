@@ -13,5 +13,5 @@ public interface ChatroomService {
 	public ChatroomResponseDto createRoom(String targetNickname) throws NumberFormatException, BaseException;
 	public boolean updatedate(String roomuuid) throws BaseException;
 	public boolean delete(ChatroomDto room);
-	ChatroomDto isRoomExist(String hostName, String userName) throws BaseException;
+	ChatroomResponseDto isRoomExist(String hostName, String userName) throws BaseException;
 }
