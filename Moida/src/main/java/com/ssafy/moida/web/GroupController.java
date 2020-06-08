@@ -193,4 +193,15 @@ public class GroupController {
 	public ResponseEntity<GroupResponseDto> findGroupByGroupId(@PathVariable Long groupId) throws BaseException{
 		return new ResponseEntity<GroupResponseDto>(groupService.findByGroupId(groupId), HttpStatus.OK);
 	}
+	
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "닉네임으로 가입한 그룹 조회", httpMethod = "GET", notes = "닉네임으로 가입한 그룹 조회 ")
+	@GetMapping(value = "/group/join/{nickname}")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<List<GroupResponseDto>> findGroupByGroupId(@PathVariable String nickname) throws BaseException{
+		return new ResponseEntity<List<GroupResponseDto>>(groupService.findJoinGroupByNickname(nickname), HttpStatus.OK);
+	}
 }

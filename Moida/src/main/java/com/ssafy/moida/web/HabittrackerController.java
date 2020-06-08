@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.habittracker.HabittrackerService;
 import com.ssafy.moida.web.dto.habittracker.AccountHabittrackerSaveDTO;
+import com.ssafy.moida.web.dto.habittracker.DohabitResponseDTO;
 import com.ssafy.moida.web.dto.habittracker.DohabitSaveRequestDTO;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerResponseDTO;
 import com.ssafy.moida.web.dto.habittracker.HabittrackerSaveRequestDTO;
@@ -117,6 +118,19 @@ public class HabittrackerController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
 	})
+	@ApiOperation(value = "해빗 오늘치 삭제", httpMethod = "DELETE", notes = "해빗트래커 do 삭제 해버리는 부분입니다.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@DeleteMapping(value = "/habit/dohbit/{dohabitid}")
+	public ResponseEntity<Boolean> deletedoHabit(@PathVariable Long dohabitid
+			) throws IllegalArgumentException, IOException, BaseException{
+		
+
+		return new ResponseEntity<Boolean>(habittrackerService.deleteclearHabittracker(dohabitid), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
 	@ApiOperation(value = "전체 해빗 트래커(지워진거 포함)", httpMethod = "GET", notes = "전체 해빗 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 	@GetMapping(value = "/habit")
@@ -163,6 +177,19 @@ public class HabittrackerController {
 		
 
 		return new ResponseEntity<List<HabittrackerResponseDTO>>(habittrackerService.findByGroupTBAndAccount(groupid), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 Access 토큰 필요", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "해빗내 나의 활동", httpMethod = "GET", notes = "해빗내 내가 활동한 내역.")
+	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
+	@GetMapping(value = "/habit/dohabit/{habitid}")
+	public ResponseEntity<List<DohabitResponseDTO>> findByHabit(@PathVariable Long habitid
+			) throws IllegalArgumentException, IOException, BaseException{
+		
+
+		return new ResponseEntity<List<DohabitResponseDTO>>(habittrackerService.findByHabit(habitid), HttpStatus.OK);
 	}
 	
 }

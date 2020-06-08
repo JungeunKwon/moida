@@ -10,7 +10,7 @@
 				</v-list-item-content>
 			</v-list-item>
 			<v-divider></v-divider>
-			<div @click="diarydetail(diary.id)">
+			<div @click="diarydetail(diary.id)" style="cursor:pointer">
 				<v-img :src="diary.imgurl" height="194"></v-img>
 				<v-divider></v-divider>
 
@@ -18,22 +18,22 @@
 			</div>
 			<v-divider></v-divider>
 			<v-item-group>
-				<v-item v-slot:default="{ active, toggle }">
-					<v-col @click="like(toggle, active, isLike)">
-						<v-btn text>
+				<v-col>
+					<v-item v-slot:default="{ active, toggle }">
+						<v-btn text @click="like(toggle, active, isLike)">
 							<v-icon color="pink lighten-4">{{ isLike ? "mdi-heart" : "mdi-heart-outline" }}</v-icon>
 							{{ likecout }}
 						</v-btn>
-						<v-btn text>
-							<v-icon color="pink lighten-4">mdi-eye</v-icon>
-							{{ diary.viewcount }}
-						</v-btn>
-						<v-btn text>
-							<v-icon color="pink lighten-4">mdi-message-reply-text</v-icon>
-							{{ diary.commentcount }}
-						</v-btn>
-					</v-col>
-				</v-item>
+					</v-item>
+					<v-btn text>
+						<v-icon color="pink lighten-4">mdi-eye</v-icon>
+						{{ diary.viewcount }}
+					</v-btn>
+					<v-btn text>
+						<v-icon color="pink lighten-4">mdi-message-reply-text</v-icon>
+						{{ diary.commentcount }}
+					</v-btn>
+				</v-col>
 			</v-item-group>
 		</v-card>
 	</div>

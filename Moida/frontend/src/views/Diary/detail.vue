@@ -166,7 +166,6 @@ export default {
 			var here = this;
 			await this.getCommentById(id)
 				.then(response => {
-					console.log("댓글", response);
 					here.comments = response.data;
 				})
 				.catch(error => {
@@ -199,7 +198,7 @@ export default {
 				" " +
 				moment()
 					.local("ko")
-					.format("HH:mm");
+					.format("HH:mm:SS");
 			var data = {
 				diaryid: this.diaryid,
 				description: this.inputcomment,
@@ -212,9 +211,9 @@ export default {
 			console.log("DATA", data);
 			await this.postComment(data)
 				.then(response => {
-					this.inputcomment = "";
 					data.id = response.data;
 					this.comments.push(data);
+					this.inputcomment = "";
 				})
 				.catch(error => {
 					console.log(error);
@@ -383,6 +382,12 @@ export default {
 		height: 400px;
 	}
 
+	.diarycommentdetail {
+		width: 100%;
+		height: 80%;
+		overflow: auto;
+		display: block;
+	}
 	.diarycommentinput {
 		background-color: whitesmoke;
 		padding: 10px;

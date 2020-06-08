@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -56,13 +57,16 @@ public class DiaryServiceImpl implements DiaryService{
 	
 		
 		List<DiaryLikes> diarylikelist;
+
 		for(int i=0;i<list.size();i++) {
 			diarylikelist = diarylist.get(i).getDiarylikelist();
-			
+
+			list.get(i).setIsLike(false);
 			for(DiaryLikes d : diarylikelist) {
-				list.get(i).setIsLike(false);
+				
 				if(d.getAccount().getId() == account.getId() && d.getDiary().getId() == list.get(i).getId()) {
 					list.get(i).setIsLike(true);
+			
 				}
 			}
 		}
@@ -94,10 +98,10 @@ public class DiaryServiceImpl implements DiaryService{
 	}
 
 	@Transactional(readOnly = true)
-	public Page<DiaryResponseDTO> findByGroupTB(Long id, Pageable pageable) {
+	public List<DiaryResponseDTO> findByGroupTB(Long id, Pageable pageable) throws NumberFormatException, BaseException {
 		GroupTB group = groupTBRepository.findById(id).get();
-		return diaryRepository.findByGroupTBAndDeleteDateIsNull(group, pageable)
-				.map(DiaryResponseDTO::new);
+				
+		return makelikecount(diaryRepository.findByGroupTBAndDeleteDateIsNull(group,Sort.by("id").descending()));
 	}
 
 	@Transactional
@@ -128,6 +132,10 @@ public class DiaryServiceImpl implements DiaryService{
 
 	@Transactional(readOnly = true)
 	public Page<DiaryResponseDTO> findByMoodAndBydeleteDateIsNull(String mood, Pageable pageable) {
+		
+		Page<DiaryResponseDTO> page = diaryRepository.findByMoodAndDeleteDateIsNull(mood, pageable)
+				.map(DiaryResponseDTO::new);
+		
 		return diaryRepository.findByMoodAndDeleteDateIsNull(mood, pageable)
 				.map(DiaryResponseDTO::new);
 	}

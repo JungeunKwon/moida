@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ssafy.moida.domain.diary.Diary;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>{
-	public List<Comment> findByDiaryAndDeleteDateIsNull(Diary diary);
+	public List<Comment> findByDiary(Diary diary);
 
 }

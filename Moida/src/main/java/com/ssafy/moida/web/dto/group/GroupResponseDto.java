@@ -23,7 +23,6 @@ public class GroupResponseDto {
 	private String hostNickname;
 	private String hostProfileImg;
 	private int curUser;
-	private Boolean isJoin;
 	
 	public GroupResponseDto(GroupTB entity) {
 		this.id = entity.getId();
@@ -36,11 +35,12 @@ public class GroupResponseDto {
 		this.hostId = entity.getHost().getId();
 		this.hostNickname = entity.getHost().getNickname();
 		this.hostProfileImg = entity.getHost().getProfileImg();
+		
 	}
 	
 	@Builder
 	public GroupResponseDto(Long id, String subject, int limitUser, LocalDateTime deleteTime, boolean isPrivate,
-			String imgUrl, String description, Long hostId, String hostNickname, String hostProfileImg, int curUser,Boolean isJoin) {
+			String imgUrl, String description, Long hostId, String hostNickname, String hostProfileImg, int curUser) {
 		this.id = id;
 		this.subject = subject;
 		this.limitUser = limitUser;
@@ -52,7 +52,7 @@ public class GroupResponseDto {
 		this.hostNickname = hostNickname;
 		this.hostProfileImg = hostProfileImg;
 		this.curUser = curUser;
-		this.isJoin = isJoin;
+
 	}
 	
 }
