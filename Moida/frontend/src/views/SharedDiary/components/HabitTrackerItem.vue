@@ -7,9 +7,7 @@
 				<div>{{ habitTracker.description }}</div>
 			</div>
 		</div>
-		<div @click="joinHT">
-			{{ this.habitTracker.isJoin ? "관두기" : "JOIN" }}
-		</div>
+		<div @click="joinHT">{{ habitTracker.isJoin ? "관두기" : "JOIN" }}</div>
 	</div>
 </template>
 
@@ -32,9 +30,10 @@ export default {
 		]),
 		joinHT() {
 			if (!this.habitTracker.isJoin) {
-				this.joinHabitTracker({ habitid: this.habitTracker.id })
+				this.joinHabitTracker(this.habitTracker.id)
 					.then(response => {
 						console.log(response.data);
+						this.habitTracker.isJoin = true;
 					})
 					.catch(error => {
 						console.log(error);
@@ -43,11 +42,13 @@ export default {
 				this.leaveHabitTracker(this.habitTracker.id)
 					.then(response => {
 						console.log(response.data);
+						this.habitTracker.isJoin = false;
 					})
 					.catch(error => {
 						console.log(error);
 					});
 			}
+			this.$emit("reload");
 		},
 	},
 };

@@ -8,6 +8,7 @@
 		<v-card style="padding: 10px;">
 			<HabitTrackerItem
 				v-for="(item, idx) in habitTrackers"
+				@reload="reload"
 				:habitTracker="item"
 				:key="idx"
 			/>
@@ -28,10 +29,11 @@ export default {
 		};
 	},
 	watch: {
-		sharedDiaryId: function() {
+		dialog: function() {
 			this.getHT();
 		},
 	},
+	updated() {},
 	computed: {
 		// 계산된 getter
 	},
@@ -50,6 +52,10 @@ export default {
 				});
 
 			this.isJoin();
+		},
+		reload() {
+			this.$router.go(0);
+			// location.reload();
 		},
 		isJoin() {
 			for (let i = 0; i < this.habitTrackers.length; i++) {
