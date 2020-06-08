@@ -180,6 +180,10 @@ public class GroupServiceImpl implements GroupService {
 	public GroupResponseDto findByGroupId(Long groupId) throws BaseException {
 		
 		GroupTB group = groupTBRepository.findById(groupId).orElseThrow(()->new BaseException(EnumGroupException.GROUP_NOT_FOUND));
+		Boolean isJoin = false;
+		if(accountGroupRepository.countByGroupTBAndAccount(group, accountService.getAccount()) >0) {
+			isJoin = true;
+		}
 		
 		
 		return GroupResponseDto.builder()
