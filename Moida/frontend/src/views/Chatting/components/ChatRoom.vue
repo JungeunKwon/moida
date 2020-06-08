@@ -142,7 +142,7 @@ export default {
 		this.targetImg = this.chat.userProfile;
 		this.userNickname = this.$store.getters.nickname;
 		this.roomuuid = this.chat.roomuuid;
-		var socketUrl = "https://k02d106.p.ssafy.io/ws-stomp";
+		var socketUrl = "https://k02d1061.p.ssafy.io/ws-stomp";
 		//var socketUrl = "http://192.168.43.253:8080/ws-stomp"; //"http://172.20.10.2:8080/ws-stomp";
 		this.socket = new SockJS(socketUrl);
 		var here = this;

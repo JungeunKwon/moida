@@ -15,7 +15,9 @@
 					@focus="subjectMsg = ''"
 					v-model="habitTracker.subject"
 				/>
-				<div v-if="subjectMsg != ''" class="errorMsg">{{subjectMsg}}</div>
+				<div v-if="subjectMsg != ''" class="errorMsg">
+					{{ subjectMsg }}
+				</div>
 			</div>
 			<div class="inputDiv">
 				<div>상세 설명</div>
@@ -26,7 +28,9 @@
 					rows="5"
 					v-model="habitTracker.description"
 				/>
-				<div v-if="descriptionMsg != ''" class="errorMsg">{{descriptionMsg}}</div>
+				<div v-if="descriptionMsg != ''" class="errorMsg">
+					{{ descriptionMsg }}
+				</div>
 			</div>
 
 			<div id="htDateDiv">
@@ -48,10 +52,21 @@
 							v-on="on"
 						></v-text-field>
 					</template>
-					<v-date-picker v-model="habitTracker.startDate" no-title scrollable>
+					<v-date-picker
+						v-model="habitTracker.startDate"
+						no-title
+						scrollable
+					>
 						<v-spacer></v-spacer>
-						<v-btn text color="gray" @click="menu1 = false">Cancel</v-btn>
-						<v-btn text color="gray" @click="$refs.menu1.save(habitTracker.startDate)">OK</v-btn>
+						<v-btn text color="gray" @click="menu1 = false"
+							>Cancel</v-btn
+						>
+						<v-btn
+							text
+							color="gray"
+							@click="$refs.menu1.save(habitTracker.startDate)"
+							>OK</v-btn
+						>
 					</v-date-picker>
 				</v-menu>
 
@@ -65,12 +80,29 @@
 					min-width="290px"
 				>
 					<template v-slot:activator="{ on }">
-						<v-text-field class="htMenu" v-model="habitTracker.endDate" label="종료 날짜" readonly v-on="on"></v-text-field>
+						<v-text-field
+							class="htMenu"
+							v-model="habitTracker.endDate"
+							label="종료 날짜"
+							readonly
+							v-on="on"
+						></v-text-field>
 					</template>
-					<v-date-picker v-model="habitTracker.endDate" no-title scrollable>
+					<v-date-picker
+						v-model="habitTracker.endDate"
+						no-title
+						scrollable
+					>
 						<v-spacer></v-spacer>
-						<v-btn text color="gray" @click="menu2 = false">Cancel</v-btn>
-						<v-btn text color="gray" @click="$refs.menu2.save(habitTracker.endDate)">OK</v-btn>
+						<v-btn text color="gray" @click="menu2 = false"
+							>Cancel</v-btn
+						>
+						<v-btn
+							text
+							color="gray"
+							@click="$refs.menu2.save(habitTracker.endDate)"
+							>OK</v-btn
+						>
 					</v-date-picker>
 				</v-menu>
 			</div>
@@ -85,6 +117,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import moment from "moment";
 export default {
 	name: "CreatehabitTracker",
 	props: { sharedDiaryId: {} },
@@ -95,8 +128,13 @@ export default {
 				groupid: 0,
 				subject: "",
 				description: "",
-				startDate: new Date().toISOString().substr(0, 10),
-				endDate: new Date().toISOString().substr(0, 10),
+				startDate: moment()
+					.locale("ko")
+					.format("YYYY-MM-DD"),
+				endDate: moment()
+					.add(1, "day")
+					.locale("ko")
+					.format("YYYY-MM-DD"),
 			},
 			date: new Date().toISOString().substr(0, 10),
 			menu1: false,
@@ -124,15 +162,22 @@ export default {
 		createHT() {
 			if (!this.validate()) return;
 			this.habitTracker.groupid = this.sharedDiaryId;
-			console.log(this.habitTracker);
 			this.createHabitTracker(this.habitTracker)
 				.then(response => {
-					console.log(response);
+					console.log(response.data);
+					this.$emit("pushMyHT", {
+						description: this.habitTracker.description,
+						endDate: this.habitTracker.endDate,
+						id: response.data,
+						startDate: this.habitTracker.startDate,
+						subject: this.habitTracker.subject,
+						doHabitId: -1,
+					});
+					this.dialog = false;
 				})
 				.catch(error => {
 					console.log(error);
 				});
-			this.dialog = false;
 		},
 		validate() {
 			var result = true;

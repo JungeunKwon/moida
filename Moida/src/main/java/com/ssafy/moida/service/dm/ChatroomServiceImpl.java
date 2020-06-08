@@ -93,7 +93,7 @@ public class ChatroomServiceImpl implements ChatroomService{
 								    .roomuuid(newroom.getRoomuuid())
 								    .type(DirectMessageDto.MessageType.TALK)
 								    .writer(newroom.getHost().getNickname())
-								    .content("방 개설 성공 ,DM을 시작해보세요!")
+								    .content("방 개설 성공 DM을 시작해보세요!")
 								    .build();
 		directMessagMessageService.putMessage(message);
 		return responseDto;

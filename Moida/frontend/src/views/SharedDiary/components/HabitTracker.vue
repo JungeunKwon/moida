@@ -1,16 +1,32 @@
 <template>
 	<div id="habitTracker">
 		<div id="habitTitle">
-			<CreateHabitTracker :sharedDiaryId="sharedDiaryId">
-				<img style="float: right;" src="../../../assets/icons/plus.png" width="20px" />
+			<CreateHabitTracker
+				@pushMyHT="pushMyHT"
+				:sharedDiaryId="sharedDiaryId"
+			>
+				<img
+					style="float: right;"
+					src="../../../assets/icons/plus.png"
+					width="20px"
+				/>
 			</CreateHabitTracker>
 
-			<HabitTrackerList :sharedDiaryId="sharedDiaryId" :myHabitTrackers="myHabitTrackers">
-				<div style="cursor: pointer; float: right; margin-right: 5px;">HabitTacker</div>
+			<HabitTrackerList
+				:sharedDiaryId="sharedDiaryId"
+				:myHabitTrackers="myHabitTrackers"
+			>
+				<div style="cursor: pointer; float: right; margin-right: 5px;">
+					HabitTacker
+				</div>
 			</HabitTrackerList>
 		</div>
 		<div id="htItem">
-			<HabitTrackerItem v-for="(item, idx) in myHabitTrackers" :key="idx" :habitTracker="item" />
+			<MyHabitTrackerItem
+				v-for="(item, idx) in myHabitTrackers"
+				:key="idx"
+				:habitTracker="item"
+			/>
 		</div>
 	</div>
 </template>
@@ -18,22 +34,23 @@
 <script>
 import { mapActions, mapMutations } from "vuex";
 import CreateHabitTracker from "./CreateHabitTracker";
-import HabitTrackerItem from "./HabitTrackerItem";
+import MyHabitTrackerItem from "./MyHabitTrackerItem";
 import HabitTrackerList from "./HabitTrackerList";
+import moment from "moment";
 export default {
 	name: "habitTracker",
 	props: { sharedDiaryId: {} },
-	components: { CreateHabitTracker, HabitTrackerItem, HabitTrackerList },
+	components: { CreateHabitTracker, MyHabitTrackerItem, HabitTrackerList },
 	data() {
 		return {
 			myHabitTrackers: [],
 			myHabitTrackerRecord: [],
-			today: new Date().toISOString().substring(0, 10),
+			today: moment()
+				.locale("ko")
+				.format("YYYY-MM-DD"),
 		};
 	},
-	mounted() {
-		console.log("오늘" + this.today);
-	},
+	mounted() {},
 	watch: {
 		sharedDiaryId: function() {
 			console.log("sharedDiaryId :: " + this.sharedDiaryId);
@@ -45,6 +62,10 @@ export default {
 			"getMyHabitTracker",
 			"getMyHabitTrackerRecord",
 		]),
+		pushMyHT(data) {
+			console.log(data);
+			this.myHabitTrackers.push(data);
+		},
 		getMyHT() {
 			this.getMyHabitTracker(this.sharedDiaryId)
 				.then(async response => {
@@ -66,6 +87,7 @@ export default {
 						this.myHabitTrackerRecord = response.data;
 
 						var result = false;
+						var tempId = -1;
 						for (
 							let j = 0;
 							j < this.myHabitTrackerRecord.length;
@@ -76,13 +98,18 @@ export default {
 								this.today
 							) {
 								result = true;
+								tempId = this.myHabitTrackerRecord[j].id;
 							}
 						}
+
+						this.$set(this.myHabitTrackers[i], "doHabitId", tempId);
 						this.$set(this.myHabitTrackers[i], "isDone", result);
 					})
 					.catch(error => {
 						console.log(error);
 					});
+				console.log("후..여기까진가");
+				console.log(this.myHabitTrackers);
 			}
 		},
 	},
