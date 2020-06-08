@@ -5,7 +5,7 @@
 				class="week"
 				v-for="dayIndex in 7"
 				:key="dayIndex"
-			>{{ (dayIndex - 1) | localeWeekDay(firstDay, locale) }}</strong>
+			>{{ (dayIndex - 2) | localeWeekDay(firstDay, locale) }}</strong>
 		</div>
 		<div class="dates" ref="dates">
 			<div class="dates-bg">

@@ -5,13 +5,18 @@
 			<div class="sharedPaper mini">내가 참가한 다이어리</div>
 		</div>
 		<div class="itemList">
-			<item />
+			<item v-for="(item, idx) in diaries"
+				:key="idx"
+				:item="item" />
 		</div>
 	</div>
 </template>
 
 <script>
 export default {
+	props:{
+		diaries: {type:Array, default:[]}
+	},
 	components: {
 		item: () => import("./components/SharedDiaryListItem"),
 	},
