@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.account.AccountRepository;
+import com.ssafy.moida.domain.follow.Follow;
 import com.ssafy.moida.domain.follow.FollowRepository;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.account.AccountService;
@@ -46,28 +47,34 @@ public class FollowServiceImpl implements FollowService{
 
 	@Transactional
 	public Boolean deleteFollow(Long followingid) throws NumberFormatException, BaseException {
-		FollowSaveRequest requestDTO = new FollowSaveRequest();
-		requestDTO.setFollower(accountService.getAccount());
-		requestDTO.setFollowing(accountRepository.findById(followingid).get());
+
+		Account follower = accountService.getAccount();
+		Account following = accountRepository.findById(followingid).get();
 		
+		if(0<followRepository.countByFollowingIdAndFollowerId(followingid, follower.getId())) {
+			Follow follow = followRepository.findByFollowerIdAndFollowingId( follower.getId(),followingid);
+			
+			followRepository.deleteById(follow.getId());
+			return true;
+		}
 		
-		followRepository.delete(requestDTO.toEntity());
+	
 		
-		return true;
+		return false;
 	}
 
 	@Transactional(readOnly=true)
-	public List<FollowingResponseDTO> Followinglist(Long followingid) throws NumberFormatException, BaseException {
+	public List<FollowingResponseDTO> Followinglist(Long followerid) throws NumberFormatException, BaseException {
 
-		return followRepository.findByFollowingId(followingid)
+		return followRepository.findByFollowerId(followerid)
 				.stream()
 				.map(FollowingResponseDTO :: new)
 				.collect(Collectors.toList());
 	}
 
 	@Transactional(readOnly=true)
-	public List<FollowerResponseDTO> Followerlist(Long followerid) throws NumberFormatException, BaseException {
-		return followRepository.findByFollowerId(followerid).stream()
+	public List<FollowerResponseDTO> Followerlist(Long followingid) throws NumberFormatException, BaseException {
+		return followRepository.findByFollowingId(followingid).stream()
 				.map(FollowerResponseDTO :: new)
 				.collect(Collectors.toList());
 	}

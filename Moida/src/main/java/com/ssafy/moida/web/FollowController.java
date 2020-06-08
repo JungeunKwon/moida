@@ -76,10 +76,10 @@ public class FollowController {
 	})
 	@ApiOperation(value = "팔로잉 찾기", httpMethod = "GET", notes = "팔로잉 찾는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@GetMapping(value = "/following/{followingid}")
-	public ResponseEntity<List<FollowerResponseDTO>> findfollowing(@PathVariable Long followingid, Pageable pageable
+	@GetMapping(value = "/following/{followerid}")
+	public ResponseEntity<List<FollowingResponseDTO>> findfollowing(@PathVariable Long followerid, Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
-		return new ResponseEntity<List<FollowerResponseDTO>>(followService.Followerlist(followingid), HttpStatus.OK);
+		return new ResponseEntity<List<FollowingResponseDTO>>(followService.Followinglist(followerid), HttpStatus.OK);
 
 	}
 	@ApiImplicitParams({
@@ -87,10 +87,10 @@ public class FollowController {
 	})
 	@ApiOperation(value = "팔로워 찾기", httpMethod = "GET", notes = "팔로워 찾는 부분입니다.")
 	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
-	@GetMapping(value = "/follower/{followerid}")
-	public ResponseEntity<List<FollowingResponseDTO>> findfollower(@PathVariable Long followerid, Pageable pageable
+	@GetMapping(value = "/follower/{followingid}")
+	public ResponseEntity<List<FollowerResponseDTO>> findfollower(@PathVariable Long followingid, Pageable pageable
 			) throws IllegalArgumentException, IOException, BaseException{
-		return new ResponseEntity<List<FollowingResponseDTO>>( followService.Followinglist(followerid), HttpStatus.OK);
+		return new ResponseEntity<List<FollowerResponseDTO>>( followService.Followerlist(followingid), HttpStatus.OK);
 
 	}
 	

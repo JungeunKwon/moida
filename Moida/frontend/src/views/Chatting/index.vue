@@ -8,14 +8,19 @@
 				:key="idx"
 				@click="inenterRoom(chat)"
 			>
-				<img id="chat_userImg" :src="chat.userProfile" />
-				<div id="chat_nickname">{{ chat.userNickname }}</div>
-				<div class="chat_left_content">
+				<div class="chat_userImg_class">
+					<img id="chat_userImg" :src="chat.userProfile" />
+				</div>
+				<div class="chat_content_class">
+					<div id="chat_nickname">{{ chat.userNickname }}</div>
+
 					<div id="chat_list_content">
 						{{ getContent(chat.lastSentence) }}
 					</div>
 
-					<div id="chat_date">{{ getLastDate(chat.lastDate) }}</div>
+					<p id="chat_date">
+						{{ getLastDate(chat.lastDate) }}
+					</p>
 				</div>
 			</div>
 		</div>
@@ -68,6 +73,11 @@ export default {
 	},
 	created() {
 		var targetNickname = this.$store.getters.targetNickname;
+		var chat = {
+			userProfile: "",
+			userNickname: "",
+			roomuuid: "",
+		};
 		if (targetNickname != "") {
 			this.roomCheck({
 				host: this.$store.getters.nickname,
@@ -78,8 +88,18 @@ export default {
 						console.log("채팅방 생성하셈");
 						this.increateRoom(targetNickname);
 					} else {
-						console.log("채팅방!!", response.data);
-						this.inenterRoom(response.data);
+						chat.roomuuid = response.data.roomuuid;
+						if (
+							response.data.hostNickname ==
+							this.$store.getters.nickname
+						) {
+							chat.userProfile = response.data.userProfileImg;
+							chat.userNickname = response.data.userNickname;
+						} else {
+							chat.userProfile = response.data.hostProfileImg;
+							chat.userNickname = response.data.hostNickname;
+						}
+						this.inenterRoom(chat);
 					}
 				})
 				.catch(error => {
@@ -113,13 +133,28 @@ export default {
 		},
 		increateRoom(targetNickname) {
 			console.log("createRoom");
+			var chat = {
+				userProfile: "",
+				userNickname: "",
+				roomuuid: "",
+			};
 			//this.chat.user = this.$store.getters.targetNickname;
 			//this.chat.userpro = this.$store.getters.targetImgUrl;
 			this.createRoom(targetNickname)
 				.then(response => {
-					console.log("개설", response.data);
 					this.findAllRoom();
-					this.inenterRoom(response.data);
+					chat.roomuuid = response.data.roomuuid;
+					if (
+						response.data.hostNickname ==
+						this.$store.getters.nickname
+					) {
+						chat.userProfile = response.data.userProfileImg;
+						chat.userNickname = response.data.userNickname;
+					} else {
+						chat.userProfile = response.data.hostProfileImg;
+						chat.userNickname = response.data.hostNickname;
+					}
+					this.inenterRoom(chat);
 				})
 				.catch(err => {
 					console.log("CreateRoom err ", err);
@@ -136,7 +171,6 @@ export default {
 			this.chat = current;
 
 			this.isOpen = true;
-			console.log("열린방!!", this.chat);
 		},
 		getLastDate(date) {
 			if (date == undefined) return;
@@ -188,11 +222,12 @@ export default {
 } /* 스크롤 바 상 하단 버튼 */
 
 #chat {
-	height: 70px;
-	padding: 12px;
-	line-height: 50px;
+	height: 80px;
+	padding: 5px;
 	cursor: pointer;
 	width: 100%;
+	display: flex;
+	align-items: center;
 }
 
 #chat:hover {
@@ -207,15 +242,19 @@ export default {
 }
 
 #chat_nickname {
-	float: left;
+	width: 100%;
+	margin: 0;
 	margin-left: 10px;
 	font-weight: 400;
+	text-align: left;
+	height: 30px;
 }
 
 #chat_date {
-	float: right;
-	color: grey;
+	width: 100%;
 	font-size: 12px;
+	text-align: right;
+	height: 20px;
 }
 
 #chat_right {
@@ -234,15 +273,20 @@ export default {
 	cursor: pointer;
 }
 
-#chat_left_content {
-	word-break: break-all;
-	width: calc(100% - 100px);
-	display: inline-block;
-}
 #chat_list_content {
 	word-break: break-all;
-
+	height: 30px;
+	width: 100%;
 	display: inline-block;
+}
+.chat_userImg_class {
+	display: inline-block;
+	width: 60px;
+}
+.chat_content_class {
+	display: inline-block;
+	height: 70px;
+	width: calc(100% - 65px);
 }
 @media screen and (max-width: 774px) {
 	#chatting {
@@ -250,17 +294,6 @@ export default {
 		width: 100%;
 		display: block;
 		position: unset;
-	}
-	#chat {
-		padding: 12px;
-		line-height: 50px;
-		cursor: pointer;
-		width: 100%;
-	}
-	#chat_list_content {
-		word-break: break-all;
-
-		display: inline-block;
 	}
 	#chat_left {
 		position: unset;
@@ -286,18 +319,7 @@ export default {
 		display: block;
 		position: unset;
 	}
-	#chat {
-		padding: 12px;
-		height: 150px;
-		line-height: 50px;
-		cursor: pointer;
-		width: 100%;
-	}
-	#chat_list_content {
-		word-break: break-all;
-		width: 100%;
-		display: inline-block;
-	}
+
 	#chat_left {
 		position: unset;
 		display: block;
