@@ -9,6 +9,8 @@ import {
 const state = {
 	targetNickname: "",
 	tartgetImgUrl: "",
+	isShare: false,
+	groupid: 0,
 };
 
 const mutations = {
@@ -17,6 +19,12 @@ const mutations = {
 	},
 	SET_TARGET_IMG_URL: (state, data) => {
 		state.tartgetImgUrl = data;
+	},
+	SET_IS_SHARE: (state, data) => {
+		state.isShare = data;
+	},
+	SET_GROUP_ID: (state, data) => {
+		state.groupid = data;
 	},
 };
 

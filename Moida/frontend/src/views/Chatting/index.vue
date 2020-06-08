@@ -119,6 +119,7 @@ export default {
 			"roomCheck",
 		]),
 		...mapMutations("chat", ["SET_TARGET_NICKNAME"]),
+
 		closeChat() {
 			this.isOpen = false;
 		},

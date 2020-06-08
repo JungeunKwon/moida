@@ -7,7 +7,7 @@
 				<img src="../../assets/icons/info.png" width="20px" />
 			</SharedDiaryInfo>
 		</div>
-
+		<v-btn @click="invite">초대</v-btn>
 		<HabitTracker :sharedDiaryId="detail.id" id="ht"></HabitTracker>
 
 		<div v-if="showCal">
@@ -81,6 +81,17 @@ export default {
 			"getSharedDiary",
 		]),
 		...mapMutations("sharedDiary", ["TOGGLE_WRITINGSD", "SET_DIARYID"]),
+		...mapMutations("chat", [
+			"SET_TARGET_NICKNAME",
+			"SET_IS_SHARE",
+			"SET_GROUP_ID",
+		]),
+		invite() {
+			this.SET_TARGET_NICKNAME("쩌능님");
+			this.SET_IS_SHARE(true);
+			this.SET_GROUP_ID(this.detail.id);
+			this.$router.push("/chat");
+		},
 		handleResize() {
 			if (window.innerWidth < 1100) {
 				this.showCal = false;
