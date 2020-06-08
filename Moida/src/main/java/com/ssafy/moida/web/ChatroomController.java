@@ -17,6 +17,7 @@ import com.ssafy.moida.domain.dm.RedisDMRepository;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.dm.ChatroomService;
 import com.ssafy.moida.web.dto.dm.ChatroomDto;
+import com.ssafy.moida.web.dto.dm.ChatroomResponseDto;
 import com.ssafy.moida.web.dto.dm.ChatroomUserDto;
 
 import io.swagger.annotations.Api;
@@ -58,7 +59,7 @@ public class ChatroomController {
 	})
 	@PostMapping("/room/{targetNickname}")
 	@ResponseBody
-	public ChatroomDto createRoom(@PathVariable String targetNickname) throws NumberFormatException, BaseException {
+	public ChatroomResponseDto createRoom(@PathVariable String targetNickname) throws NumberFormatException, BaseException {
 		return chatroomService.createRoom(targetNickname);
 	}
 

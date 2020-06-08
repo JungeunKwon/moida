@@ -18,6 +18,17 @@ public class ChatroomResponseDto {
     private String userProfileImg;
     
     @Builder
+    public ChatroomResponseDto(Long id, String roomuuid, String hostNickname, String hostProfileImg,
+			String userNickname, String userProfileImg) {
+		this.id = id;
+		this.roomuuid = roomuuid;
+		this.hostNickname = hostNickname;
+		this.hostProfileImg = hostProfileImg;
+		this.userNickname = userNickname;
+		this.userProfileImg = userProfileImg;
+	}
+
+	@Builder
     public ChatroomResponseDto(Chatroom entity){
     	this.id = entity.getId();
     	this.roomuuid = entity.getRoomuuid();
