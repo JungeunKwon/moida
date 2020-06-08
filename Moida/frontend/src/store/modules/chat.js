@@ -80,10 +80,14 @@ const actions = {
 				});
 		});
 	},
-	roomCheck({ commit }, host, user) {
+	roomCheck({ commit }, data) {
 		return new Promise((resolve, reject) => {
-			roomCheck(host, user)
+			roomCheck(data.host, data.user)
 				.then(response => {
+					if (response.data.code != undefined) {
+						alert(response.data.msg);
+						return;
+					}
 					resolve(response);
 				})
 				.catch(error => {
