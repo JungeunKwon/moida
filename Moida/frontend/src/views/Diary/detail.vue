@@ -53,7 +53,7 @@
 			</div>
 		</div>
 		<div class="diarycomment">
-			<div class="diarycommentdetail">
+			<div class="diarycommentdetail" id="diarycommentdetail">
 				<div style="width: 100%;" v-for="(comment, index) in comments" :key="comment.id">
 					<diarycomment :comment="comment" :index="index" />
 				</div>
@@ -162,15 +162,17 @@ export default {
 					console.log(error);
 				});
 		},
-		getsearchcommentById(id) {
+		async getsearchcommentById(id) {
 			var here = this;
-			this.getCommentById(id)
+			await this.getCommentById(id)
 				.then(response => {
 					here.comments = response.data;
 				})
 				.catch(error => {
 					console.log(error);
 				});
+			var objDiv = document.getElementById("diarycommentdetail");
+			objDiv.scrollTop = objDiv.scrollHeight;
 		},
 		editdiary() {
 			this.$router.push("/editDiary/" + this.diaryid);
@@ -186,7 +188,7 @@ export default {
 					console.log(error);
 				});
 		},
-		addcomment() {
+		async addcomment() {
 			if (this.inputcomment == null || this.inputcomment == "") {
 				alert("댓글을 입력해주세요.");
 				return;
@@ -200,14 +202,14 @@ export default {
 			var data = {
 				diaryid: this.diaryid,
 				description: this.inputcomment,
-				profileimg: this.$store.getters.profileImg,
+				profileimg: this.$store.getters.profile_img,
 				nickname: this.$store.getters.nickname,
 				modifiedDate: date,
 				likecount: 0,
 				id: null,
 			};
-			console.log("DATE", data);
-			this.postComment(data)
+			console.log("DATA", data);
+			await this.postComment(data)
 				.then(response => {
 					data.id = response.data;
 					this.comments.push(data);
@@ -216,6 +218,8 @@ export default {
 				.catch(error => {
 					console.log(error);
 				});
+			var objDiv = document.getElementById("diarycommentdetail");
+			objDiv.scrollTop = objDiv.scrollHeight;
 		},
 	},
 };

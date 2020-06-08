@@ -54,7 +54,7 @@ export default {
 	},
 	created() {
 		if (this.diary.imgurl == null || this.diary.imgurl == "") {
-			this.diary.imgurl = "./diarydefault.jpg";
+			this.diary.imgurl = "./default.png";
 		}
 	},
 	mounted() {
