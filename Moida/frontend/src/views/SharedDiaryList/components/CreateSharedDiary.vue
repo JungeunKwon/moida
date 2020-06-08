@@ -28,7 +28,9 @@
 					@focus="subjectMsg = ''"
 					v-model="sharedDiary.subject"
 				/>
-				<div v-if="subjectMsg != ''" class="errorMsg">{{subjectMsg}}</div>
+				<div v-if="subjectMsg != ''" class="errorMsg">
+					{{ subjectMsg }}
+				</div>
 			</div>
 			<div class="inputDiv">
 				<div>제한 인원</div>
@@ -37,9 +39,12 @@
 					class="input"
 					@focus="limitUserMsg = ''"
 					type="number"
+					min="0"
 					v-model="sharedDiary.limitUser"
 				/>
-				<div v-if="limitUserMsg != ''" class="errorMsg">{{limitUserMsg}}</div>
+				<div v-if="limitUserMsg != ''" class="errorMsg">
+					{{ limitUserMsg }}
+				</div>
 			</div>
 			<div class="inputDiv">
 				<div>공개 여부</div>
@@ -58,11 +63,13 @@
 					rows="10"
 					v-model="sharedDiary.description"
 				/>
-				<div v-if="descriptionMsg != ''" class="errorMsg">{{descriptionMsg}}</div>
+				<div v-if="descriptionMsg != ''" class="errorMsg">
+					{{ descriptionMsg }}
+				</div>
 			</div>
 			<div class="buttonDiv">
 				<button @click="createSD">만들기</button>
-				<button @click="dialog=false">취소</button>
+				<button @click="dialog = false">취소</button>
 			</div>
 		</v-card>
 	</v-dialog>
@@ -115,6 +122,7 @@ export default {
 					console.log(response);
 					if (response.data.code == undefined) {
 						alert("성공적으로 등록되었습니다!");
+						this.$emit("reload");
 						this.dialog = false;
 					} else {
 						this.clear();

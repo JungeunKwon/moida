@@ -11,13 +11,27 @@
 		<HabitTracker :sharedDiaryId="detail.id" id="ht"></HabitTracker>
 
 		<div v-if="showCal">
-			<v-date-picker id="sharedCal" v-model="picker" color="#fadf99" @change="getSharedDiaryByDate()" />
+			<v-date-picker
+				id="sharedCal"
+				v-model="picker"
+				color="#fadf99"
+				@change="getSharedDiaryByDate()"
+			/>
 			<div id="sharedCalText" @click="getSharedDiaryAll">전체보기</div>
 		</div>
-		<img v-if="showCalImg" id="shardCalImg" @click="toggleCal()" src="../../assets/icons/cal.png" />
+		<img
+			v-if="showCalImg"
+			id="shardCalImg"
+			@click="toggleCal()"
+			src="../../assets/icons/cal.png"
+		/>
 
 		<div id="sharedDiaryMain">
-			<SharedDiaryItem v-for="(item, idx) in sharedDiarys" :key="idx" :sharedDiary="item" />
+			<SharedDiaryItem
+				v-for="(item, idx) in sharedDiarys"
+				:key="idx"
+				:sharedDiary="item"
+			/>
 		</div>
 
 		<div id="writeDiaryDiv" @click="openWrite">
@@ -50,7 +64,6 @@ export default {
 		this.getSharedDiaryDetail(this.$route.params.id)
 			.then(response => {
 				this.detail = response.data;
-				console.log(this.detail);
 				this.getSD();
 			})
 			.catch(error => {

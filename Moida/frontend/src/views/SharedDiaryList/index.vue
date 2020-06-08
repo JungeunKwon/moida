@@ -1,7 +1,7 @@
 <template>
 	<div id="SharedDiaryList">
 		<div id="sharedListTop">
-			<createSharedDiary>
+			<createSharedDiary @reload="reload">
 				<div class="sharedMenu mini">
 					<img class="tape" src="../../assets/images/tape.png" />
 					<div class="sharedPaper mini">공다 만들기</div>
@@ -14,16 +14,31 @@
 			<div class="sharedMenu mini">
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper mini">
-					<v-select :items="sels" v-model="searchSel" label="검색조건" color="gray" dense solo />
+					<v-select
+						:items="sels"
+						v-model="searchSel"
+						label="검색조건"
+						color="gray"
+						dense
+						solo
+					/>
 				</div>
 			</div>
 			<div class="sharedMenu large">
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper large">
 					<div id="searchTextDiv">
-						<input type="text" id="searchText" v-model="searchText" />
+						<input
+							type="text"
+							id="searchText"
+							v-model="searchText"
+						/>
 					</div>
-					<img id="searchImg" src="../../assets/icons/search.png" @click="searchSharedDiary" />
+					<img
+						id="searchImg"
+						src="../../assets/icons/search.png"
+						@click="searchSharedDiary"
+					/>
 				</div>
 			</div>
 		</div>
@@ -80,8 +95,10 @@ export default {
 			"searchByNickname",
 			"getMySharedDiary",
 		]),
+		reload() {
+			location.reload();
+		},
 		searchSharedDiary() {
-			console.log(this.searchSel);
 			if (this.searchText == "") return;
 			let temp = this.searchSel;
 			if (temp == 0) {

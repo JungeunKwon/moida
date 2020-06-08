@@ -2,13 +2,12 @@
 	<div class="trashcontainer">
 		<div class="trashtop">
 			<TrashDialog :items="items">
-				<div class="todack" dark>음악 공유</div>
+				<div class="todack">음악 공유</div>
 			</TrashDialog>
+			<img src="@/assets/icons/click.png" />
 		</div>
 		<div class="trashdrawer">
-			<v-app-bar-nav-icon
-				@click.stop="drawer = !drawer"
-			></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 		</div>
 		<v-navigation-drawer v-model="drawer" absolute temporary>
 			<v-list nav dense>
@@ -16,36 +15,24 @@
 					<template v-slot:activator>
 						<v-list-item-title>정렬</v-list-item-title>
 					</template>
-					<v-list-item-group
-						v-model="group"
-						active-class="deep-purple--text text--accent-4"
-					>
-						<v-list-item
-							v-for="item in sortlist"
-							:key="item.id"
-							@click="changesortSmall(item.text)"
-						>
-							<v-list-item-title>{{
+					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+						<v-list-item v-for="item in sortlist" :key="item.id" @click="changesortSmall(item.text)">
+							<v-list-item-title>
+								{{
 								item.text
-							}}</v-list-item-title>
+								}}
+							</v-list-item-title>
 						</v-list-item>
 					</v-list-item-group>
 				</v-list-group>
-				<v-list-item-group
-					v-model="group2"
-					active-class="deep-purple--text text--accent-4"
-				>
+				<v-list-item-group v-model="group2" active-class="deep-purple--text text--accent-4">
 					<v-list-item @click="getEtrashByMoodMain('전체보기')">
 						<v-list-item-title>전체보기</v-list-item-title>
 					</v-list-item>
 					<v-list-item @click="changesortSmall('내가쓴글')">
 						<v-list-item-title>내가쓴글</v-list-item-title>
 					</v-list-item>
-					<v-list-item
-						v-for="item in items"
-						:key="item.id"
-						@click="getEtrashByMoodMain(item.text)"
-					>
+					<v-list-item v-for="item in items" :key="item.id" @click="getEtrashByMoodMain(item.text)">
 						<v-list-item-title>{{ item.text }}</v-list-item-title>
 					</v-list-item>
 				</v-list-item-group>
@@ -75,10 +62,7 @@
 					></v-select>
 				</div>
 			</div>
-			<div
-				class="sharedMenu min"
-				@click="getEtrashByMoodMain('전체보기')"
-			>
+			<div class="sharedMenu min" @click="getEtrashByMoodMain('전체보기')">
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper mini">전체보기</div>
 			</div>
@@ -93,21 +77,12 @@
 				@click="getEtrashByMoodMain(item.text)"
 			>
 				<img class="tape" src="../../assets/images/tape.png" />
-				<div
-					class="sharedPaper mini"
-					:background-color="getcolor(index)"
-				>
-					{{ item.text }}
-				</div>
+				<div class="sharedPaper mini" :background-color="getcolor(index)">{{ item.text }}</div>
 			</div>
 		</div>
 		<div class="trashmiddle">
 			<div class="masonry" v-lazy-container="{ selector: 'card' }">
-				<div
-					v-for="(intrash, index) in trash"
-					:key="intrash.id"
-					class="card"
-				>
+				<div v-for="(intrash, index) in trash" :key="intrash.id" class="card">
 					<TrashCom
 						:items="items"
 						@load="rendered"
@@ -120,18 +95,11 @@
 			</div>
 		</div>
 
-		<div class="bottomtrash">
-			<div class="bottomtrashbtn">
-				<TrashInsertDialog
-					:items="items"
-					@getEtrashMain="getEtrashMain"
-				>
-					<v-btn>
-						<v-icon x-large>mdi-heart-box</v-icon>
-					</v-btn>
-				</TrashInsertDialog>
+		<TrashInsertDialog :items="items" @getEtrashMain="getEtrashMain">
+			<div id="writeDiaryDiv">
+				<v-icon large>mdi-delete</v-icon>&nbsp;감쓰 버리기
 			</div>
-		</div>
+		</TrashInsertDialog>
 	</div>
 </template>
 
@@ -483,13 +451,6 @@ export default {
 .bottomtrashbtn {
 	background-color: #fce4ec;
 }
-.todack {
-	background-color: #b2dfdb;
-
-	border-radius: 5px;
-	color: white;
-	border: 1px solid rgba(192, 192, 192, 0.363);
-}
 
 .v-text-field.v-input--is-focused > .v-input__control > .v-input__slot:after {
 	display: inline-block;
@@ -560,8 +521,31 @@ export default {
 	top: 15px;
 	left: 15px;
 	width: 120px;
-	height: 50px;
+	height: 35px;
 	cursor: pointer;
+	color: black;
+	background-color: #b2dfdb;
+	border-radius: 5px 5px 0 0;
+	box-shadow: -1px -1px 3px rgba(0, 0, 0, 0.541);
+}
+.todack:hover {
+	transform: scale(1.1);
+}
+
+.todack {
+	line-height: 35px;
+	width: 100%;
+	font-family: "kyoboHand";
+	font-size: 20px;
+	padding-right: 10px;
+	transition: 0.1s ease;
+}
+
+.trashtop img {
+	position: fixed;
+	top: 15px;
+	left: 100px;
+	width: 40px;
 }
 
 .filtertoggle {
@@ -591,5 +575,26 @@ export default {
 
 #app-view > div.paper.p3 > div > div.sort > div.sharedMenu.sel > div {
 	margin-top: -26px;
+}
+
+/* 글쓰기 버튼 */
+#writeDiaryDiv {
+	position: absolute;
+	font-family: KyoboHand;
+	font-size: 20px;
+	bottom: 30px;
+	right: -85px;
+	width: 130px;
+	background-color: white;
+	height: 45px;
+	padding: 5px;
+	border-radius: 10px 0 0 10px;
+	box-shadow: 1px 1px 5px rgba(128, 128, 128, 0.61);
+	transition: 0.3s ease;
+	cursor: pointer;
+}
+
+#writeDiaryDiv:hover {
+	right: 0;
 }
 </style>
