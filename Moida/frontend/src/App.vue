@@ -34,7 +34,7 @@ export default {
 <style>
 @import "./assets/font/font.css";
 #app {
-	/* background-image: url("./assets/images/background.png"); */
+	background-image: url("./assets/images/background_2.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	height: 100%;

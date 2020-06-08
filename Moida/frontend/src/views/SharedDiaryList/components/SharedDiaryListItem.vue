@@ -71,6 +71,7 @@ export default {
 
 <style>
 #sharedDiaryItem {
+	background-color: white;
 	overflow: hidden;
 	display: inline-block;
 	width: 24%;

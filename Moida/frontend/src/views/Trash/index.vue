@@ -6,9 +6,7 @@
 			</TrashDialog>
 		</div>
 		<div class="trashdrawer">
-			<v-app-bar-nav-icon
-				@click.stop="drawer = !drawer"
-			></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 		</div>
 		<v-navigation-drawer v-model="drawer" absolute temporary>
 			<v-list nav dense>
@@ -16,36 +14,20 @@
 					<template v-slot:activator>
 						<v-list-item-title>정렬</v-list-item-title>
 					</template>
-					<v-list-item-group
-						v-model="group"
-						active-class="deep-purple--text text--accent-4"
-					>
-						<v-list-item
-							v-for="item in sortlist"
-							:key="item.id"
-							@click="changesortSmall(item.text)"
-						>
-							<v-list-item-title>
-								{{ item.text }}
-							</v-list-item-title>
+					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+						<v-list-item v-for="item in sortlist" :key="item.id" @click="changesortSmall(item.text)">
+							<v-list-item-title>{{ item.text }}</v-list-item-title>
 						</v-list-item>
 					</v-list-item-group>
 				</v-list-group>
-				<v-list-item-group
-					v-model="group2"
-					active-class="deep-purple--text text--accent-4"
-				>
+				<v-list-item-group v-model="group2" active-class="deep-purple--text text--accent-4">
 					<v-list-item @click="getEtrashByMoodMain('전체보기')">
 						<v-list-item-title>전체보기</v-list-item-title>
 					</v-list-item>
 					<v-list-item @click="changesortSmall('내가쓴글')">
 						<v-list-item-title>내가쓴글</v-list-item-title>
 					</v-list-item>
-					<v-list-item
-						v-for="item in items"
-						:key="item.id"
-						@click="getEtrashByMoodMain(item.text)"
-					>
+					<v-list-item v-for="item in items" :key="item.id" @click="getEtrashByMoodMain(item.text)">
 						<v-list-item-title>{{ item.text }}</v-list-item-title>
 					</v-list-item>
 				</v-list-item-group>
@@ -75,10 +57,7 @@
 					></v-select>
 				</div>
 			</div>
-			<div
-				class="sharedMenu min"
-				@click="getEtrashByMoodMain('전체보기')"
-			>
+			<div class="sharedMenu min" @click="getEtrashByMoodMain('전체보기')">
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper mini">전체보기</div>
 			</div>
@@ -93,21 +72,12 @@
 				@click="getEtrashByMoodMain(item.text)"
 			>
 				<img class="tape" src="../../assets/images/tape.png" />
-				<div
-					class="sharedPaper mini"
-					:background-color="getcolor(index)"
-				>
-					{{ item.text }}
-				</div>
+				<div class="sharedPaper mini" :background-color="getcolor(index)">{{ item.text }}</div>
 			</div>
 		</div>
 		<div class="trashmiddle">
 			<div class="masonry" v-lazy-container="{ selector: 'card' }">
-				<div
-					v-for="(intrash, index) in trash"
-					:key="intrash.id"
-					class="card"
-				>
+				<div v-for="(intrash, index) in trash" :key="intrash.id" class="card">
 					<TrashCom
 						:items="items"
 						@load="rendered"
@@ -122,10 +92,7 @@
 
 		<div class="bottomtrash">
 			<div class="bottomtrashbtn">
-				<TrashInsertDialog
-					:items="items"
-					@getEtrashMain="getEtrashMain"
-				>
+				<TrashInsertDialog :items="items" @getEtrashMain="getEtrashMain">
 					<v-btn>
 						<v-icon x-large>mdi-heart-box</v-icon>
 					</v-btn>
@@ -417,6 +384,7 @@ export default {
 </script>
 <style>
 .trashcontainer {
+	background-color: rgba(192, 192, 192, 0.1);
 	height: 100%;
 	margin: 0 auto;
 	overflow-y: auto;
@@ -563,5 +531,26 @@ export default {
 }
 .filtermood {
 	display: inline-block;
+}
+
+/* 정렬 부분 */
+#app-view > div.paper.p3 > div > div.sort > div.sharedMenu.sel > div > div {
+	padding: 0 0 0 0;
+}
+
+#app-view
+	> div.paper.p3
+	> div
+	> div.sort
+	> div.sharedMenu.sel
+	> div
+	> div
+	> div
+	> div.v-input__slot {
+	padding: 5px;
+}
+
+#app-view > div.paper.p3 > div > div.sort > div.sharedMenu.sel > div {
+	margin-top: -26px;
 }
 </style>

@@ -21,9 +21,15 @@
 				</div>
 			</div>
 			<div v-if="deleteDate != null">삭제된 메세지 입니다.</div>
+			<div style="text-align:right">
+				{{ getLastDate(comment.modifiedDate) }}
+			</div>
 		</div>
 		<div v-if="deleteDate == null">
-			<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && !isEdit">
+			<div
+				class="commenticon"
+				v-if="$store.getters.nickname == comment.nickname && !isEdit"
+			>
 				<div class="diaryicons" @click="setdeletecomment">
 					<v-icon>mdi-delete</v-icon>
 				</div>
@@ -31,7 +37,10 @@
 					<v-icon>mdi-pencil</v-icon>
 				</div>
 			</div>
-			<div class="commenticon" v-if="$store.getters.nickname == comment.nickname && isEdit">
+			<div
+				class="commenticon"
+				v-if="$store.getters.nickname == comment.nickname && isEdit"
+			>
 				<div class="diaryicons" @click="editcomment">
 					<v-icon>mdi-check</v-icon>
 				</div>
@@ -71,7 +80,6 @@ export default {
 		},
 		setFocus() {
 			this.isEdit = true;
-			this.$refs.inputcommenttext.focus();
 		},
 		setdeletecomment() {
 			this.deletetComment(this.comment.id)
@@ -99,6 +107,10 @@ export default {
 					console.log(error);
 				});
 		},
+		getLastDate(date) {
+			if (date == undefined) return;
+			return date.replace("T", " ").substring(0, 19);
+		},
 	},
 };
 </script>
@@ -112,7 +124,7 @@ export default {
 	width: 100%;
 	text-align: left;
 	border-bottom: 1px solid rgba(192, 192, 192, 0.23);
-	padding: 10px 10px 20px 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .commentavatar {
