@@ -1,11 +1,11 @@
 <template>
 	<div class="mp-main-container">
 		<el-row type="flex" class="mp-first-row">
-			<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+			<el-col :xs="18" :sm="18" :md="18" :lg="18" :xl="18">
 				<user-card :user="user" />
 			</el-col>
-			<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-				<shared-diary-list />
+			<el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
+				<shared-diary-list :diaries.sync="diaries" :user="user" />
 			</el-col>
 		</el-row>
 		<el-row type="flex" class="mp-second-row" justify="center">
@@ -29,6 +29,7 @@ export default {
 		return {
 			user: {},
 			events: [],
+			diaries: [],
 		};
 	},
 	async mounted() {
@@ -37,6 +38,10 @@ export default {
 				this.$route.params.nickname,
 			);
 			this.events = await this.getDiary(this.user.nickname);
+			let data = await this.searchByMember(this.user.nickname);
+			this.diaries = data.data;
+			console.log("diary here");
+			console.log(this.diaries);
 		} catch (error) {
 			console.log(error);
 		}
@@ -44,6 +49,9 @@ export default {
 	methods: {
 		...mapActions("calendar", ["getDiary"]),
 		...mapActions("user", ["searchByNickname"]),
+		...mapActions("sharedDiaryList", {
+			searchByMember: "searchByMember",
+		}),
 	},
 };
 </script>

@@ -23,7 +23,7 @@
 		</v-card>
 
 		<div v-if="innerdialog">
-			<div class="TrashMusicCardTitle" dark>토닥토닥</div>
+			<div class="TrashMusicCardTitle" dark>음악 공유</div>
 			<div class="TrashMusicCard">
 				<div id="trashmusicinserttext">
 					<p class="font-weight-bold">

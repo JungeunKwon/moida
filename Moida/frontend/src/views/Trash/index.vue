@@ -2,11 +2,13 @@
 	<div class="trashcontainer">
 		<div class="trashtop">
 			<TrashDialog :items="items">
-				<div class="todack" dark>토닥토닥</div>
+				<div class="todack" dark>음악 공유</div>
 			</TrashDialog>
 		</div>
 		<div class="trashdrawer">
-			<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon
+				@click.stop="drawer = !drawer"
+			></v-app-bar-nav-icon>
 		</div>
 		<v-navigation-drawer v-model="drawer" absolute temporary>
 			<v-list nav dense>
@@ -14,20 +16,36 @@
 					<template v-slot:activator>
 						<v-list-item-title>정렬</v-list-item-title>
 					</template>
-					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
-						<v-list-item v-for="item in sortlist" :key="item.id" @click="changesortSmall(item.text)">
-							<v-list-item-title>{{ item.text }}</v-list-item-title>
+					<v-list-item-group
+						v-model="group"
+						active-class="deep-purple--text text--accent-4"
+					>
+						<v-list-item
+							v-for="item in sortlist"
+							:key="item.id"
+							@click="changesortSmall(item.text)"
+						>
+							<v-list-item-title>{{
+								item.text
+							}}</v-list-item-title>
 						</v-list-item>
 					</v-list-item-group>
 				</v-list-group>
-				<v-list-item-group v-model="group2" active-class="deep-purple--text text--accent-4">
+				<v-list-item-group
+					v-model="group2"
+					active-class="deep-purple--text text--accent-4"
+				>
 					<v-list-item @click="getEtrashByMoodMain('전체보기')">
 						<v-list-item-title>전체보기</v-list-item-title>
 					</v-list-item>
 					<v-list-item @click="changesortSmall('내가쓴글')">
 						<v-list-item-title>내가쓴글</v-list-item-title>
 					</v-list-item>
-					<v-list-item v-for="item in items" :key="item.id" @click="getEtrashByMoodMain(item.text)">
+					<v-list-item
+						v-for="item in items"
+						:key="item.id"
+						@click="getEtrashByMoodMain(item.text)"
+					>
 						<v-list-item-title>{{ item.text }}</v-list-item-title>
 					</v-list-item>
 				</v-list-item-group>
@@ -57,7 +75,10 @@
 					></v-select>
 				</div>
 			</div>
-			<div class="sharedMenu min" @click="getEtrashByMoodMain('전체보기')">
+			<div
+				class="sharedMenu min"
+				@click="getEtrashByMoodMain('전체보기')"
+			>
 				<img class="tape" src="../../assets/images/tape.png" />
 				<div class="sharedPaper mini">전체보기</div>
 			</div>
@@ -72,12 +93,21 @@
 				@click="getEtrashByMoodMain(item.text)"
 			>
 				<img class="tape" src="../../assets/images/tape.png" />
-				<div class="sharedPaper mini" :background-color="getcolor(index)">{{ item.text }}</div>
+				<div
+					class="sharedPaper mini"
+					:background-color="getcolor(index)"
+				>
+					{{ item.text }}
+				</div>
 			</div>
 		</div>
 		<div class="trashmiddle">
 			<div class="masonry" v-lazy-container="{ selector: 'card' }">
-				<div v-for="(intrash, index) in trash" :key="intrash.id" class="card">
+				<div
+					v-for="(intrash, index) in trash"
+					:key="intrash.id"
+					class="card"
+				>
 					<TrashCom
 						:items="items"
 						@load="rendered"
@@ -92,7 +122,10 @@
 
 		<div class="bottomtrash">
 			<div class="bottomtrashbtn">
-				<TrashInsertDialog :items="items" @getEtrashMain="getEtrashMain">
+				<TrashInsertDialog
+					:items="items"
+					@getEtrashMain="getEtrashMain"
+				>
 					<v-btn>
 						<v-icon x-large>mdi-heart-box</v-icon>
 					</v-btn>
@@ -144,49 +177,55 @@ export default {
 					//공포 보라 혐오 녹색
 					id: 0,
 					text: "기쁨",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src: "https://image.flaticon.com/icons/svg/725/725107.svg",
 					colorcode: "#F48FB17F",
 				},
 				{
 					id: 1,
 					text: "신뢰",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src: "https://image.flaticon.com/icons/svg/725/725118.svg",
 					colorcode: "#90CAF97F",
 				},
 				{
 					id: 2,
 					text: "공포",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725023.png",
 					colorcode: "#6161617F",
 				},
 				{
 					id: 3,
 					text: "기대",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725079.png",
 					colorcode: "#FFF59D7F",
 				},
 				{
 					id: 4,
 					text: "놀라움",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725102.png",
 					colorcode: "#FFAB917F",
 				},
 				{
 					id: 5,
 					text: "슬픔",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725038.png",
 					colorcode: "#CE93D87F",
 				},
 				{
 					id: 6,
 					text: "혐오",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725056.png",
 					colorcode: "#BCAAA47F",
 				},
 				{
 					id: 7,
 					text: "분노",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725022.png",
 					colorcode: "#EF9A9A7F",
 				},
 			],
