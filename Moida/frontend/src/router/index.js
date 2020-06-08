@@ -8,9 +8,11 @@ import WriteDiary from "../views/Diary/writediary.vue";
 import DetailDiary from "../views/Diary/detail.vue";
 import EditDiary from "../views/Diary/edit.vue";
 import Diary from "../views/Diary/index.vue";
+import Chat from "../views/Chatting/index.vue";
 Vue.use(VueRouter);
 
-const routes = [{
+const routes = [
+	{
 		path: "/login",
 		name: "Login",
 		component: Login,
@@ -51,10 +53,15 @@ const routes = [{
 		component: DetailDiary,
 	},
 	{
+		path: "/chat",
+		name: "Chat",
+		component: Chat,
+	},
+	{
 		path: "/",
 		name: "Trash",
 		component: () =>
-			import( /* webpackChunkName: "trash" */ "../views/Trash/index.vue"),
+			import(/* webpackChunkName: "trash" */ "../views/Trash/index.vue"),
 	},
 	{
 		path: "/myPage/:nickname",
