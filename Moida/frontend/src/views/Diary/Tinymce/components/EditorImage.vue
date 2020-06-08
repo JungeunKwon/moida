@@ -5,8 +5,14 @@
 			icon="el-icon-upload"
 			size="mini"
 			@click="dialogVisible = true"
-		>photo upload</el-button>
-		<v-dialog v-model="dialogVisible" max-width="500px" background-color="white" background="white">
+			>photo upload</el-button
+		>
+		<v-dialog
+			v-model="dialogVisible"
+			max-width="500px"
+			background-color="white"
+			background="white"
+		>
 			<div class="tinymcemodal">
 				<div class="tinymceimgbtn">
 					<img-inputer
@@ -17,7 +23,7 @@
 						placeholder="Drop file here or click"
 						bottom-text="Drop file here or click"
 						exceed-size-text="사진의 크기가 초과하였습니다"
-						:max-size="1024*1024"
+						:max-size="1024 * 1024"
 						width="400px"
 						@onExceed="exceedHandler"
 						id="signUp_img"
@@ -25,10 +31,16 @@
 				</div>
 				<div>
 					<div style="display:inline-block; margin:10px">
-						<el-button class="diaryWriteBtn" @click="handleSubmit">Confirm</el-button>
+						<el-button class="diaryWriteBtn" @click="handleSubmit"
+							>Confirm</el-button
+						>
 					</div>
 					<div style="display:inline-block; margin:10px">
-						<el-button class="diaryWriteBtn" @click="dialogVisible = false">Cancel</el-button>
+						<el-button
+							class="diaryWriteBtn"
+							@click="dialogVisible = false"
+							>Cancel</el-button
+						>
 					</div>
 				</div>
 			</div>

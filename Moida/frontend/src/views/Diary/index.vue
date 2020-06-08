@@ -1,21 +1,36 @@
 <template>
 	<div class="diarycontainer">
 		<div class="diraydrawer">
-			<v-app-bar-nav-icon @click.stop="diarydrawer = !diarydrawer"></v-app-bar-nav-icon>
+			<v-app-bar-nav-icon
+				@click.stop="diarydrawer = !diarydrawer"
+			></v-app-bar-nav-icon>
 		</div>
+
 		<v-navigation-drawer v-model="diarydrawer" absolute temporary>
 			<v-list nav dense>
 				<v-list-group value="true">
 					<template v-slot:activator>
 						<v-list-item-title>정렬</v-list-item-title>
 					</template>
-					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
-						<v-list-item v-for="item in sortlist" :key="item.id" @click="changesortSmall(item.text)">
-							<v-list-item-title>{{ item.text }}</v-list-item-title>
+					<v-list-item-group
+						v-model="group"
+						active-class="deep-purple--text text--accent-4"
+					>
+						<v-list-item
+							v-for="item in sortlist"
+							:key="item.id"
+							@click="changesortSmall(item.text)"
+						>
+							<v-list-item-title>{{
+								item.text
+							}}</v-list-item-title>
 						</v-list-item>
 					</v-list-item-group>
 				</v-list-group>
-				<v-list-item-group v-model="group2" active-class="deep-purple--text text--accent-4">
+				<v-list-item-group
+					v-model="group2"
+					active-class="deep-purple--text text--accent-4"
+				>
 					<v-list-item @click="getDiaryByfilter('전체보기')">
 						<v-list-item-title>전체보기</v-list-item-title>
 					</v-list-item>
@@ -55,10 +70,18 @@
 				<div class="sharedPaper mini">내가쓴글</div>
 			</div>
 		</div>
+
 		<div class="middlediary">
-			<div class="diarymasonry" v-lazy-container="{ selector: 'diarycard' }">
+			<div
+				class="diarymasonry"
+				v-lazy-container="{ selector: 'diarycard' }"
+			>
 				<div v-for="diary in diaries" :key="diary.id" class="diarycard">
-					<DiaryCard :diary="diary" @load="rendered" class="diary-card-content" />
+					<DiaryCard
+						:diary="diary"
+						@load="rendered"
+						class="diary-card-content"
+					/>
 				</div>
 			</div>
 		</div>
@@ -138,6 +161,7 @@ export default {
 			"searchById",
 			"putDiary",
 		]),
+
 		async getAllDiary() {
 			await this.getDiary()
 				.then(response => {
@@ -149,6 +173,7 @@ export default {
 				});
 			await this.resizeAllMasonryItems();
 		},
+
 		getDiaryByfilter(filter) {
 			this.sorted = "";
 			if (filter == "전체보기") {

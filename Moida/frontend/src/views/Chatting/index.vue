@@ -2,11 +2,18 @@
 	<div id="chatting">
 		<!-- <v-btn @click="increateRoom">템ㅅ프</v-btn> -->
 		<div id="chat_left">
-			<div v-for="(chat, idx) in chatList" id="chat" :key="idx" @click="enterRoom(chat)">
-				<img id="chat_userImg" :src="chat.account.profileImg" />
-				<div id="chat_nickname">{{ chat.account.nickname }}</div>
+			<div
+				v-for="(chat, idx) in chatList"
+				id="chat"
+				:key="idx"
+				@click="inenterRoom(chat)"
+			>
+				<img id="chat_userImg" :src="chat.userProfile" />
+				<div id="chat_nickname">{{ chat.userNickname }}</div>
 				<div class="chat_left_content">
-					<div id="chat_list_content">{{getContent(chat.lastSentence)}}</div>
+					<div id="chat_list_content">
+						{{ getContent(chat.lastSentence) }}
+					</div>
 
 					<div id="chat_date">{{ getLastDate(chat.lastDate) }}</div>
 				</div>
@@ -37,14 +44,7 @@ export default {
 	data() {
 		return {
 			isOpen: false,
-			chatList: [
-				{
-					account: {
-						profileImg: "",
-						nickname: "123",
-					},
-				},
-			],
+			chatList: [],
 			chattingkey: 0,
 			chat: {
 				user: "",
@@ -66,8 +66,27 @@ export default {
 		// store.state.isChat = 0;
 		//this.createRoom();
 	},
-
 	created() {
+		var targetNickname = this.$store.getters.targetNickname;
+		if (targetNickname != "") {
+			this.roomCheck({
+				host: this.$store.getters.nickname,
+				user: targetNickname,
+			})
+				.then(response => {
+					if (response.data == "") {
+						console.log("채팅방 생성하셈");
+						this.increateRoom(targetNickname);
+					} else {
+						console.log("채팅방!!", response.data);
+						this.inenterRoom(response.data);
+					}
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		}
+		this.SET_TARGET_NICKNAME("");
 		this.findAllRoom();
 	},
 	methods: {
@@ -77,13 +96,14 @@ export default {
 			"getRoomInfo",
 			"createRoom",
 			"getAllRooms",
+			"roomCheck",
 		]),
-
+		...mapMutations("chat", ["SET_TARGET_NICKNAME"]),
 		closeChat() {
 			this.isOpen = false;
 		},
-		async findAllRoom() {
-			await this.getAllRooms(this.$store.getters.nickname)
+		findAllRoom() {
+			this.getAllRooms(this.$store.getters.nickname)
 				.then(response => {
 					this.chatList = response.data;
 				})
@@ -91,22 +111,21 @@ export default {
 					console.log("findAllRoomError :::::", error);
 				});
 		},
-		increateRoom() {
+		increateRoom(targetNickname) {
 			console.log("createRoom");
 			//this.chat.user = this.$store.getters.targetNickname;
 			//this.chat.userpro = this.$store.getters.targetImgUrl;
-			this.createRoom("123")
+			this.createRoom(targetNickname)
 				.then(response => {
-					console.log(res.data);
-					this.chat.roomuuid = res.data.roomuuid;
-					this.isOpen = true;
+					console.log("개설", response.data);
 					this.findAllRoom();
+					this.inenterRoom(response.data);
 				})
 				.catch(err => {
 					console.log("CreateRoom err ", err);
 				});
 		},
-		enterRoom(current) {
+		inenterRoom(current) {
 			if (this.isOpen == true) {
 				this.$refs.chattingref.closeChat();
 				//	this.$refs.chattingref.destroy();
@@ -117,13 +136,14 @@ export default {
 			this.chat = current;
 
 			this.isOpen = true;
-			console.log(this.chat);
+			console.log("열린방!!", this.chat);
 		},
 		getLastDate(date) {
 			if (date == undefined) return;
 			return date.replace("T", " ").substring(0, 16);
 		},
 		getContent(content) {
+			if (content == undefined) return;
 			if (content.length < 10) return content;
 			return content.substring(0, 10) + "...";
 		},

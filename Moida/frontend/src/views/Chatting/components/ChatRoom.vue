@@ -135,15 +135,14 @@ export default {
 			isOn: false,
 		};
 	},
-	mounted() {
+	mounted() {},
+
+	created() {
 		this.targetNickname = this.chat.account.nickname;
 		this.targetImg = this.chat.account.profileImg;
 		this.userNickname = this.$store.getters.nickname;
 		this.roomuuid = this.chat.roomuuid;
-	},
-
-	created() {
-		var socketUrl = "http://k02d106.p.ssafy.io:8080/ws-stomp";
+		var socketUrl = "https://k02d106.p.ssafy.io/ws-stomp";
 		//var socketUrl = "http://192.168.43.253:8080/ws-stomp"; //"http://172.20.10.2:8080/ws-stomp";
 		this.socket = new SockJS(socketUrl);
 		var here = this;
