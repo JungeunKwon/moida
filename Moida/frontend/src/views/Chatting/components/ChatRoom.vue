@@ -1,22 +1,29 @@
 <template>
 	<div id="chatRoom">
 		<div id="chatRoom_top">
-			<img id="chat_back" src="../../../assets/icons/chat_back.png" @click="closeChat()" />
+			<img
+				id="chat_back"
+				src="../../../assets/icons/chat_back.png"
+				@click="closeChat()"
+			/>
 			<div id="targetNickname">{{ targetNickname }}</div>
 			<div id="chat_on">
-				<img :src="isOn ? './icons/on.png' : './icons/off.png'" width="15px" />
+				<img
+					:src="isOn ? './icons/on.png' : './icons/off.png'"
+					width="15px"
+				/>
 			</div>
 		</div>
 		<div id="chats_div">
 			<div v-for="(msg, idx) in messages" id="chats" :key="idx">
-				<div v-if="(msg.writer == targetNickname) " class="you">
+				<div v-if="msg.writer == targetNickname" class="you">
 					<img :src="targetImg" class="targetImg" />
 					<div>
 						<div id="chats_youdate">
 							&nbsp;&nbsp;&nbsp;&nbsp;
 							{{ getLastDate(msg.lastDate) }}
 						</div>
-						<div v-if="msg.type=='SHARE'" class="you_store_div">
+						<div v-if="msg.type == 'SHARE'" class="you_store_div">
 							<!-- <div class="you_store">
 								<div class="store_title" @click="goStore(msg.store.storeId)">
 									<img
@@ -40,13 +47,18 @@
 								</div>
 							</div>-->
 						</div>
-						<div v-if="msg.type != 'SHARE' && msg.content !=''" class="you_msg">{{ msg.content }}</div>
+						<div
+							v-if="msg.type != 'SHARE' && msg.content != ''"
+							class="you_msg"
+						>
+							{{ msg.content }}
+						</div>
 					</div>
 				</div>
 
-				<div v-if="(msg.writer == userNickname)" class="me">
+				<div v-if="msg.writer == userNickname" class="me">
 					<div id="chats_medate">{{ getLastDate(msg.lastDate) }}</div>
-					<div v-if="msg.type=='SHARE'" class="me_store_div">
+					<div v-if="msg.type == 'SHARE'" class="me_store_div">
 						<!-- <div class="me_store">
 							<div class="store_title" @click="goStore(msg.store.storeId)">
 								<img
@@ -70,13 +82,27 @@
 							</div>
 						</div>-->
 					</div>
-					<div v-if="msg.type != 'SHARE' && msg.content !=''" class="me_msg">{{ msg.content }}</div>
+					<div
+						v-if="msg.type != 'SHARE' && msg.content != ''"
+						class="me_msg"
+					>
+						{{ msg.content }}
+					</div>
 				</div>
 			</div>
 		</div>
 		<div id="send_div">
-			<input id="chatRoom_input" v-model="content" type="text" @keyup.enter="sendMessage()" />
-			<img id="send" src="../../../assets/icons/send.png" @click="sendMessage()" />
+			<input
+				id="chatRoom_input"
+				v-model="content"
+				type="text"
+				@keyup.enter="sendMessage()"
+			/>
+			<img
+				id="send"
+				src="../../../assets/icons/send.png"
+				@click="sendMessage()"
+			/>
 		</div>
 	</div>
 </template>
@@ -118,7 +144,7 @@ export default {
 
 	created() {
 		//var socketUrl = "http://k02d106.p.ssafy.io:8080/ws-stomp";
-		var socketUrl = "http://192.168.43.253:8080/ws-stomp"; //"http://172.20.10.2:8080/ws-stomp";
+		var socketUrl = "http://localhost:8080/ws-stomp"; //"http://172.20.10.2:8080/ws-stomp";
 		this.socket = new SockJS(socketUrl);
 		var here = this;
 		this.stompClient = Stomp.over(this.socket);
