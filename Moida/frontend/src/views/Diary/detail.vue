@@ -55,7 +55,7 @@
 		<div class="diarycomment">
 			<div class="diarycommentdetail">
 				<div style="width: 100%;" v-for="(comment, index) in comments" :key="comment.id">
-					<diarycomment :comment="comment" :index="index" @ />
+					<diarycomment :comment="comment" :index="index" />
 				</div>
 			</div>
 			<div class="diarycommentinput">
@@ -205,19 +205,19 @@ export default {
 				nickname: this.$store.getters.nickname,
 				modifiedDate: date,
 				likecount: 0,
+				id: null,
 			};
 			console.log("DATE", data);
 			this.postComment(data)
 				.then(response => {
-					console.log();
+					console.log("댓글!", response);
+					data.id = response.data;
 					this.comments.push(data);
+					this.inputcomment = "";
 				})
 				.catch(error => {
 					console.log(error);
 				});
-		},
-		deletecomment(index) {
-			this.comments.splice(index, 1);
 		},
 	},
 };
@@ -380,6 +380,12 @@ export default {
 		height: 400px;
 	}
 
+	.diarycommentdetail {
+		width: 100%;
+		height: 80%;
+		overflow: auto;
+		display: block;
+	}
 	.diarycommentinput {
 		background-color: whitesmoke;
 		padding: 10px;
