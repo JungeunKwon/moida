@@ -8,6 +8,19 @@
 				<router-view :key="$route.fullPath" />
 			</v-fade-transition>
 		</Layout>
+		<v-btn
+			id="msg_btn"
+			v-if="!isFirst"
+			fab
+			dark
+			fixed
+			bottom
+			right
+			color="#fa8072"
+			@click="goChat"
+		>
+			<v-icon>mdi-message-reply</v-icon>
+		</v-btn>
 	</v-app>
 </template>
 
@@ -28,7 +41,17 @@ export default {
 	data() {
 		return {};
 	},
-	methods: {},
+	methods: {
+		goChat() {
+			let location = "/chat";
+
+			if (this.$route.fullPath != location) {
+				this.$router.push(location);
+			} else {
+				window.location.reload(true);
+			}
+		},
+	},
 };
 </script>
 <style>
@@ -56,5 +79,9 @@ export default {
 }
 ::-webkit-scrollbar-thumb:hover {
 	background-color: rgba(128, 128, 128, 0.808);
+}
+
+#msg_btn {
+	opacity: 0.9;
 }
 </style>
