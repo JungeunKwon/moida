@@ -2,13 +2,25 @@
 	<div id="chatting">
 		<!-- <v-btn @click="increateRoom">템ㅅ프</v-btn> -->
 		<div id="chat_left">
-			<div v-for="(chat, idx) in chatList" id="chat" :key="idx" @click="enterRoom(chat)">
-				<img id="chat_userImg" :src="chat.account.profileImg" />
-				<div id="chat_nickname">{{ chat.account.nickname }}</div>
-				<div class="chat_left_content">
-					<div id="chat_list_content">{{getContent(chat.lastSentence)}}</div>
+			<div
+				v-for="(chat, idx) in chatList"
+				id="chat"
+				:key="idx"
+				@click="inenterRoom(chat)"
+			>
+				<div class="chat_userImg_class">
+					<img id="chat_userImg" :src="chat.userProfile" />
+				</div>
+				<div class="chat_content_class">
+					<div id="chat_nickname">{{ chat.userNickname }}</div>
 
-					<div id="chat_date">{{ getLastDate(chat.lastDate) }}</div>
+					<div id="chat_list_content">
+						{{ getContent(chat.lastSentence) }}
+					</div>
+
+					<p id="chat_date">
+						{{ getLastDate(chat.lastDate) }}
+					</p>
 				</div>
 			</div>
 		</div>
@@ -37,14 +49,7 @@ export default {
 	data() {
 		return {
 			isOpen: false,
-			chatList: [
-				{
-					account: {
-						profileImg: "",
-						nickname: "123",
-					},
-				},
-			],
+			chatList: [],
 			chattingkey: 0,
 			chat: {
 				user: "",
@@ -66,8 +71,42 @@ export default {
 		// store.state.isChat = 0;
 		//this.createRoom();
 	},
-
 	created() {
+		var targetNickname = this.$store.getters.targetNickname;
+		var chat = {
+			userProfile: "",
+			userNickname: "",
+			roomuuid: "",
+		};
+		if (targetNickname != "") {
+			this.roomCheck({
+				host: this.$store.getters.nickname,
+				user: targetNickname,
+			})
+				.then(response => {
+					if (response.data == "") {
+						console.log("채팅방 생성하셈");
+						this.increateRoom(targetNickname);
+					} else {
+						chat.roomuuid = response.data.roomuuid;
+						if (
+							response.data.hostNickname ==
+							this.$store.getters.nickname
+						) {
+							chat.userProfile = response.data.userProfileImg;
+							chat.userNickname = response.data.userNickname;
+						} else {
+							chat.userProfile = response.data.hostProfileImg;
+							chat.userNickname = response.data.hostNickname;
+						}
+						this.inenterRoom(chat);
+					}
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		}
+		this.SET_TARGET_NICKNAME("");
 		this.findAllRoom();
 	},
 	methods: {
@@ -77,13 +116,15 @@ export default {
 			"getRoomInfo",
 			"createRoom",
 			"getAllRooms",
+			"roomCheck",
 		]),
+		...mapMutations("chat", ["SET_TARGET_NICKNAME"]),
 
 		closeChat() {
 			this.isOpen = false;
 		},
-		async findAllRoom() {
-			await this.getAllRooms(this.$store.getters.nickname)
+		findAllRoom() {
+			this.getAllRooms(this.$store.getters.nickname)
 				.then(response => {
 					this.chatList = response.data;
 				})
@@ -91,22 +132,36 @@ export default {
 					console.log("findAllRoomError :::::", error);
 				});
 		},
-		increateRoom() {
+		increateRoom(targetNickname) {
 			console.log("createRoom");
+			var chat = {
+				userProfile: "",
+				userNickname: "",
+				roomuuid: "",
+			};
 			//this.chat.user = this.$store.getters.targetNickname;
 			//this.chat.userpro = this.$store.getters.targetImgUrl;
-			this.createRoom("123")
+			this.createRoom(targetNickname)
 				.then(response => {
-					console.log(res.data);
-					this.chat.roomuuid = res.data.roomuuid;
-					this.isOpen = true;
 					this.findAllRoom();
+					chat.roomuuid = response.data.roomuuid;
+					if (
+						response.data.hostNickname ==
+						this.$store.getters.nickname
+					) {
+						chat.userProfile = response.data.userProfileImg;
+						chat.userNickname = response.data.userNickname;
+					} else {
+						chat.userProfile = response.data.hostProfileImg;
+						chat.userNickname = response.data.hostNickname;
+					}
+					this.inenterRoom(chat);
 				})
 				.catch(err => {
 					console.log("CreateRoom err ", err);
 				});
 		},
-		enterRoom(current) {
+		inenterRoom(current) {
 			if (this.isOpen == true) {
 				this.$refs.chattingref.closeChat();
 				//	this.$refs.chattingref.destroy();
@@ -117,13 +172,13 @@ export default {
 			this.chat = current;
 
 			this.isOpen = true;
-			console.log(this.chat);
 		},
 		getLastDate(date) {
 			if (date == undefined) return;
 			return date.replace("T", " ").substring(0, 16);
 		},
 		getContent(content) {
+			if (content == undefined) return;
 			if (content.length < 10) return content;
 			return content.substring(0, 10) + "...";
 		},
@@ -168,11 +223,12 @@ export default {
 } /* 스크롤 바 상 하단 버튼 */
 
 #chat {
-	height: 70px;
-	padding: 12px;
-	line-height: 50px;
+	height: 80px;
+	padding: 5px;
 	cursor: pointer;
 	width: 100%;
+	display: flex;
+	align-items: center;
 }
 
 #chat:hover {
@@ -187,15 +243,19 @@ export default {
 }
 
 #chat_nickname {
-	float: left;
+	width: 100%;
+	margin: 0;
 	margin-left: 10px;
 	font-weight: 400;
+	text-align: left;
+	height: 30px;
 }
 
 #chat_date {
-	float: right;
-	color: grey;
+	width: 100%;
 	font-size: 12px;
+	text-align: right;
+	height: 20px;
 }
 
 #chat_right {
@@ -214,15 +274,20 @@ export default {
 	cursor: pointer;
 }
 
-#chat_left_content {
-	word-break: break-all;
-	width: calc(100% - 100px);
-	display: inline-block;
-}
 #chat_list_content {
 	word-break: break-all;
-
+	height: 30px;
+	width: 100%;
 	display: inline-block;
+}
+.chat_userImg_class {
+	display: inline-block;
+	width: 60px;
+}
+.chat_content_class {
+	display: inline-block;
+	height: 70px;
+	width: calc(100% - 65px);
 }
 @media screen and (max-width: 774px) {
 	#chatting {
@@ -230,17 +295,6 @@ export default {
 		width: 100%;
 		display: block;
 		position: unset;
-	}
-	#chat {
-		padding: 12px;
-		line-height: 50px;
-		cursor: pointer;
-		width: 100%;
-	}
-	#chat_list_content {
-		word-break: break-all;
-
-		display: inline-block;
 	}
 	#chat_left {
 		position: unset;
@@ -266,18 +320,7 @@ export default {
 		display: block;
 		position: unset;
 	}
-	#chat {
-		padding: 12px;
-		height: 150px;
-		line-height: 50px;
-		cursor: pointer;
-		width: 100%;
-	}
-	#chat_list_content {
-		word-break: break-all;
-		width: 100%;
-		display: inline-block;
-	}
+
 	#chat_left {
 		position: unset;
 		display: block;

@@ -7,17 +7,31 @@
 				<img src="../../assets/icons/info.png" width="20px" />
 			</SharedDiaryInfo>
 		</div>
-
+		<v-btn @click="invite">초대</v-btn>
 		<HabitTracker :sharedDiaryId="detail.id" id="ht"></HabitTracker>
 
 		<div v-if="showCal">
-			<v-date-picker id="sharedCal" v-model="picker" color="#fadf99" @change="getSharedDiaryByDate()" />
+			<v-date-picker
+				id="sharedCal"
+				v-model="picker"
+				color="#fadf99"
+				@change="getSharedDiaryByDate()"
+			/>
 			<div id="sharedCalText" @click="getSharedDiaryAll">전체보기</div>
 		</div>
-		<img v-if="showCalImg" id="shardCalImg" @click="toggleCal()" src="../../assets/icons/cal.png" />
+		<img
+			v-if="showCalImg"
+			id="shardCalImg"
+			@click="toggleCal()"
+			src="../../assets/icons/cal.png"
+		/>
 
 		<div id="sharedDiaryMain">
-			<SharedDiaryItem v-for="(item, idx) in sharedDiarys" :key="idx" :sharedDiary="item" />
+			<SharedDiaryItem
+				v-for="(item, idx) in sharedDiarys"
+				:key="idx"
+				:sharedDiary="item"
+			/>
 		</div>
 
 		<div id="writeDiaryDiv" @click="openWrite">
@@ -50,7 +64,6 @@ export default {
 		this.getSharedDiaryDetail(this.$route.params.id)
 			.then(response => {
 				this.detail = response.data;
-				console.log(this.detail);
 				this.getSD();
 			})
 			.catch(error => {
@@ -68,6 +81,17 @@ export default {
 			"getSharedDiary",
 		]),
 		...mapMutations("sharedDiary", ["TOGGLE_WRITINGSD", "SET_DIARYID"]),
+		...mapMutations("chat", [
+			"SET_TARGET_NICKNAME",
+			"SET_IS_SHARE",
+			"SET_GROUP_ID",
+		]),
+		invite() {
+			this.SET_TARGET_NICKNAME("쩌능님");
+			this.SET_IS_SHARE(true);
+			this.SET_GROUP_ID(this.detail.id);
+			this.$router.push("/chat");
+		},
 		handleResize() {
 			if (window.innerWidth < 1100) {
 				this.showCal = false;

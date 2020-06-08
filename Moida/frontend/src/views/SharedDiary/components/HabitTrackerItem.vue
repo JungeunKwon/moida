@@ -1,93 +1,92 @@
 <template>
-	<div id="habitTrackerItem">
-		<div id="dDay">D-{{dDay}}</div>
-		<div id="htiSubject">{{habitTracker.subject}}</div>
-		<div id="current" @click="doHT">{{habitTracker.isDone ? "했음^-^" : "안했음ㅠ"}}</div>
+	<div class="habitTrackerItem">
+		<div class="itemDesc">
+			<div class="itemDate">{{ startDate }} ~ {{ endDate }}</div>
+			<div>
+				<div class="itemTitle">{{ habitTracker.subject }}</div>
+				<div>{{ habitTracker.description }}</div>
+			</div>
+		</div>
+		<div @click="joinHT">{{ habitTracker.isJoin ? "관두기" : "JOIN" }}</div>
 	</div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
 export default {
-	name: "HabitTrackerItem",
 	props: { habitTracker: {} },
-	data() {
-		return {
-			dDay: 0,
-		};
-	},
-	mounted() {
-		let diff =
-			new Date(this.habitTracker.endDate.substr(0, 10)) -
-			new Date(this.habitTracker.startDate.substr(0, 10));
-		this.dDay = Math.ceil(diff / (1000 * 3600 * 24));
+	computed: {
+		startDate: function() {
+			return this.habitTracker.startDate.substring(0, 10);
+		},
+		endDate: function() {
+			return this.habitTracker.endDate.substring(0, 10);
+		},
 	},
 	methods: {
-		...mapActions("habitTracker", ["doHabitTracker"]),
-		doHT() {
-			console.log({
-				habitid: this.habitTracker.id,
-				clearDate: new Date().toISOString().substring(0, 10),
-				hdescription: "완료",
-			});
-			this.doHabitTracker({
-				habitid: this.habitTracker.id,
-				clearDate: new Date().toISOString().substring(0, 10),
-				hdescription: "완료",
-			})
-				.then(response => {
-					resolve(response);
-				})
-				.catch(error => {
-					reject(error);
-				});
+		...mapActions("habitTracker", [
+			"joinHabitTracker",
+			"leaveHabitTracker",
+		]),
+		joinHT() {
+			if (!this.habitTracker.isJoin) {
+				this.joinHabitTracker(this.habitTracker.id)
+					.then(response => {
+						console.log(response.data);
+						this.habitTracker.isJoin = true;
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			} else {
+				this.leaveHabitTracker(this.habitTracker.id)
+					.then(response => {
+						console.log(response.data);
+						this.habitTracker.isJoin = false;
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			}
+			this.$emit("reload");
 		},
 	},
 };
 </script>
 
 <style>
-#dDay,
-#current {
-	font-family: "KyoboHand";
-}
-
-#habitTrackerItem {
+.habitTrackerItem {
 	display: inline-block;
-	width: 100%;
-	padding: 10px;
-	border-bottom: 1px solid rgba(192, 192, 192, 0.432);
-	line-height: 30px;
+	text-align: left;
+	width: 95%;
+	border-radius: 5px;
+	box-shadow: 1px 1px 3px silver;
+	margin: 10px;
+	padding: 5px;
 }
 
-#dDay,
-#htiSubject {
+.habitTrackerItem > div:first-child {
 	float: left;
 }
 
-#htiSubject {
-	width: 160px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	text-align: left;
-}
-
-#dDay {
-	font-size: 22px;
-}
-
-#current {
+.habitTrackerItem > div:last-child {
 	float: right;
-	font-size: 17px;
+	font-family: "kyoboHand";
+	font-size: 20px;
+	padding: 20px;
+}
+
+.itemDate {
+	font-size: 13px;
+}
+
+.itemTitle {
+	font-weight: 400;
+	font-size: 18px;
+}
+
+.habitTrackerItem > div:last-child:hover {
+	opacity: 0.7;
 	cursor: pointer;
-}
-
-#current:hover {
-	opacity: 0.5;
-}
-
-#habitTrackerItem div:first-child {
-	margin-right: 8px;
 }
 </style>

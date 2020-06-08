@@ -5,16 +5,23 @@
 				<slot />
 			</div>
 		</template>
-		<v-card>
-			<div v-for="(item, idx) in habitTrackers" :key="idx">{{item}}</div>
+		<v-card style="padding: 10px;">
+			<HabitTrackerItem
+				v-for="(item, idx) in habitTrackers"
+				@reload="reload"
+				:habitTracker="item"
+				:key="idx"
+			/>
 		</v-card>
 	</v-dialog>
 </template>
 
 <script>
 import { mapActions, mapMutations } from "vuex";
+import HabitTrackerItem from "./HabitTrackerItem";
 export default {
 	props: { sharedDiaryId: {}, myHabitTrackers: {} },
+	components: { HabitTrackerItem },
 	data() {
 		return {
 			dialog: false,
@@ -22,10 +29,13 @@ export default {
 		};
 	},
 	watch: {
-		sharedDiaryId: function() {
-			console.log("띠로롱 :: " + this.sharedDiaryId);
+		dialog: function() {
 			this.getHT();
 		},
+	},
+	updated() {},
+	computed: {
+		// 계산된 getter
 	},
 	mounted() {},
 	methods: {
@@ -43,12 +53,11 @@ export default {
 
 			this.isJoin();
 		},
+		reload() {
+			this.$router.go(0);
+			// location.reload();
+		},
 		isJoin() {
-			console.log("낶거");
-			console.log(this.myHabitTrackers);
-			console.log("전체");
-			console.log(this.habitTrackers);
-
 			for (let i = 0; i < this.habitTrackers.length; i++) {
 				let flag = false;
 				for (let j = 0; j < this.myHabitTrackers.length; j++) {
@@ -58,14 +67,11 @@ export default {
 						flag = true;
 					}
 				}
-				his.$set(this.myHabitTrackers[i], "isJoin", flag);
+				this.$set(this.habitTrackers[i], "isJoin", flag);
 			}
-			console.log("꺄핳");
-			console.log(this.habitTrackers);
 		},
 	},
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

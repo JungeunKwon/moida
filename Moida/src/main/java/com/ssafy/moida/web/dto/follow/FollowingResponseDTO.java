@@ -13,17 +13,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class FollowResponseDTO {
+public class FollowingResponseDTO {
 	private Long id;
-	private Account following;
+	private String nickname;
+	private String profileimg;
 	
+
 	
-	
-	
-	public FollowResponseDTO(Follow entity) {
+	public FollowingResponseDTO(Follow entity) {
 		super();
 		this.id = entity.getId();
-		this.following = entity.getFollowing();
+		this.nickname = entity.getFollowing().getNickname();
+		this.profileimg = entity.getFollowing().getProfileImg();
 	}
 	
 

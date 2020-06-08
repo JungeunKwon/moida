@@ -25,7 +25,7 @@
 					class="btn-div"
 					v-if="user.nickname !== $store.getters.nickname"
 				>
-					<div>
+					<div @click="gochat">
 						<img src="@/assets/icons/chat.png" />
 					</div>
 					<div v-if="!isFollower" @click="addFollow">
@@ -88,6 +88,10 @@ export default {
 					break;
 				}
 			}
+		},
+		gochat() {
+			this.SET_TARGET_NICKNAME(this.user.nickname);
+			this.$router.push("/chat");
 		},
 	},
 };

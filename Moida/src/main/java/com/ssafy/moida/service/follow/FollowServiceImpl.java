@@ -10,13 +10,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.moida.domain.account.Account;
 import com.ssafy.moida.domain.account.AccountRepository;
+import com.ssafy.moida.domain.follow.Follow;
 import com.ssafy.moida.domain.follow.FollowRepository;
 import com.ssafy.moida.exception.BaseException;
 import com.ssafy.moida.service.account.AccountService;
-import com.ssafy.moida.web.dto.follow.FollowResponseDTO;
+import com.ssafy.moida.web.dto.follow.FollowingResponseDTO;
 import com.ssafy.moida.web.dto.follow.FollowSaveRequest;
 import com.ssafy.moida.web.dto.follow.FollowSeachRequest;
+import com.ssafy.moida.web.dto.follow.FollowerResponseDTO;
 import com.ssafy.moida.web.dto.group.GroupResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -44,31 +47,38 @@ public class FollowServiceImpl implements FollowService{
 
 	@Transactional
 	public Boolean deleteFollow(Long followingid) throws NumberFormatException, BaseException {
-		FollowSaveRequest requestDTO = new FollowSaveRequest();
-		requestDTO.setFollower(accountService.getAccount());
-		requestDTO.setFollowing(accountRepository.findById(followingid).get());
+
+		Account follower = accountService.getAccount();
+		Account following = accountRepository.findById(followingid).get();
 		
+		if(0<followRepository.countByFollowingIdAndFollowerId(followingid, follower.getId())) {
+			Follow follow = followRepository.findByFollowerIdAndFollowingId( follower.getId(),followingid);
+			
+			followRepository.deleteById(follow.getId());
+			return true;
+		}
 		
-		followRepository.delete(requestDTO.toEntity());
+	
 		
-		return true;
+		return false;
 	}
 
 	@Transactional(readOnly=true)
-	public List<FollowResponseDTO> Followinglist() throws NumberFormatException, BaseException {
-		
-		return followRepository.findByFollowingId(accountService.getAccount().getId())
+	public List<FollowingResponseDTO> Followinglist(Long followerid) throws NumberFormatException, BaseException {
+
+		return followRepository.findByFollowerId(followerid)
 				.stream()
-				.map(FollowResponseDTO :: new)
+				.map(FollowingResponseDTO :: new)
 				.collect(Collectors.toList());
 	}
 
 	@Transactional(readOnly=true)
-	public List<FollowResponseDTO> Followerlist() throws NumberFormatException, BaseException {
-		return followRepository.findByFollowerId(accountService.getAccount().getId()).stream()
-				.map(FollowResponseDTO :: new)
+	public List<FollowerResponseDTO> Followerlist(Long followingid) throws NumberFormatException, BaseException {
+		return followRepository.findByFollowingId(followingid).stream()
+				.map(FollowerResponseDTO :: new)
 				.collect(Collectors.toList());
 	}
+	
 	
 
 }

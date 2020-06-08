@@ -23,6 +23,7 @@
 					user.nickname && $store.getters.nickname !== user.nickname
 				"
 				class="sharedPaper mini"
+				@click="gochat"
 			>
 				채팅걸기
 			</div>
@@ -31,6 +32,8 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
 	props: {
 		diaries: { type: Array, default: [] },
@@ -43,6 +46,14 @@ export default {
 	},
 	components: {
 		mof: () => import("./components/followModal"),
+	},
+	methods: {
+		...mapMutations("chat", ["SET_TARGET_NICKNAME"]),
+
+		gochat() {
+			this.SET_TARGET_NICKNAME(this.user.nickname);
+			this.$router.push("/chat");
+		},
 	},
 };
 </script>

@@ -9,6 +9,8 @@ import {
 const state = {
 	targetNickname: "",
 	tartgetImgUrl: "",
+	isShare: false,
+	groupid: 0,
 };
 
 const mutations = {
@@ -17,6 +19,12 @@ const mutations = {
 	},
 	SET_TARGET_IMG_URL: (state, data) => {
 		state.tartgetImgUrl = data;
+	},
+	SET_IS_SHARE: (state, data) => {
+		state.isShare = data;
+	},
+	SET_GROUP_ID: (state, data) => {
+		state.groupid = data;
 	},
 };
 
@@ -80,10 +88,14 @@ const actions = {
 				});
 		});
 	},
-	roomCheck({ commit }, host, user) {
+	roomCheck({ commit }, data) {
 		return new Promise((resolve, reject) => {
-			roomCheck(host, user)
+			roomCheck(data.host, data.user)
 				.then(response => {
+					if (response.data.code != undefined) {
+						alert(response.data.msg);
+						return;
+					}
 					resolve(response);
 				})
 				.catch(error => {

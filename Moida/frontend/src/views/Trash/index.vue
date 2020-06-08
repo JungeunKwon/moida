@@ -2,8 +2,9 @@
 	<div class="trashcontainer">
 		<div class="trashtop">
 			<TrashDialog :items="items">
-				<div class="todack" dark>토닥토닥</div>
+				<div class="todack">음악 공유</div>
 			</TrashDialog>
+			<img src="@/assets/icons/click.png" />
 		</div>
 		<div class="trashdrawer">
 			<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -16,7 +17,11 @@
 					</template>
 					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
 						<v-list-item v-for="item in sortlist" :key="item.id" @click="changesortSmall(item.text)">
-							<v-list-item-title>{{ item.text }}</v-list-item-title>
+							<v-list-item-title>
+								{{
+								item.text
+								}}
+							</v-list-item-title>
 						</v-list-item>
 					</v-list-item-group>
 				</v-list-group>
@@ -90,15 +95,11 @@
 			</div>
 		</div>
 
-		<div class="bottomtrash">
-			<div class="bottomtrashbtn">
-				<TrashInsertDialog :items="items" @getEtrashMain="getEtrashMain">
-					<v-btn>
-						<v-icon x-large>mdi-heart-box</v-icon>
-					</v-btn>
-				</TrashInsertDialog>
+		<TrashInsertDialog :items="items" @getEtrashMain="getEtrashMain">
+			<div id="writeDiaryDiv">
+				<v-icon large>mdi-delete</v-icon>&nbsp;감쓰 버리기
 			</div>
-		</div>
+		</TrashInsertDialog>
 	</div>
 </template>
 
@@ -144,49 +145,55 @@ export default {
 					//공포 보라 혐오 녹색
 					id: 0,
 					text: "기쁨",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src: "https://image.flaticon.com/icons/svg/725/725107.svg",
 					colorcode: "#F48FB17F",
 				},
 				{
 					id: 1,
 					text: "신뢰",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src: "https://image.flaticon.com/icons/svg/725/725118.svg",
 					colorcode: "#90CAF97F",
 				},
 				{
 					id: 2,
 					text: "공포",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725023.png",
 					colorcode: "#6161617F",
 				},
 				{
 					id: 3,
 					text: "기대",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725079.png",
 					colorcode: "#FFF59D7F",
 				},
 				{
 					id: 4,
 					text: "놀라움",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725102.png",
 					colorcode: "#FFAB917F",
 				},
 				{
 					id: 5,
 					text: "슬픔",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725038.png",
 					colorcode: "#CE93D87F",
 				},
 				{
 					id: 6,
 					text: "혐오",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725056.png",
 					colorcode: "#BCAAA47F",
 				},
 				{
 					id: 7,
 					text: "분노",
-					src: "https://cdn.vuetifyjs.com/images/john.png",
+					src:
+						"https://image.flaticon.com/icons/png/512/725/725022.png",
 					colorcode: "#EF9A9A7F",
 				},
 			],
@@ -444,13 +451,6 @@ export default {
 .bottomtrashbtn {
 	background-color: #fce4ec;
 }
-.todack {
-	background-color: #b2dfdb;
-
-	border-radius: 5px;
-	color: white;
-	border: 1px solid rgba(192, 192, 192, 0.363);
-}
 
 .v-text-field.v-input--is-focused > .v-input__control > .v-input__slot:after {
 	display: inline-block;
@@ -521,8 +521,31 @@ export default {
 	top: 15px;
 	left: 15px;
 	width: 120px;
-	height: 50px;
+	height: 35px;
 	cursor: pointer;
+	color: black;
+	background-color: #b2dfdb;
+	border-radius: 5px 5px 0 0;
+	box-shadow: -1px -1px 3px rgba(0, 0, 0, 0.541);
+}
+.todack:hover {
+	transform: scale(1.1);
+}
+
+.todack {
+	line-height: 35px;
+	width: 100%;
+	font-family: "kyoboHand";
+	font-size: 20px;
+	padding-right: 10px;
+	transition: 0.1s ease;
+}
+
+.trashtop img {
+	position: fixed;
+	top: 15px;
+	left: 100px;
+	width: 40px;
 }
 
 .filtertoggle {
@@ -552,5 +575,26 @@ export default {
 
 #app-view > div.paper.p3 > div > div.sort > div.sharedMenu.sel > div {
 	margin-top: -26px;
+}
+
+/* 글쓰기 버튼 */
+#writeDiaryDiv {
+	position: absolute;
+	font-family: KyoboHand;
+	font-size: 20px;
+	bottom: 30px;
+	right: -85px;
+	width: 130px;
+	background-color: white;
+	height: 45px;
+	padding: 5px;
+	border-radius: 10px 0 0 10px;
+	box-shadow: 1px 1px 5px rgba(128, 128, 128, 0.61);
+	transition: 0.3s ease;
+	cursor: pointer;
+}
+
+#writeDiaryDiv:hover {
+	right: 0;
 }
 </style>

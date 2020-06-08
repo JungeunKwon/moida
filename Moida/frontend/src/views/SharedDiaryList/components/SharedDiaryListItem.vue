@@ -56,7 +56,9 @@ export default {
 		openSharedDiaryDetail() {
 			this.getSharedDiaryDetail(this.item.id)
 				.then(response => {
+					console.log("이게 왜안되지?");
 					this.detail = response.data;
+					console.log(this.detail);
 					if (this.isMyDiaryList) {
 						this.$router.push(`/shared/${this.detail.id}`);
 					}

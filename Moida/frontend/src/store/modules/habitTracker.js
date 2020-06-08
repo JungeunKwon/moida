@@ -7,11 +7,18 @@ import {
     joinHabitTracker,
     leaveHabitTracker,
     deleteHabitTracker,
-    doHabitTracker
+    doHabitTracker,
+    deleteDoHabitTracker
 } from "@/api/habitTracker";
 
-const state = {};
-const mutations = {};
+const state = {
+    sharedDiaryId: 0,
+};
+const mutations = {
+    SET_SD_ID: function (state, id) {
+        state.sharedDiaryId = id;
+    }
+};
 
 const actions = {
     createHabitTracker({
@@ -124,6 +131,19 @@ const actions = {
     }, data) {
         return new Promise((resolve, reject) => {
             doHabitTracker(data)
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        });
+    },
+    deleteDoHabitTracker({
+        commit
+    }, data) {
+        return new Promise((resolve, reject) => {
+            deleteDoHabitTracker(data)
                 .then(response => {
                     resolve(response);
                 })

@@ -21,66 +21,43 @@
 				</v-img>
 			</div>
 		</v-card>
-
-		<div v-if="innerdialog">
-			<div class="TrashMusicCardTitle" dark>토닥토닥</div>
-			<div class="TrashMusicCard">
-				<div id="trashmusicinserttext">
-					<p class="font-weight-bold">
-						다른 유저들에게 자신만의 노래를 추천해보세요.
-					</p>
-
-					<v-card-text>
-						<v-chip-group
-							v-model="selection"
-							active-class="deep-purple accent-4 white--text"
-							column
-						>
-							<div style="margin: 0 auto; width:90%">
-								<v-row align="center" justify="start">
-									<v-col
-										v-for="item in items"
-										:key="item.text"
-										class="shrink"
-									>
-										<v-chip>
-											<v-avatar left>
-												<v-img :src="item.src"></v-img>
-											</v-avatar>
-											{{ item.text }}
-										</v-chip>
-									</v-col>
-								</v-row>
-							</div>
-						</v-chip-group>
-						<div style="margin: 0 auto; width:70%">
-							<p class="font-weight-bold">
-								해당 감정에 자주 듣는 노래 url을
-								입력해주세요.(유투브)
-							</p>
-							<div style="margin: 0 auto; width:100%;">
-								<div
-									style="display: inline-block; width: 80%; border:2px black"
-								>
-									<v-text-field
-										v-model="url"
-										@keyup.enter="insert"
-										label="url"
-										ref="url"
-										required
-										:rules="[youtube_parser]"
-									/>
-								</div>
-								<v-btn
-									text
-									style="display: inline-block; width: 20%;"
-									@click="inserttodack"
-									>입력</v-btn
-								>
-							</div>
-						</div>
-					</v-card-text>
+		<div v-if="innerdialog" class="TrashMusicCard">
+			<div id="TrashMusicBack">
+				<div class="tmTitle">다른 유저들에게 자신만의 노래를 추천해보세요.</div>
+				<v-chip-group
+					style="margin-left: 23px"
+					v-model="selection"
+					active-class="amber lighten-4 accent-4 white--text"
+					column
+				>
+					<div>
+						<v-row align="center" justify="start">
+							<v-col v-for="item in items" :key="item.text" class="shrink">
+								<v-chip color="white" large>
+									<img :src="item.src" width="30px" />
+								</v-chip>
+							</v-col>
+						</v-row>
+					</div>
+				</v-chip-group>
+				<div class="selText" v-if="selection != undefined">
+					<span>선택된 감정은&nbsp;</span>
+					<span>"{{items[selection].text}}"</span>
+					<span>&nbsp;입니다</span>
 				</div>
+				<div>
+					<v-text-field
+						v-model="url"
+						@keyup.enter="insert"
+						label="url"
+						ref="url"
+						required
+						color="gray"
+						placeholder="해당 감정에 알맞은 url을 입력해주세요.(유투브)"
+						:rules="[youtube_parser]"
+					/>
+				</div>
+				<v-btn @click="inserttodack">등록</v-btn>
 			</div>
 		</div>
 	</v-dialog>
@@ -98,6 +75,7 @@ export default {
 	},
 	data() {
 		return {
+			selText: "",
 			trashdialog: false,
 			innerdialog: true,
 			url: "",
@@ -115,14 +93,14 @@ export default {
 				this.thumbnail = "";
 				this.musicname = "";
 				this.selection = null;
-				$("#trashmusicinserttext").css({
+				$("#TrashMusicBack").css({
 					"background-color": "#ffffff",
 				});
 			}
 		},
 		selection: function(newVal, oldVal) {
 			if (this.selection == undefined) {
-				$("#trashmusicinserttext").css({
+				$("#TrashMusicBack").css({
 					"background-color": "#ffffff",
 				});
 				return;
@@ -131,7 +109,7 @@ export default {
 			if (!this.trashdialog) return;
 			for (var i = 0; i < this.items.length; i++) {
 				if (this.items[i].text == item.text) {
-					$("#trashmusicinserttext").css({
+					$("#TrashMusicBack").css({
 						"background-color": this.items[i].colorcode,
 					});
 					break;
@@ -234,6 +212,27 @@ export default {
 	z-index: 1;
 	background-color: white;
 }
+
+#TrashMusicBack {
+	width: 100%;
+	padding: 20px;
+}
+
+.tmTitle {
+	margin-top: 5px;
+	padding: 5px;
+	background-color: white;
+	font-family: "kyoboHand";
+	font-size: 18px;
+	box-shadow: 1px 1px 3px silver;
+	border-radius: 5px;
+}
+
+.selText span:nth-child(2) {
+	font-family: "kyoboHand";
+	font-size: 25px;
+}
+
 .TrashMusicCardTitle {
 	width: 120px;
 	height: 30px;
