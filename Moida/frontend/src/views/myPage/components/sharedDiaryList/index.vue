@@ -36,7 +36,7 @@ import { mapMutations } from "vuex";
 
 export default {
 	props: {
-		diaries: { type: Array, default: [] },
+		diaries: { type: Array, default: () => [] },
 		user: { typs: Object, default: {} },
 	},
 	data() {
