@@ -2,18 +2,34 @@
 	<div class="sdl-root">
 		<div class="sharedMenu mini">
 			<img class="tape" src="@/assets/images/tape.png" />
-			<div class="sharedPaper mini">내가 참가한 다이어리</div>
+			<div class="sharedPaper mini" @click="showModal=true">참가한 다이어리</div>
+			<img
+				v-if="user.nickname && $store.getters.nickname !== user.nickname"
+				class="tape"
+				src="@/assets/images/tape.png"
+			/>
+			<div
+				v-if="user.nickname && $store.getters.nickname !== user.nickname"
+				class="sharedPaper mini"
+			>채팅걸기</div>
 		</div>
-		<div class="itemList">
-			<item />
-		</div>
+		<diary-list v-if="showModal" :diaries="diaries" @close="showModal=false" />
 	</div>
 </template>
 
 <script>
 export default {
+	props: {
+		diaries: { type: Array, default: [] },
+		user: { typs: Object, default: {} },
+	},
+	data() {
+		return {
+			showModal: false,
+		};
+	},
 	components: {
-		item: () => import("./components/SharedDiaryListItem"),
+		diaryList: () => import("./components/sharedDiaryList"),
 	},
 };
 </script>
@@ -25,7 +41,7 @@ export default {
 	height: 100%;
 	display: flex;
 	.sharedMenu {
-		flex: 3;
+		flex: 1;
 		margin: 0;
 		&.mini {
 			&:hover {
@@ -41,14 +57,10 @@ export default {
 			width: fit-content !important;
 			height: fit-content !important;
 			&:hover {
-				cursor: unset;
+				cursor: pointer;
 				transform: none;
 			}
 		}
-	}
-
-	.itemList {
-		flex: 7;
 	}
 }
 </style>

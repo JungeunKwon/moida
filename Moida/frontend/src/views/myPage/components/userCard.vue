@@ -6,9 +6,11 @@
 		</el-col>
 		<el-col :span="18" class="us-content">
 			<el-row style="height: 30%">
-				<el-col class="us-nickname">{{
+				<el-col class="us-nickname">
+					{{
 					$route.params.nickname
-				}}</el-col>
+					}}
+				</el-col>
 			</el-row>
 			<el-row style="height: 70%">
 				<el-col :span="12" class="us-follow">팔로워:</el-col>
@@ -27,7 +29,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .us-root {
 	height: 100%;
 	width: 100%;
@@ -38,7 +40,8 @@ export default {
 	width: 100%;
 }
 .us-image {
-	height: 50%;
+	height: 100px;
+	width: 100px;
 	vertical-align: middle;
 	border-radius: 50%;
 }
