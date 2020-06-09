@@ -1,10 +1,16 @@
 <template>
 	<div class="sdl-root">
 		<div class="sharedMenu mini">
-			<img class="tape" src="@/assets/images/tape.png" />
-			<div class="sharedPaper mini" @click="showModal = true">
-				참가한 다이어리
-			</div>
+			<img
+				v-if="diaries.length !== 0"
+				class="tape"
+				src="@/assets/images/tape.png"
+			/>
+			<mof :diaries="diaries">
+				<div v-if="diaries.length !== 0" class="sharedPaper mini">
+					참가한 다이어리
+				</div>
+			</mof>
 			<img
 				v-if="
 					user.nickname && $store.getters.nickname !== user.nickname
@@ -22,11 +28,6 @@
 				채팅걸기
 			</div>
 		</div>
-		<diary-list
-			v-if="showModal"
-			:diaries="diaries"
-			@close="showModal = false"
-		/>
 	</div>
 </template>
 
@@ -35,7 +36,7 @@ import { mapMutations } from "vuex";
 
 export default {
 	props: {
-		diaries: { type: Array, default: [] },
+		diaries: { type: Array, default: () => [] },
 		user: { typs: Object, default: {} },
 	},
 	data() {
@@ -44,7 +45,7 @@ export default {
 		};
 	},
 	components: {
-		diaryList: () => import("./components/sharedDiaryList"),
+		mof: () => import("./components/followModal"),
 	},
 	methods: {
 		...mapMutations("chat", ["SET_TARGET_NICKNAME"]),

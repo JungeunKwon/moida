@@ -1,15 +1,17 @@
 <template>
 	<div class="full-calendar-body">
 		<div class="weeks">
-			<strong
-				class="week"
-				v-for="dayIndex in 7"
-				:key="dayIndex"
-			>{{ (dayIndex - 2) | localeWeekDay(firstDay, locale) }}</strong>
+			<strong class="week" v-for="dayIndex in 7" :key="dayIndex">{{
+				(dayIndex - 2) | localeWeekDay(firstDay, locale)
+			}}</strong>
 		</div>
 		<div class="dates" ref="dates">
 			<div class="dates-bg">
-				<div class="week-row" v-for="(week, idx) in currentDates" :key="idx">
+				<div
+					class="week-row"
+					v-for="(week, idx) in currentDates"
+					:key="idx"
+				>
 					<div
 						class="day-cell"
 						v-for="(day, idx) in week"
@@ -86,6 +88,7 @@ export default {
 	},
 	props: {
 		events: { type: Array, default: [] },
+		nickname: "",
 	},
 	created() {
 		window.addEventListener("click", this.outOfMore);
@@ -131,6 +134,10 @@ export default {
 				this.currentMonth,
 				this.firstDay,
 			);
+			let temp = this.events.filter(event => {
+				return event.nickname === this.nickname;
+			});
+			temp;
 			let calendar = [];
 			for (let perWeek = 0; perWeek < 6; perWeek++) {
 				let week = [];
@@ -144,7 +151,7 @@ export default {
 						),
 						weekDay: perDay,
 						date: moment(monthViewStartDate),
-						events: this.addEvents(monthViewStartDate),
+						events: this.addEvents(temp, monthViewStartDate),
 					});
 					monthViewStartDate.add(1, "day");
 				}
@@ -152,8 +159,8 @@ export default {
 			}
 			return calendar;
 		},
-		addEvents(date) {
-			let thisDayEvents = this.events.filter(event => {
+		addEvents(tempEvents, date) {
+			let thisDayEvents = tempEvents.filter(event => {
 				let edate = moment(event.day);
 				return date.isSame(edate, "day");
 			});

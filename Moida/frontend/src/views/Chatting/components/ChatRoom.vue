@@ -24,28 +24,40 @@
 							{{ getLastDate(msg.lastDate) }}
 						</div>
 						<div v-if="msg.type == 'SHARE'" class="you_store_div">
-							<!-- <div class="you_store">
-								<div class="store_title" @click="goStore(msg.store.storeId)">
+							<div
+								@click="openSharedDiaryDetail(msg.group.id)"
+								id="chatsharedDiaryItem"
+							>
+								<div id="chatdetailImgDiv">
 									<img
-										class="store_icon"
-										src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/place_icon.png"
-									/>
-									<div class="store_name">{{ msg.store.storeName }}</div>
-									<img
-										class="store_arrow"
-										src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png"
+										id="detailImg"
+										:src="msg.group.imgUrl"
 									/>
 								</div>
-								<div class="store_desc">
-									<div class="store_img_div">
-										<img class="store_img" :src="msg.store.storeImage" />
+								<div id="chatdiaryInfo">
+									<div id="subjectDiv">
+										<div id="roomId">
+											{{ msg.group.id }}
+										</div>
+										<div id="roomSubject">
+											{{ msg.group.subject }}
+										</div>
 									</div>
-									<div class="store_detail">
-										<div>REVIEWS : {{ msg.store.reviewCnt }}</div>
-										<div>TEL : {{ msg.store.storeTel }}</div>
+									<div id="hostDiv">
+										<div id="hostName">
+											{{ msg.group.hostNickname }}
+										</div>
+										<img
+											id="hostIcon"
+											:src="msg.group.hostProfileImg"
+										/>
+									</div>
+									<div style="clear: both;" />
+									<div id="desc">
+										{{ msg.group.description }}
 									</div>
 								</div>
-							</div>-->
+							</div>
 						</div>
 						<div
 							v-if="msg.type != 'SHARE' && msg.content != ''"
@@ -59,29 +71,39 @@
 				<div v-if="msg.writer == userNickname" class="me">
 					<div id="chats_medate">{{ getLastDate(msg.lastDate) }}</div>
 					<div v-if="msg.type == 'SHARE'" class="me_store_div">
-						<!-- <div class="me_store">
-							<div class="store_title" @click="goStore(msg.store.storeId)">
-								<img
-									class="store_icon"
-									src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/place_icon.png"
-								/>
-								<div class="store_name">{{ msg.store.storeName }}</div>
-								<img
-									class="store_arrow"
-									src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png"
-								/>
+						<div
+							@click="openSharedDiaryDetail(msg.group.id)"
+							id="chatsharedDiaryItem"
+						>
+							<div id="chatdetailImgDiv">
+								<img id="detailImg" :src="msg.group.imgUrl" />
 							</div>
-							<div class="store_desc">
-								<div class="store_img_div">
-									<img class="store_img" :src="msg.store.storeImage" />
+							<div id="chatdiaryInfo">
+								<div id="subjectDiv">
+									<div id="roomId">
+										{{ msg.group.id }}
+									</div>
+									<div id="roomSubject">
+										{{ msg.group.subject }}
+									</div>
 								</div>
-								<div class="store_detail">
-									<div>REVIEWS : {{ msg.store.reviewCnt }}</div>
-									<div>TEL : {{ msg.store.storeTel }}</div>
+								<div id="hostDiv">
+									<div id="hostName">
+										{{ msg.group.hostNickname }}
+									</div>
+									<img
+										id="hostIcon"
+										:src="msg.group.hostProfileImg"
+									/>
+								</div>
+								<div style="clear: both;" />
+								<div id="desc">
+									{{ msg.group.description }}
 								</div>
 							</div>
-						</div>-->
+						</div>
 					</div>
+
 					<div
 						v-if="msg.type != 'SHARE' && msg.content != ''"
 						class="me_msg"
@@ -133,6 +155,7 @@ export default {
 			stompClient: null,
 			socket: null,
 			isOn: false,
+			detail: {},
 		};
 	},
 	mounted() {},
@@ -170,6 +193,9 @@ export default {
 					}),
 					{},
 				);
+				if (here.$store.getters.isShare == true) {
+					here.sendShare();
+				}
 			},
 			error => {
 				alert("error create " + error);
@@ -198,6 +224,12 @@ export default {
 		}
 	},
 	methods: {
+		...mapActions("sharedDiaryList", [
+			"getSharedDiaryDetail",
+			"joinSharedDiary",
+		]),
+		...mapMutations("chat", ["SET_IS_SHARE", "SET_GROUP_ID"]),
+
 		getLastDate(date) {
 			if (date == undefined) return;
 			return date.replace("T", " ").substring(0, 16);
@@ -208,13 +240,15 @@ export default {
 				JSON.stringify(
 					{
 						type: "SHARE",
-						roomuuid: this.chat.roomuuid,
+						roomuuid: this.roomuuid,
 						writer: this.userNickname,
-						content: "",
+						content: this.$store.getters.groupid,
 					},
 					{},
 				),
 			);
+			this.SET_IS_SHARE(false);
+			this.SET_GROUP_ID(0);
 		},
 		closeChat() {
 			console.log("closeChat()");
@@ -253,7 +287,17 @@ export default {
 			);
 			this.content = "";
 		},
-
+		openSharedDiaryDetail(id) {
+			if (confirm("정말 참여하시겠어요?")) {
+				this.joinSharedDiary({ groupId: id })
+					.then(response => {
+						this.$router.push(`/shared/${id}`);
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			}
+		},
 		recvMessage(recv) {
 			console.log("recvMessage");
 			console.log(recv);
@@ -281,7 +325,7 @@ export default {
 					recv.loguser != this.userNickname
 				)
 					return;
-				this.recvStore(recv);
+				this.recvGroup(recv);
 			} else {
 				this.messages.push({
 					roomuuid: recv.roomuuid,
@@ -291,8 +335,33 @@ export default {
 					lastDate: recv.lastDate,
 				});
 			}
-			this.messages.sort((a, b) => new Date(a.date) - new Date(b.date));
+			this.messages.sort(
+				(a, b) => new Date(a.lastDate) - new Date(b.lastDate),
+			);
 			console.log(this.messages);
+		},
+
+		recvGroup(recv) {
+			this.getSharedDiaryDetail(recv.content)
+				.then(response => {
+					this.detail = response.data;
+					console.log(this.detail);
+					this.messages.push({
+						roomuuid: recv.roomuuid,
+						writer: recv.writer,
+						content: recv.content,
+						type: recv.type,
+						lastDate: recv.lastDate,
+						group: response.data,
+					});
+					this.messages.sort(
+						(a, b) => new Date(a.lastDate) - new Date(b.lastDate),
+					);
+					console.log(this.messages);
+				})
+				.catch(error => {
+					console.log(error);
+				});
 		},
 		connect() {
 			this.stompClient.connect(
@@ -316,6 +385,10 @@ export default {
 							content: "",
 						}),
 					);
+					console.log("TRUE? ", this.$store.getters.isShare);
+					if (this.$store.getters.isShare == true) {
+						this.sendShare();
+					}
 				},
 				error => {
 					alert("error " + error);
@@ -527,6 +600,31 @@ export default {
 	padding-bottom: 5px;
 }
 
+#chatsharedDiaryItem {
+	background-color: white;
+	overflow: hidden;
+	display: inline-block;
+	width: 24%;
+	margin: 5px;
+	border-radius: 5px;
+	/* border: 1px solid rgba(192, 192, 192, 0.363); */
+	box-shadow: 1px 1px 7px rgba(192, 192, 192, 0.589);
+	width: 300px;
+	cursor: pointer;
+}
+#chatdetailImgDiv {
+	float: left;
+	width: 30%;
+	height: 100px;
+	overflow: hidden;
+}
+
+#chatdiaryInfo {
+	padding: 10px;
+	text-align: left;
+	float: right;
+	width: 70%;
+}
 #send {
 	cursor: pointer;
 	float: left;
