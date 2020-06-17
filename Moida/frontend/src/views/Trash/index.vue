@@ -17,11 +17,7 @@
 					</template>
 					<v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
 						<v-list-item v-for="item in sortlist" :key="item.id" @click="changesortSmall(item.text)">
-							<v-list-item-title>
-								{{
-								item.text
-								}}
-							</v-list-item-title>
+							<v-list-item-title>{{ item.text }}</v-list-item-title>
 						</v-list-item>
 					</v-list-item-group>
 				</v-list-group>
@@ -96,7 +92,7 @@
 		</div>
 
 		<TrashInsertDialog :items="items" @getEtrashMain="getEtrashMain">
-			<div id="writeDiaryDiv">
+			<div id="writeTrashDiaryDiv">
 				<v-icon large>mdi-delete</v-icon>&nbsp;감쓰 버리기
 			</div>
 		</TrashInsertDialog>
@@ -390,6 +386,7 @@ export default {
 };
 </script>
 <style>
+@import url("../../utils/css/memo.css");
 .trashcontainer {
 	background-color: rgba(192, 192, 192, 0.1);
 	height: 100%;
@@ -578,7 +575,7 @@ export default {
 }
 
 /* 글쓰기 버튼 */
-#writeDiaryDiv {
+#writeTrashDiaryDiv {
 	position: absolute;
 	font-family: KyoboHand;
 	font-size: 20px;
@@ -594,7 +591,7 @@ export default {
 	cursor: pointer;
 }
 
-#writeDiaryDiv:hover {
+#writeTrashDiaryDiv:hover {
 	right: 0;
 }
 </style>

@@ -1,13 +1,15 @@
 @font-face {
-	font-family: 'Binggrae-Bold';
-	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Binggrae-Bold.woff') format('woff');
+	font-family: "Binggrae-Bold";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Binggrae-Bold.woff")
+		format("woff");
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: 'MapoFlowerIsland';
-	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff') format('woff');
+	font-family: "MapoFlowerIsland";
+	src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff")
+		format("woff");
 	font-weight: normal;
 	font-style: normal;
 }
@@ -61,8 +63,8 @@
 	height: 650px;
 	-webkit-transform-style: preserve-3d;
 	transform-style: preserve-3d;
-	-webkit-transition: -webkit-transform .5s;
-	transition: transform .5s;
+	-webkit-transition: -webkit-transform 0.5s;
+	transition: transform 0.5s;
 	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
 }
 
@@ -71,8 +73,8 @@
 	transform: rotate3d(0, 1, 0, 35deg);
 }
 
-.bk-list li .bk-book>div,
-.bk-list li .bk-front>div {
+.bk-list li .bk-book > div,
+.bk-list li .bk-front > div {
 	display: block;
 	position: absolute;
 }
@@ -82,16 +84,14 @@
 	transform-style: preserve-3d;
 	-webkit-transform-origin: 0% 50%;
 	transform-origin: 0% 50%;
-	-webkit-transition: -webkit-transform .5s;
-	transition: transform .5s;
+	-webkit-transition: -webkit-transform 0.5s;
+	transition: transform 0.5s;
 	-webkit-transform: translate3d(0, 0, 20px);
 	transform: translate3d(0, 0, 20px);
 	z-index: 10;
-
-
 }
 
-.bk-list li .bk-front>div {
+.bk-list li .bk-front > div {
 	z-index: 1;
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
@@ -116,7 +116,7 @@
 
 .bk-list li .bk-front,
 .bk-list li .bk-back,
-.bk-list li .bk-front>div {
+.bk-list li .bk-front > div {
 	/* width: 300px;
 	height: 400px; */
 	width: 550px;
@@ -203,14 +203,13 @@
 	background-color: #fff;
 }
 
-.bk-list li .bk-front>div {
+.bk-list li .bk-front > div {
 	border-radius: 0 3px 3px 0;
-	box-shadow:
-		inset 4px 0 10px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 4px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .bk-list li .bk-front:after {
-	content: '';
+	content: "";
 	position: absolute;
 	top: 1px;
 	bottom: 1px;
@@ -220,7 +219,7 @@
 
 .bk-list li .bk-cover:after,
 .bk-list li .bk-back:after {
-	content: '';
+	content: "";
 	position: absolute;
 	top: 0;
 	left: 10px;
@@ -303,7 +302,7 @@
 /* Individual style & artwork */
 
 /* Book 1 */
-.book-1 .bk-front>div,
+.book-1 .bk-front > div,
 .book-1 .bk-back,
 .book-1 .bk-left,
 .book-1 .bk-front:after {
@@ -386,12 +385,12 @@
 
 /* Fallbacks */
 
-.no-csstransforms3d .bk-list li .bk-book>div,
+.no-csstransforms3d .bk-list li .bk-book > div,
 .no-csstransforms3d .bk-list li .bk-book .bk-cover-back {
 	display: none;
 }
 
-.no-csstransforms3d .bk-list li .bk-book>div.bk-front {
+.no-csstransforms3d .bk-list li .bk-book > div.bk-front {
 	display: block;
 }
 
@@ -408,7 +407,7 @@
 
 	.bk-list li .bk-front,
 	.bk-list li .bk-back,
-	.bk-list li .bk-front>div {
+	.bk-list li .bk-front > div {
 		width: 300px;
 		height: 400px;
 	}

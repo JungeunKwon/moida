@@ -77,7 +77,10 @@
 					<v-btn @click="getmood" color="white">버리기</v-btn>
 				</div>
 				<div v-if="analyzing">
-					<img width="500" src="../../../assets/icons/analyzing.gif" />
+					<img
+						width="500"
+						src="../../../assets/icons/analyzing.gif"
+					/>
 				</div>
 			</v-card-text>
 		</v-card>
@@ -85,7 +88,13 @@
 			<div id="trashinserttext">
 				<div class="moodResultDiv" v-if="!selectanswer">
 					<div class="moodResult">
-						<v-progress-circular :rotate="180" :size="200" :width="15" :value="score" :color="color">
+						<v-progress-circular
+							:rotate="180"
+							:size="200"
+							:width="15"
+							:value="score"
+							:color="color"
+						>
 							<div id="moodImg">
 								<img :src="moodsrc" width="30px" />
 								<div>"{{ mood }}"</div>
@@ -96,8 +105,16 @@
 							</div>
 						</v-progress-circular>
 					</div>
-					<v-btn color="white" @click="(afteranswer = true), (selectanswer = true)">맞아요!</v-btn>
-					<v-btn color="white" @click="(afteranswer = false), (selectanswer = true)">아닌 것 같은데...</v-btn>
+					<v-btn
+						color="white"
+						@click="(afteranswer = true), (selectanswer = true)"
+						>맞아요!</v-btn
+					>
+					<v-btn
+						color="white"
+						@click="(afteranswer = false), (selectanswer = true)"
+						>아닌 것 같은데...</v-btn
+					>
 				</div>
 				<div v-if="selectanswer && afteranswer" style="padding: 20px;">
 					<div class="deleteDiv">
@@ -111,22 +128,37 @@
 							:max="24"
 						></v-slider>
 						<div id="deleteText">
-							<b>{{time}}</b> 시간 뒤에 감정 쓰레기가 사라집니다
+							<b>{{ time }}</b> 시간 뒤에 감정 쓰레기가 사라집니다
 						</div>
 					</div>
 
 					<div style="margin: 0 auto; width:100%;">
-						<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">다음</v-btn>
+						<v-btn
+							text
+							style="display: inline-block; width: 20%;"
+							@click="getmusic"
+							>다음</v-btn
+						>
 					</div>
 				</div>
 				<div class="reselectDiv" v-if="selectanswer && !afteranswer">
 					<div>
-						<span class="tmTitle">감정을 다시 선택해주세요.</span>
+						<span class="reslelecttmTitle"
+							>감정을 다시 선택해주세요.</span
+						>
 					</div>
-					<v-chip-group v-model="selection" active-class="amber lighten-4 accent-4 white--text" column>
+					<v-chip-group
+						v-model="selection"
+						active-class="amber lighten-4 accent-4 white--text"
+						column
+					>
 						<div>
 							<v-row align="center" justify="start">
-								<v-col v-for="item in items" :key="item.text" class="shrink">
+								<v-col
+									v-for="item in items"
+									:key="item.text"
+									class="shrink"
+								>
 									<v-chip color="white" large>
 										<img :src="item.src" width="30px" />
 									</v-chip>
@@ -136,7 +168,7 @@
 					</v-chip-group>
 					<div class="selText" v-if="selection != undefined">
 						<span>선택된 감정은&nbsp;</span>
-						<span>"{{items[selection].text}}"</span>
+						<span>"{{ items[selection].text }}"</span>
 						<span>&nbsp;입니다</span>
 					</div>
 					<div class="deleteDiv">
@@ -150,11 +182,16 @@
 							:max="24"
 						></v-slider>
 						<div id="deleteText">
-							<b>{{time}}</b> 시간 뒤에 감정 쓰레기가 사라집니다
+							<b>{{ time }}</b> 시간 뒤에 감정 쓰레기가 사라집니다
 						</div>
 					</div>
 					<div style="margin: 0 auto; width:100%">
-						<v-btn text style="display: inline-block; width: 20%;" @click="getmusic">다음</v-btn>
+						<v-btn
+							text
+							style="display: inline-block; width: 20%;"
+							@click="getmusic"
+							>다음</v-btn
+						>
 					</div>
 				</div>
 			</div>
@@ -163,8 +200,14 @@
 			<div
 				class="font-weight-bold"
 				style="font-family: 'kyoboHand'; font-size: 20px;"
-			>~ 영상을 클릭해서 노래를 선택해주세요 ~</div>
-			<img id="back_arrow" src="../../../assets/icons/back.png" @click="moveLeft" />
+			>
+				~ 영상을 클릭해서 노래를 선택해주세요 ~
+			</div>
+			<img
+				id="back_arrow"
+				src="../../../assets/icons/back.png"
+				@click="moveLeft"
+			/>
 			<div id="musicList">
 				<div id="category" class="music">
 					<v-item-group>
@@ -190,16 +233,29 @@
 										loading="lazy"
 									></iframe>
 								</div>
-								<div style="width:100%; height:50px; text-align:center">{{ music.musicname }}</div>
+								<div
+									style="width:100%; height:50px; text-align:center"
+								>
+									{{ music.musicname }}
+								</div>
 							</v-card>
 						</v-item>
 					</v-item-group>
 				</div>
 			</div>
-			<img id="next_arrow" src="../../../assets/icons/next.png" @click="moveRight" />
+			<img
+				id="next_arrow"
+				src="../../../assets/icons/next.png"
+				@click="moveRight"
+			/>
 
 			<div style="margin: 0 auto; width:100%">
-				<v-btn text style="display: inline-block; width: 20%;" @click="inserttrash">노래선택</v-btn>
+				<v-btn
+					text
+					style="display: inline-block; width: 20%;"
+					@click="inserttrash"
+					>노래선택</v-btn
+				>
 			</div>
 		</v-card>
 	</v-dialog>
@@ -478,7 +534,7 @@ export default {
 	padding: 20px;
 }
 
-.tmTitle {
+.reslelecttmTitle {
 	padding: 5px;
 	background-color: white;
 	font-family: "kyoboHand";

@@ -1,0 +1,37 @@
+.sharedMenu {
+	float: left;
+	margin: 5px;
+}
+
+.sharedMenu.mini:hover {
+	transform: rotate(4deg);
+}
+
+.sharedMenu > .tape {
+	position: relative;
+	z-index: 1;
+	width: 45px;
+	transform: rotate(20deg);
+	opacity: 0.5;
+}
+
+.sharedMenu > .sharedPaper {
+	margin-top: -22px;
+	background-color: white;
+	height: 40px;
+	line-height: 40px;
+	font-family: "KyoboHand";
+	font-size: 17px;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.288);
+}
+
+.sharedMenu > .sharedPaper.mini,
+.sharedMenu.mini {
+	width: 85px;
+	cursor: pointer;
+}
+
+.sharedMenu > .sharedPaper.large,
+.sharedMenu.large {
+	width: 300px;
+}
