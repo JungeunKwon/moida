@@ -8,15 +8,14 @@
 		</div>
 		<img id="sdImg" :src="sharedDiary.imgurl" />
 		<div id="sdDesc">
-			<div>{{sharedDiary.inputDate}}</div>
+			<div>{{ sharedDiary.inputDate }}</div>
 			<div>{{ sharedDiary.description }}</div>
 		</div>
 		<div id="sdBottom">
 			<div @click.stop="like()">
-				<v-icon
-					color="pink lighten-4"
-					id="sdLike"
-				>{{ sharedDiary.isLike ? "mdi-heart" : "mdi-heart-outline" }}</v-icon>
+				<v-icon color="pink lighten-4" id="sdLike">{{
+					sharedDiary.isLike ? "mdi-heart" : "mdi-heart-outline"
+				}}</v-icon>
 				{{ sharedDiary.likecount }}
 			</div>
 			<div>

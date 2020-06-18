@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="trashdialog" max-width="50%" style="padding:20px">
+	<v-dialog v-model="trashdialog" max-width="450" style="padding:20px">
 		<template v-slot:activator="{ on }">
 			<div v-on="on">
 				<slot />
@@ -23,16 +23,22 @@
 		</v-card>
 		<div v-if="innerdialog" class="TrashMusicCard">
 			<div id="TrashMusicBack">
-				<div class="tmTitle">다른 유저들에게 자신만의 노래를 추천해보세요.</div>
+				<div class="tmTitle">
+					다른 유저들에게 자신만의 노래를 추천해보세요.
+				</div>
 				<v-chip-group
-					style="margin-left: 23px"
+					style="margin-left: 45px"
 					v-model="selection"
 					active-class="amber lighten-4 accent-4 white--text"
 					column
 				>
 					<div>
 						<v-row align="center" justify="start">
-							<v-col v-for="item in items" :key="item.text" class="shrink">
+							<v-col
+								v-for="item in items"
+								:key="item.text"
+								class="shrink"
+							>
 								<v-chip color="white" large>
 									<img :src="item.src" width="30px" />
 								</v-chip>
@@ -42,7 +48,7 @@
 				</v-chip-group>
 				<div class="selText" v-if="selection != undefined">
 					<span>선택된 감정은&nbsp;</span>
-					<span>"{{items[selection].text}}"</span>
+					<span>"{{ items[selection].text }}"</span>
 					<span>&nbsp;입니다</span>
 				</div>
 				<div>

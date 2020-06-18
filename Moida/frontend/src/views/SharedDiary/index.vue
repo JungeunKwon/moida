@@ -7,7 +7,7 @@
 				<img src="../../assets/icons/info.png" width="20px" />
 			</SharedDiaryInfo>
 		</div>
-		<v-btn @click="invite">초대</v-btn>
+		<!-- <v-btn @click="invite">초대</v-btn> -->
 		<HabitTracker :sharedDiaryId="detail.id" id="ht"></HabitTracker>
 
 		<div v-if="showCal">
