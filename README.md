@@ -47,13 +47,13 @@ npm run serve
 
 ## 💻 화면 설계
 
-**시작**
-
-![시작](https://moida-image-bucket.s3.ap-northeast-2.amazonaws.com/diary/ars2424%40naver.com/0571611c-8ae7-42ba-9761-6e2424b3fca8.jpg)
-
 **감정 쓰레기통**
 
-![감정 쓰레기통](https://moida-image-bucket.s3.ap-northeast-2.amazonaws.com/diary/ars2424%40naver.com/b7daa203-4088-4b01-b10e-44ffa9762bcf.jpg)
+![감정 쓰레기통](https://github.com/JungeunKwon/moida/blob/master/MainImage/KakaoTalk_20200916_154308031.png?raw=true)
+
+**음악 추천**
+
+![음악 추천](https://github.com/JungeunKwon/moida/blob/master/MainImage/KakaoTalk_20200609_095136290.png?raw=true)
 
 **일기**
 
@@ -61,21 +61,19 @@ npm run serve
 
 **일기 상세페이지**
 
-![일기상세](https://moida-image-bucket.s3.ap-northeast-2.amazonaws.com/diary/ars2424%40naver.com/34643bce-66ec-4c33-84ad-c7392f50ce87.jpg)
+![일기상세](https://github.com/JungeunKwon/moida/blob/master/MainImage/KakaoTalk_20200605_231624893.png?raw=true)
 
 **공유 다이어리**
 
-![공다](https://moida-image-bucket.s3.ap-northeast-2.amazonaws.com/diary/ars2424%40naver.com/de39d6eb-0d4f-4bca-a92a-2e137299e19e.jpg)
+![공다](https://github.com/JungeunKwon/moida/blob/master/MainImage/KakaoTalk_20200916_154312998.png?raw=true)
 
 **공유 다이어리 상세 페이지**
 
-![공다 상세](https://moida-image-bucket.s3.ap-northeast-2.amazonaws.com/diary/ars2424%40naver.com/d276e90a-ff22-41db-a737-133a88f6a20e.jpg)
+![공다 상세](https://github.com/JungeunKwon/moida/blob/master/MainImage/KakaoTalk_20200916_154315953.png?raw=true)
 
 **유저 상세 페이지**
 
-![유저 상세](https://moida-image-bucket.s3.ap-northeast-2.amazonaws.com/diary/ars2424%40naver.com/a0a4eee3-52d7-4af0-9134-695fd8e1ff29.jpg)**채팅**
-
-![채팅](https://moida-image-bucket.s3.ap-northeast-2.amazonaws.com/diary/ars2424%40naver.com/9c24e4cb-1210-46b8-a346-ee38ea47b3d7.jpg)
+![유저 상세](https://github.com/JungeunKwon/moida/blob/master/MainImage/68747470733a2f2f6d6f6964612d696d6167652d6275636b65742e73332e61702d6e6f727468656173742d322e616d617a6f6e6177732e636f6d2f64696172792f617273323432342534306e617665722e636f6d2f61306134656565332d353264372d346166302d3931333.png?raw=true)
 
 
 ## ❤️Collaborator
